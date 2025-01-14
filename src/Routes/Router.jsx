@@ -5,6 +5,9 @@ import Home from "../pages/home/Home";
 import Login from "../user/Login";
 import Register from "../user/Register";
 import Dashboard from './../layout/Dashboard';
+import About from "../pages/about/About";
+import Community from './../pages/community/Community';
+import Trips from './../pages/trips/Trips';
 
 const Router = () => {
     const route = createBrowserRouter([
@@ -15,6 +18,18 @@ const Router = () => {
                 {
                     path: '/',
                     element: <Home/>
+                },
+                {
+                    path: '/about-us',
+                    element: <About/>
+                },
+                {
+                    path: '/community',
+                    element: <Community/>
+                },
+                {
+                    path: '/trips',
+                    element: <Trips/>
                 },
                 {
                     path: '/login',
