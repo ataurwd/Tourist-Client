@@ -4,6 +4,7 @@ import Layout from './../layout/Layout';
 import Home from "../pages/home/Home";
 import Login from "../user/Login";
 import Register from "../user/Register";
+import Dashboard from './../layout/Dashboard';
 
 const Router = () => {
     const route = createBrowserRouter([
@@ -24,6 +25,10 @@ const Router = () => {
                     element: <Register />
                 }
             ]
+        },
+        {
+            path: 'dashboard',
+            element: <Dashboard/>
         }
     ])
   return <RouterProvider  router={route}/>;
