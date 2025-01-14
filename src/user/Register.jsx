@@ -45,7 +45,11 @@ const Register = () => {
           displayName: name,
           photoURL: photoURl,
         }
-        updateProfile(auth.currentUser, profile)
+        updateProfile(auth.currentUser, profile).then(() => {
+          setUser((prev) => {
+            return{...prev, displayName: name, photoURL: photoURl}
+          })
+        })
         setUser(res.user);
       })
 
