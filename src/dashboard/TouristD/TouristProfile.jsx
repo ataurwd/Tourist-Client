@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 import { FormContext } from "../../context/FormData";
 import { Link } from "react-router-dom";
+import useUser from "../../hooks/useUser";
 
 const TouristProfile = () => {
+  const [current, setCurrent] = useState('')
   const { user, setUser } = useContext(FormContext);
-
+  const { loginUser } = useUser()
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({ ...user });
 
@@ -42,6 +44,7 @@ const TouristProfile = () => {
         />
         <h2 className="text-xl font-semibold">{user?.displayName}</h2>
         <p className="text-gray-600">{user?.email}</p>
+        <p className="text-gray-600"> <span className="font-bold">Role: </span>{loginUser[0].role}</p>
         <button
           onClick={handleEditClick}
           className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 mr-3"

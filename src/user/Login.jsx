@@ -3,14 +3,14 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FormContext } from "./../context/FormData";
-import axios from 'axios'
+import axios from "axios";
 
 const Login = () => {
   const { googleLogin, loginUser, user, setUser } = useContext(FormContext);
   const [password, setPassword] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation()
-  console.log(user)
+  const location = useLocation();
+  console.log(user);
 
   const signInUser = (e) => {
     e.preventDefault();
@@ -28,26 +28,26 @@ const Login = () => {
       });
   };
 
-  const googleSignInUser = () => { 
+  const googleSignInUser = () => {
     googleLogin()
-     .then((res) => {
-       setUser(res.user)
-       navigate(location?.state ? location.state : "/");
-       const userInfo = {
-        email: res.user.email,
-         name: res.user.displayName,
-      }
-      // to post user data
-      axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)
-        .then(res => {
-        console.log(res.data)
-      })
+      .then((res) => {
+        setUser(res.user);
+        navigate(location?.state ? location.state : "/");
+        const userInfo = {
+          email: res.user.email,
+          name: res.user.displayName,
+          role: 'tourist',
+        };
+        // to post user data
+        axios.post(`${import.meta.env.VITE_URL}/user`, userInfo).then((res) => {
+          console.log(res.data);
+        });
         toast.success(`Successfully logged in ${res.user.displayName}`);
       })
-     .catch((er) => {
+      .catch((er) => {
         toast.error(er.message);
       });
-  }
+  };
 
   return (
     <div className="flex mt-[7vh] items-center justify-center dark:bg-gray-900">

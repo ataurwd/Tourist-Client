@@ -47,13 +47,13 @@ const TouristStories = () => {
     await axios
       .patch(`${import.meta.env.VITE_URL}/update/${id}`, updateData)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         refetch();
         Swal.fire({
           title: "Update Sucessfull!",
           icon: "success",
-          draggable: false
-        })
+          draggable: false,
+        });
         document.getElementById("my_modal_1").close();
       });
   };
