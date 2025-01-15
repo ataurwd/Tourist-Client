@@ -87,7 +87,7 @@ const TouristAddStory = () => {
 
   return (
     <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Add a New Story</h1>
+      <h1 className="text-3xl font-bold mb-6 text-primary">Add a New Story</h1>
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl"
