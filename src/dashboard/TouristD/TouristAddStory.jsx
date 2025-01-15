@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from 'sweetalert2'
+
 const TouristAddStory = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [storyData, setStoryData] = useState({
     title: "",
     storyText: "",
     images: [],
   });
-  const [isUploading, setIsUploading] = useState(false); // for showing loading state
+  const [isUploading, setIsUploading] = useState(false); 
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // for storing uploaded image URLs
 
   // Handle input changes
@@ -42,8 +44,7 @@ const TouristAddStory = () => {
         const response = await axios.post(
           `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGEBB}`,
           formData
-        )
-        // If the image is uploaded successfully, push the URL to imageUrls array
+        );
         if (response.data.success) {
           imageUrls.push(response.data.data.url);
         }
@@ -58,16 +59,30 @@ const TouristAddStory = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Save the story (e.g., send to backend)
-    console.log("Story Data: ", {
-      ...storyData,
-      images: uploadedImageUrls, // Use the uploaded image URLs
-    });
+    const storyToSubmit = {
+      title: storyData.title,
+      storyText: storyData.storyText,
+      images: uploadedImageUrls,
+    };
 
-    // Redirect to manage story route
-    navigate("/dashboard/tourist-stories");
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_URL}/add-stories`, // URL of the backend API
+        storyToSubmit
+      );
+        if (response.data.insertedId) {
+            Swal.fire({
+                title: "Story Added successfully",
+                icon: "success",
+                draggable: false,
+              });
+      }
+      navigate("/dashboard/tourist-stories"); // Redirect to another page
+    } catch (error) {
+      console.error("Error submitting story", error);
+    }
   };
 
   return (
@@ -131,17 +146,17 @@ const TouristAddStory = () => {
             <div className="mt-2 text-gray-500">Uploading images...</div>
           )}
         </div>
-        <div className="flex justify-end">
-          <button
+        <div className={`flex justify-end `}>
+          <button disabled={isUploading}
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className={`bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 ${isUploading ? 'cursor-not-allowed' : ''}`}
           >
             Submit Story
           </button>
         </div>
       </form>
     </div>
-    );
+  );
 };
 
 export default TouristAddStory;

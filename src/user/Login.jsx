@@ -35,7 +35,7 @@ const Login = () => {
        navigate(location?.state ? location.state : "/");
        const userInfo = {
         email: res.user.email,
-        name: res.user.displayName
+         name: res.user.displayName,
       }
       // to post user data
       axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)

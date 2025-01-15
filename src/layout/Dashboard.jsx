@@ -37,8 +37,8 @@ const Dashboard = () => {
 
         {/* Menu Items */}
         <div
-          className={`w-full mx-auto ${
-            isCollapsed ? "text-center" : "text-left"
+          className={` ${
+            isCollapsed ? "text-center mx-1" : "text-left"
           }`}
         >
           <div className="rounded-md p-4 bg-white my-2">
