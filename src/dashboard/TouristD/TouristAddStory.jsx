@@ -1,10 +1,146 @@
-import React from 'react';
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const TouristAddStory = () => {
-    return (
-        <div>
-            add storis
+    const navigate = useNavigate();
+  const [storyData, setStoryData] = useState({
+    title: "",
+    storyText: "",
+    images: [],
+  });
+  const [isUploading, setIsUploading] = useState(false); // for showing loading state
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // for storing uploaded image URLs
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStoryData({ ...storyData, [name]: value });
+  };
+
+  // Handle image uploads
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    setStoryData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files],
+    }));
+
+    // Upload images to ImageBB
+    const imageUrls = await uploadImagesToImageBB(files);
+    setUploadedImageUrls((prev) => [...prev, ...imageUrls]);
+  };
+
+  // Upload images to ImageBB
+  const uploadImagesToImageBB = async (files) => {
+    const imageUrls = [];
+    try {
+      setIsUploading(true);
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGEBB}`,
+          formData
+        )
+        // If the image is uploaded successfully, push the URL to imageUrls array
+        if (response.data.success) {
+          imageUrls.push(response.data.data.url);
+        }
+      }
+      setIsUploading(false);
+      return imageUrls;
+    } catch (error) {
+      setIsUploading(false);
+      console.error("Image upload failed", error);
+      return [];
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Save the story (e.g., send to backend)
+    console.log("Story Data: ", {
+      ...storyData,
+      images: uploadedImageUrls, // Use the uploaded image URLs
+    });
+
+    // Redirect to manage story route
+    navigate("/dashboard/tourist-stories");
+  };
+
+  return (
+    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6">Add a New Story</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl"
+      >
+        <div className="mb-4">
+          <label htmlFor="title" className="block text-sm font-medium mb-2">
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={storyData.title}
+            onChange={handleChange}
+            placeholder="Enter story title"
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
         </div>
+        <div className="mb-4">
+          <label htmlFor="storyText" className="block text-sm font-medium mb-2">
+            Story Text
+          </label>
+          <textarea
+            id="storyText"
+            name="storyText"
+            value={storyData.storyText}
+            onChange={handleChange}
+            placeholder="Write your story here..."
+            rows="6"
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="images" className="block text-sm font-medium mb-2">
+            Upload Images
+          </label>
+          <input
+            type="file"
+            id="images"
+            name="images"
+            onChange={handleImageUpload}
+            accept="image/*"
+            multiple
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+          {storyData.images.length > 0 && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">
+                Uploaded Images: {storyData.images.length}
+              </p>
+            </div>
+          )}
+          {isUploading && (
+            <div className="mt-2 text-gray-500">Uploading images...</div>
+          )}
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Submit Story
+          </button>
+        </div>
+      </form>
+    </div>
     );
 };
 
