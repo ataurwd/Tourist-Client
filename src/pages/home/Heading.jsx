@@ -27,49 +27,50 @@ const Heading = () => {
       ];
   return (
     <div>
-      <AwesomeSlider bullets={false} style={{ height: "90vh" }}>
-        {slides.map((slide) => (
+    <AwesomeSlider
+      bullets={false}
+      style={{ height: "80vh" }}
+    >
+      {slides.map((slide) => (
+        <div
+          key={slide.id}
+          style={{
+            position: "relative",
+            backgroundImage: `url(${slide.bgImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "80vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "white",
+            textAlign: "center",
+            margin: 0,
+          }}
+        >
+          {/* Overlay */}
           <div
-            key={slide.id}
             style={{
-              position: "relative",
-              backgroundImage: `url(${slide.bgImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              height: "100vh", 
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "white",
-              textAlign: "center",
-              margin: 0, 
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 1,
             }}
-          >
-            {/* Overlay */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.5)", 
-                zIndex: 1,
-              }}
-            />
-            {/* Content */}
-            <div className="relative z-20">
-              <h1 className="md:text-5xl text-2xl mb-4 px-5 font-bold text-secondary">
-                {slide.title}
-              </h1>
-              <p className="md:text-md mx-auto max-w-2xl px-5">
-                {slide.description}
-              </p>
-            </div>
+          />
+          {/* Content */}
+          <div className="relative z-20">
+            <h1 className="md:text-5xl text-2xl mb-4 px-5 font-bold text-secondary">
+              {slide.title}
+            </h1>
+            <p className="md:text-md mx-auto max-w-2xl px-5">{slide.description}</p>
           </div>
-        ))}
-      </AwesomeSlider>
+        </div>
+      ))}
+    </AwesomeSlider>
     </div>
     );
 };

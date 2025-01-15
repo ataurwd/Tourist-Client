@@ -3,6 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FormContext } from "./../context/FormData";
+import axios from 'axios'
 
 const Login = () => {
   const { googleLogin, loginUser, user, setUser } = useContext(FormContext);
@@ -30,7 +31,16 @@ const Login = () => {
     googleLogin()
      .then((res) => {
        setUser(res.user)
-        navigate(location?.state ? location.state : "/");
+       navigate(location?.state ? location.state : "/");
+       const userInfo = {
+        email: res.user.email,
+        name: res.user.displayName
+      }
+      // to post user data
+      axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)
+        .then(res => {
+        console.log(res.data)
+      })
         toast.success(`Successfully logged in ${res.user.displayName}`);
       })
      .catch((er) => {
