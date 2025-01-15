@@ -35,8 +35,27 @@ const TouristStories = () => {
   });
 
   // Edit button handler
-  const handleEdit = (id) => {
-    console.log(`Edit story with ID: ${id}`);
+  const handleEdit = async (e, id) => {
+    e.preventDefault();
+    const form = e.target;
+    const title = form.title.value;
+    const text = form.text.value;
+    const updateData = {
+      title,
+      text,
+    };
+    await axios
+      .patch(`${import.meta.env.VITE_URL}/update/${id}`, updateData)
+      .then((res) => {
+        console.log(res.data)
+        refetch();
+        Swal.fire({
+          title: "Update Sucessfull!",
+          icon: "success",
+          draggable: false
+        })
+        document.getElementById("my_modal_1").close();
+      });
   };
 
   // Delete button handler
@@ -64,7 +83,7 @@ const TouristStories = () => {
             text: "Your file has been deleted.",
             icon: "success",
           });
-          refetch()
+          refetch();
         }
       } catch (error) {
         console.error("Error deleting story:", error);
@@ -91,6 +110,10 @@ const TouristStories = () => {
     return <div>Error fetching stories: {error.message}</div>;
   }
 
+  // close the modal
+  const closeModal = () => {
+    document.getElementById("my_modal_1").close();
+  };
   // Render the stories in card format
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -120,9 +143,11 @@ const TouristStories = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
-            <div className="flex justify-between mt-auto">
+            <div className="flex space-x-3 mt-auto">
               <button
-                onClick={() => handleEdit(story._id)}
+                onClick={() =>
+                  document.getElementById("my_modal_1").showModal()
+                }
                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
               >
                 Edit
@@ -133,6 +158,46 @@ const TouristStories = () => {
               >
                 Delete
               </button>
+
+              {/* update modal */}
+              <dialog id="my_modal_1" className="modal">
+                <div className="modal-box">
+                  <div
+                    className="flex justify-end font-bold cursor-pointer"
+                    onClick={closeModal}
+                  >
+                    X
+                  </div>
+                  <form onSubmit={(e) => handleEdit(e, story._id)}>
+                    <div className="mb-4">
+                      <label className="block text-gray-700">Title</label>
+                      <input
+                        name="title"
+                        defaultValue={story.title}
+                        type="text"
+                        className="mt-1 p-2 border border-gray-300 rounded w-full"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-gray-700">Story Text</label>
+                      <textarea
+                        name="text"
+                        defaultValue={story.storyText}
+                        className="mt-1 p-2 border border-gray-300 rounded w-full"
+                        rows="4"
+                      ></textarea>
+                    </div>
+                    <button className="btn bg-secondary font-semibold">
+                      Update Now
+                    </button>
+                  </form>
+                  <div className="modal-action">
+                    <form method="dialog">
+                      {/* if there is a button in form, it will close the modal */}
+                    </form>
+                  </div>
+                </div>
+              </dialog>
             </div>
           </div>
         ))}

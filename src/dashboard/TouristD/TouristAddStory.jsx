@@ -149,7 +149,7 @@ const TouristAddStory = () => {
         <div className={`flex justify-end `}>
           <button disabled={isUploading}
             type="submit"
-            className={`bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 ${isUploading ? 'cursor-not-allowed' : ''}`}
+            className={`bg-secondary text-black py-2 px-4 rounded hover:bg-blue-600 ${isUploading ? 'cursor-not-allowed' : ''}`}
           >
             Submit Story
           </button>
