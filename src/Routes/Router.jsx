@@ -8,6 +8,11 @@ import Dashboard from './../layout/Dashboard';
 import About from "../pages/about/About";
 import Community from './../pages/community/Community';
 import Trips from './../pages/trips/Trips';
+import TouristAddStory from "../dashboard/TouristD/TouristAddStory";
+import TouristProfile from './../dashboard/TouristD/TouristProfile';
+import TouristBooking from './../dashboard/TouristD/TouristBooking';
+import TouristStories from './../dashboard/TouristD/TouristStories';
+import JoinAsGuild from "../dashboard/TouristD/JoinAsGuild";
 
 const Router = () => {
     const route = createBrowserRouter([
@@ -20,30 +25,52 @@ const Router = () => {
                     element: <Home/>
                 },
                 {
-                    path: '/about-us',
+                    path: 'about-us',
                     element: <About/>
                 },
                 {
-                    path: '/community',
+                    path: 'community',
                     element: <Community/>
                 },
                 {
-                    path: '/trips',
+                    path: 'trips',
                     element: <Trips/>
                 },
                 {
-                    path: '/login',
+                    path: 'login',
                     element: <Login />
                 },
                 {
-                    path: '/register',
+                    path: 'register',
                     element: <Register />
                 }
             ]
         },
         {
             path: 'dashboard',
-            element: <Dashboard/>
+            element: <Dashboard />,
+            children: [
+                {
+                    path: 'tourist-stories',
+                    element: <TouristStories/>
+                },
+                {
+                    path: 'tourist-profile',
+                    element: <TouristProfile/>
+                },
+                {
+                    path: 'tourist-bookings',
+                    element: <TouristBooking/>
+                },
+                {
+                    path: 'tourist-add-story',
+                    element: <TouristAddStory/>
+                },
+                {
+                    path: 'tourist-guild',
+                    element: <JoinAsGuild/>
+                },
+            ]
         }
     ])
   return <RouterProvider  router={route}/>;

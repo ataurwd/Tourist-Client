@@ -5,6 +5,7 @@ import { FormContext } from "../context/FormData";
 import toast from "react-hot-toast";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
+import axios from "axios";
 
 const Register = () => {
   const [password, setPassword] = useState(false);
@@ -41,6 +42,19 @@ const Register = () => {
       .then((res) => {
           toast.success("Registration successful");
         navigate('/')
+
+        // to post the user infor to the server
+        const userInfo = {
+          email: res.user.email,
+          name: name
+        }
+        // to post user data
+        axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)
+          .then(res => {
+          console.log(res.data)
+          })
+        
+        // to update user profile in the firebase auth
         const profile = {
           displayName: name,
           photoURL: photoURl,

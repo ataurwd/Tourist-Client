@@ -10,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation()
+  console.log(user)
 
   const signInUser = (e) => {
     e.preventDefault();
