@@ -13,6 +13,8 @@ import TouristProfile from './../dashboard/TouristD/TouristProfile';
 import TouristBooking from './../dashboard/TouristD/TouristBooking';
 import TouristStories from './../dashboard/TouristD/TouristStories';
 import JoinAsGuild from "../dashboard/TouristD/JoinAsGuild";
+import UserRoute from "./UserRoute";
+import GuideProfile from "../dashboard/guide/GuideProfile";
 
 const Router = () => {
     const route = createBrowserRouter([
@@ -70,6 +72,12 @@ const Router = () => {
                     path: 'tourist-guild',
                     element: <JoinAsGuild/>
                 },
+
+                // for guide dashboard menu
+                {
+                    path: 'guide-profile',
+                    element: <GuideProfile/>,
+                }
             ]
         }
     ])
