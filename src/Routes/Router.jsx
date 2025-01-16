@@ -28,6 +28,7 @@ import AdminAssigned from './../dashboard/admin/AdminAssigned';
 import AdminManageUser from './../dashboard/admin/AdminManageUser';
 import AdminStories from './../dashboard/admin/AdminStories';
 import ManageCandidate from './../dashboard/admin/ManageCandidate';
+import AdminRoute from "./AdminRoute";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -141,33 +142,33 @@ const Router = () => {
         // for admin route
         {
           path: 'admin-profile',
-          element: <AdminProfile />
+          element: <AdminRoute><AdminProfile /></AdminRoute>
           
         },
         {
           path: 'admin-add-package',
-          element: <AddPackage/>
+          element: <AdminRoute><AddPackage/></AdminRoute>
         },
         {
           path: 'admin-add-story',
-          element: <AdminAddStories/>
+          element: <AdminRoute><AdminAddStories/></AdminRoute>
         },
         {
           path: 'admin-assigned',
-          element: <AdminAssigned/>
+          element: <AdminRoute><AdminAssigned/></AdminRoute>
         },
         {
           path: 'admin-manage-user',
-          element: <AdminManageUser />,
+          element: <AdminRoute><AdminManageUser /></AdminRoute>,
           loader: () => fetch(`${import.meta.env.VITE_URL}/users`)
         },
         {
           path: 'admin-story',
-          element: <AdminStories/>
+          element: <AdminRoute><AdminStories/></AdminRoute>
         },
         {
           path: 'admin-manage-candidate',
-          element: <ManageCandidate/>
+          element: <AdminRoute><ManageCandidate/></AdminRoute>
         }
 
       ],

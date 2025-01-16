@@ -5,7 +5,7 @@ import { FormContext } from "../context/FormData";
 import useUser from "../hooks/useUser";
 import Loading from "../components/Loading";
 
-const GuideRoute = ({ children }) => {
+const AdminRoute = ({ children }) => {
   const { user, loading: userLoading } = useContext(FormContext);
   const [loginUser, refetch, isLoading] = useUser();
   const location = useLocation();
@@ -16,7 +16,7 @@ const GuideRoute = ({ children }) => {
   }
 
   // If no user or their role doesn't match, redirect to login
-  if (!user || loginUser?.role !== "guide") {
+  if (!user || loginUser?.role !== "admin") {
     if (!user) {
       toast.error("Please Login To See Details");
     }
@@ -27,4 +27,4 @@ const GuideRoute = ({ children }) => {
   return children;
 };
 
-export default GuideRoute;
+export default AdminRoute;
