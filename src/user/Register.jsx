@@ -46,7 +46,8 @@ const Register = () => {
         // to post the user infor to the server
         const userInfo = {
           email: res.user.email,
-          name: name
+          name: name,
+          role: 'tourist'
         }
         // to post user data
         axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)

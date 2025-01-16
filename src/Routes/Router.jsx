@@ -158,7 +158,8 @@ const Router = () => {
         },
         {
           path: 'admin-manage-user',
-          element: <AdminManageUser/>
+          element: <AdminManageUser />,
+          loader: () => fetch(`${import.meta.env.VITE_URL}/users`)
         },
         {
           path: 'admin-story',

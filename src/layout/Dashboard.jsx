@@ -14,6 +14,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import useUser from "../hooks/useUser";
 import TouristMenu from "../dashboard/TouristD/TouristMenu";
 import GuideMenu from "../dashboard/guide/GuideMenu";
+import AdminMenu from "../dashboard/admin/AdminMenu";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -55,6 +56,14 @@ const Dashboard = () => {
         {loginUser?.role === "guide" ? (
           <div className={` ${isCollapsed ? "text-center mx-1" : "text-left"}`}>
            <GuideMenu isCollapsed={isCollapsed}/>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* menu item for admin */}
+        {loginUser?.role === "admin" ? (
+          <div className={` ${isCollapsed ? "text-center mx-1" : "text-left"}`}>
+           <AdminMenu isCollapsed={isCollapsed}></AdminMenu>
           </div>
         ) : (
           ""
