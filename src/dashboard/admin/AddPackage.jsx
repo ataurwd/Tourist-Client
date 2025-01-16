@@ -15,6 +15,7 @@ const AddPackage = () => {
     tourDate: "",
     images: [],
   });
+  const [packages, setPackages] = useState([]); // State to store added packages
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
@@ -32,7 +33,6 @@ const AddPackage = () => {
       images: [...prev.images, ...files],
     }));
 
-    // Upload images to ImageBB
     const imageUrls = await uploadImagesToImageBB(files);
     setUploadedImageUrls((prev) => [...prev, ...imageUrls]);
   };
@@ -71,7 +71,6 @@ const AddPackage = () => {
       ...packageData,
       images: uploadedImageUrls,
     };
-    console.log(packageToSubmit);
 
     try {
       const response = await axios.post(
@@ -103,15 +102,16 @@ const AddPackage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-3">Add Package</h1>
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-white shadow-md rounded-lg p-6"
       >
+        {/* Form Fields */}
         <div className="form-control">
           <label className="label font-bold" htmlFor="packageName">
-            <span className="label-text">Package Name</span>
+            <span className="label-text">Trip Title</span>
           </label>
           <input
             type="text"
@@ -134,95 +134,33 @@ const AddPackage = () => {
             multiple
             className="file-input file-input-bordered w-full"
           />
-          {packageData.images.length > 0 && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Selected Images: {packageData.images.length}
-              </p>
-            </div>
-          )}
-          {isUploading && (
-            <div className="mt-2 text-gray-500">Uploading images...</div>
-          )}
         </div>
-        <div className="grid grid-cols-2 gap-5">
-          <div className="form-control">
-            <label className="label font-bold" htmlFor="aboutTour">
-              <span className="label-text">About The Tour</span>
-            </label>
-            <textarea
-              id="aboutTour"
-              name="aboutTour"
-              value={packageData.aboutTour}
-              onChange={handleChange}
-              placeholder="Provide information about the tour..."
-              className="textarea textarea-bordered w-full"
-            ></textarea>
-          </div>
-          <div className="form-control">
-            <label className="label font-bold" htmlFor="tourPlan">
-              <span className="label-text">Tour Plan</span>
-            </label>
-            <textarea
-              id="tourPlan"
-              name="tourPlan"
-              value={packageData.tourPlan}
-              onChange={handleChange}
-              placeholder="Provide day-wise tour plan..."
-              className="textarea textarea-bordered w-full"
-            ></textarea>
-          </div>
+        <div className="form-control">
+          <label className="label font-bold" htmlFor="aboutTour">
+            <span className="label-text">Tour Type</span>
+          </label>
+          <input
+            id="aboutTour"
+            name="aboutTour"
+            value={packageData.aboutTour}
+            onChange={handleChange}
+            placeholder="Enter Tour Type"
+            className="input input-bordered w-full"
+          />
         </div>
-        <div className="grid grid-cols-3 gap-5">
-          <div className="form-control w-full">
-            <label className="label font-bold" htmlFor="tourGuide">
-              <span className="label-text">Tour Guide</span>
-            </label>
-            <select
-              id="tourGuide"
-              name="tourGuide"
-              value={packageData.tourGuide}
-              onChange={handleChange}
-              className="select select-bordered w-full"
-            >
-              <option disabled value="">
-                Select a Tour Guide
-              </option>
-              {alluser
-                .filter((user) => user.role === "guide")
-                .map((user, index) => (
-                  <option key={index}>{user.name}</option>
-                ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label className="label font-bold" htmlFor="price">
-              <span className="label-text">Price</span>
-            </label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={packageData.price}
-              onChange={handleChange}
-              placeholder="Enter Price"
-              className="input input-bordered w-full"
-            />
-          </div>
-          <div className="form-control">
-            <label className="label font-bold" htmlFor="tourDate">
-              <span className="label-text">Tour Date</span>
-            </label>
-            <input
-              type="text"
-              id="tourDate"
-              name="tourDate"
-              value={packageData.tourDate}
-              onChange={handleChange}
-              placeholder="Select Date"
-              className="input input-bordered w-full"
-            />
-          </div>
+        <div className="form-control">
+          <label className="label font-bold" htmlFor="price">
+            <span className="label-text">Price</span>
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={packageData.price}
+            onChange={handleChange}
+            placeholder="Enter Price"
+            className="input input-bordered w-full"
+          />
         </div>
         <div className="form-control mt-4">
           <button

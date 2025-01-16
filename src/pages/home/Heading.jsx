@@ -63,7 +63,7 @@ const Heading = () => {
           />
           {/* Content */}
           <div className="relative z-20">
-            <h1 className="md:text-5xl text-2xl mb-4 px-5 font-bold text-secondary">
+            <h1 className="md:text-5xl text-2xl mb-4 px-5 font-bold text-primary">
               {slide.title}
             </h1>
             <p className="md:text-md mx-auto max-w-2xl px-5">{slide.description}</p>

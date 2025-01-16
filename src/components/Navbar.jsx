@@ -69,6 +69,7 @@ const NavBer = () => {
               src={user?.photoURL || "/default-profile.png"}
               className="rounded-full w-10 h-10 cursor-pointer"
               alt="User"
+              referrerPolicy="no-referrer"
             />
             <div className="absolute top-12 right-0 md:-left-20 flex flex-col gap-2 w-48 bg-white p-3 shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
               <h3 className="text-sm font-semibold">{user?.displayName}</h3>

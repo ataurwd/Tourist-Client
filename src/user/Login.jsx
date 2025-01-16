@@ -20,7 +20,6 @@ const Login = () => {
       .then((res) => {
         const user = res.user;
         navigate(location?.state ? location.state : "/");
-        toast.success(`Successfully logged in ${user.displayName}`);
       })
       .catch((er) => {
         toast.error(er.message);
@@ -35,12 +34,12 @@ const Login = () => {
         const userInfo = {
           email: res.user.email,
           name: res.user.displayName,
-          role: 'tourist',
+          role: "tourist",
         };
         // to post user data
-        axios.post(`${import.meta.env.VITE_URL}/user`, userInfo).then((res) => {
-        });
-        toast.success(`Successfully logged in ${res.user.displayName}`);
+        axios
+          .post(`${import.meta.env.VITE_URL}/user`, userInfo)
+          .then((res) => {});
       })
       .catch((er) => {
         toast.error(er.message);
