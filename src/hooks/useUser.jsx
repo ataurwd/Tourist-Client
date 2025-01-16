@@ -6,7 +6,7 @@ import { FormContext } from "../context/FormData";
 const useUser = () => {
   const { user } = useContext(FormContext);
 
-  const { data: loginUser = {}, refetch, isLoading } = useQuery({
+  const { data: loginUser = [], refetch, isLoading } = useQuery({
     queryKey: ["user", user?.email],
     queryFn: async () => {
       if (!user?.email) return null; // Handle case where email is not available

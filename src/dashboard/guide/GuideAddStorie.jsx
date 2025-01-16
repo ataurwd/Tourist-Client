@@ -13,7 +13,7 @@ const GuideAddStorie = () => {
     images: [],
   });
   const [isUploading, setIsUploading] = useState(false); 
-  const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // for storing uploaded image URLs
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]); 
 
   // Handle input changes
   const handleChange = (e) => {

@@ -1,9 +1,12 @@
 import React from 'react';
+import usePackage from './../../hooks/usePackage';
 
 const AdminStories = () => {
+    const [packageItem] = usePackage()
+    
     return (
         <div>
-            admin stories
+            admin stories{packageItem.length}
         </div>
     );
 };
