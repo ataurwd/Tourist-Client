@@ -3,6 +3,7 @@ import { CgProfile } from 'react-icons/cg';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { MdHistoryToggleOff } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
+import { GoTasklist } from "react-icons/go";
 
 const GuideMenu = ({isCollapsed}) => {
     return (
@@ -25,14 +26,14 @@ const GuideMenu = ({isCollapsed}) => {
             </div>
             <div className="rounded-md p-4 bg-white my-2">
               <NavLink
-                to={"tourist-profile"}
+                to={"guide-assigned"}
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
                   } ${isCollapsed ? "justify-center" : "ml-5"}`
                 }
               >
-                <CgProfile
+                <GoTasklist
                   className={`${isCollapsed ? "" : "mr-3"}`}
                   size={24}
                 />
@@ -41,7 +42,7 @@ const GuideMenu = ({isCollapsed}) => {
             </div>
             <div className="rounded-md p-4 bg-white my-2">
               <NavLink
-                to={"tourist-add-story"}
+                to={"guide-add-story"}
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
@@ -57,7 +58,7 @@ const GuideMenu = ({isCollapsed}) => {
             </div>
             <div className="rounded-md p-4 bg-white my-2">
               <NavLink
-                to={"tourist-stories"}
+                to={"guide-manage-story"}
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"

@@ -6,8 +6,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import 'swiper/swiper.min.css';
 import "swiper/css";
 import Swal from "sweetalert2";
+import useUser from "../../hooks/useUser";
+import Loading from "../../components/Loading";
 
 const TouristStories = () => {
+  const [loginUser] = useUser()
+  console.log(loginUser)
   const queryClient = useQueryClient();
 
   // Fetch stories
@@ -17,9 +21,9 @@ const TouristStories = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["touristStories"],
+    queryKey: ["touristStories", loginUser?.email],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_URL}/stories`);
+      const response = await axios.get(`${import.meta.env.VITE_URL}/storie/${loginUser.email}`);
       return response.data;
     },
   });
@@ -99,9 +103,7 @@ const TouristStories = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="grid place-items-center min-h-svh">
-        <span className="loading loading-ring loading-lg"></span>
-      </div>
+     <Loading/>
     );
   }
 

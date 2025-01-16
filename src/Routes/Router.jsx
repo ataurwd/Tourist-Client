@@ -16,6 +16,10 @@ import JoinAsGuild from "../dashboard/TouristD/JoinAsGuild";
 import UserRoute from "./UserRoute";
 import GuideProfile from "../dashboard/guide/GuideProfile";
 import PrivateRoute from "./PrivateRoute";
+import GuideAssigned from "./../dashboard/guide/GuideAssigned";
+import GuideAddStorie from "./../dashboard/guide/GuideAddStorie";
+import GuideMangeStory from "./../dashboard/guide/GuideMangeStory";
+import GuideRoute from "./GuideRoute";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -51,7 +55,11 @@ const Router = () => {
     },
     {
       path: "dashboard",
-      element: <PrivateRoute><Dashboard /></PrivateRoute>,
+      element: (
+        <PrivateRoute>
+          <Dashboard />
+        </PrivateRoute>
+      ),
       children: [
         {
           path: "tourist-stories",
@@ -75,13 +83,45 @@ const Router = () => {
         },
         {
           path: "tourist-guild",
-          element: <JoinAsGuild />,
+          element: (
+            <UserRoute>
+              <JoinAsGuild />
+            </UserRoute>
+          ),
         },
 
         // for guide dashboard menu
         {
           path: "guide-profile",
-          element: <GuideProfile />,
+          element: (
+            <GuideRoute>
+              <GuideProfile />
+            </GuideRoute>
+          ),
+        },
+        {
+          path: "guide-assigned",
+          element: (
+            <GuideRoute>
+              <GuideAssigned />
+            </GuideRoute>
+          ),
+        },
+        {
+          path: "guide-add-story",
+          element: (
+            <GuideRoute>
+              <GuideAddStorie />
+            </GuideRoute>
+          ),
+        },
+        {
+          path: "guide-manage-story",
+          element: (
+            <GuideRoute>
+              <GuideMangeStory />
+            </GuideRoute>
+          ),
         },
       ],
     },

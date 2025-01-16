@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from 'sweetalert2'
+import useUser from "../../hooks/useUser";
 
 const TouristAddStory = () => {
+  const [loginUser] = useUser()
   const navigate = useNavigate();
   const [storyData, setStoryData] = useState({
     title: "",
@@ -65,6 +67,7 @@ const TouristAddStory = () => {
       title: storyData.title,
       storyText: storyData.storyText,
       images: uploadedImageUrls,
+      email: loginUser?.email,
     };
 
     try {

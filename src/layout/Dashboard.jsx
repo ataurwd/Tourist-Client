@@ -53,16 +53,16 @@ const Dashboard = () => {
 
         {/* menu item for guide */}
         {loginUser?.role === "guide" ? (
-          <>
+          <div className={` ${isCollapsed ? "text-center mx-1" : "text-left"}`}>
            <GuideMenu isCollapsed={isCollapsed}/>
-          </>
+          </div>
         ) : (
           ""
         )}
 
         {/* back to home route everyone can see this */}
         <div className="border-b-2 my-4"></div>
-        <div className="rounded-md p-4 bg-white my-2">
+        <div className={`rounded-md p-4 bg-white my-2 ${isCollapsed ? 'mx-1' : ''}`}>
           <NavLink
             to={"/"}
             className={({ isActive }) =>
