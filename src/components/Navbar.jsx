@@ -39,7 +39,7 @@ const NavBer = () => {
         </button>
         {/* Logo and Website Name */}
         <Link to="/" className="font-semibold text-xl flex items-center text-white">
-          WebsiteName
+          Treva
         </Link>
       </div>
 
