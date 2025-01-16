@@ -21,6 +21,13 @@ import GuideAddStorie from "./../dashboard/guide/GuideAddStorie";
 import GuideMangeStory from "./../dashboard/guide/GuideMangeStory";
 import GuideRoute from "./GuideRoute";
 import UpateStorie from "../components/UpateStorie";
+import AdminProfile from './../dashboard/admin/AdminProfile';
+import AddPackage from './../dashboard/admin/AddPackage';
+import AdminAddStories from './../dashboard/admin/AdminAddStories';
+import AdminAssigned from './../dashboard/admin/AdminAssigned';
+import AdminManageUser from './../dashboard/admin/AdminManageUser';
+import AdminStories from './../dashboard/admin/AdminStories';
+import ManageCandidate from './../dashboard/admin/ManageCandidate';
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -127,7 +134,41 @@ const Router = () => {
         {
           path: 'update/:id',
           element: <UpateStorie/>,
+        },
+
+
+
+        // for admin route
+        {
+          path: 'admin-profile',
+          element: <AdminProfile />
+          
+        },
+        {
+          path: 'admin-add-package',
+          element: <AddPackage/>
+        },
+        {
+          path: 'admin-add-story',
+          element: <AdminAddStories/>
+        },
+        {
+          path: 'admin-assigned',
+          element: <AdminAssigned/>
+        },
+        {
+          path: 'admin-manage-user',
+          element: <AdminManageUser/>
+        },
+        {
+          path: 'admin-story',
+          element: <AdminStories/>
+        },
+        {
+          path: 'admin-manage-candidate',
+          element: <ManageCandidate/>
         }
+
       ],
     },
   ]);
