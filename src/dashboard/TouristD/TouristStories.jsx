@@ -11,7 +11,6 @@ import Loading from "../../components/Loading";
 
 const TouristStories = () => {
   const [loginUser] = useUser()
-  console.log(loginUser)
   const queryClient = useQueryClient();
 
   // Fetch stories
@@ -43,15 +42,14 @@ const TouristStories = () => {
     e.preventDefault();
     const form = e.target;
     const title = form.title.value;
-    const text = form.text.value;
+    const storyText = form.text.value;
     const updateData = {
       title,
-      text,
+      storyText,
     };
     await axios
       .patch(`${import.meta.env.VITE_URL}/update/${id}`, updateData)
       .then((res) => {
-        console.log(res.data);
         refetch();
         Swal.fire({
           title: "Update Sucessfull!",

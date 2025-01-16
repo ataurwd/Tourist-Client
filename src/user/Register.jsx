@@ -51,7 +51,6 @@ const Register = () => {
         // to post user data
         axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)
           .then(res => {
-          console.log(res.data)
           })
         
         // to update user profile in the firebase auth

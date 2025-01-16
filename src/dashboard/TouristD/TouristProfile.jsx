@@ -2,10 +2,11 @@ import React, { useContext, useState } from "react";
 import { FormContext } from "../../context/FormData";
 import { Link } from "react-router-dom";
 import useUser from "../../hooks/useUser";
+import Swal from "sweetalert2";
 
 const TouristProfile = () => {
   const { user, setUser } = useContext(FormContext);
-  const [loginUser] = useUser()
+  const [loginUser] = useUser();
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({ ...user });
   // Open modal
@@ -29,6 +30,11 @@ const TouristProfile = () => {
   const handleSave = () => {
     setUser({ ...formData }); // Update user in context
     setModalOpen(false);
+    Swal.fire({
+      title: "Profile Updated",
+      icon: "success",
+      draggable: false,
+    });
   };
 
   return (
@@ -42,17 +48,19 @@ const TouristProfile = () => {
         />
         <h2 className="text-xl font-semibold">{user?.displayName}</h2>
         <p className="text-gray-600">{user?.email}</p>
-        <p className="text-gray-600"> <span className="font-bold">Role: </span>{loginUser?.role}</p>
+        <p className="text-gray-600">
+          {" "}
+          <span className="font-bold">Role: </span>
+          {loginUser?.role}
+        </p>
         <button
           onClick={handleEditClick}
           className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 mr-3"
         >
           Edit Profile
         </button>
-        <Link to={'/dashboard/tourist-guild'}>
-          <button
-            className="mt-4 bg-secondary text-black py-2 px-4 rounded hover:bg-green-600"
-          >
+        <Link to={"/dashboard/tourist-guild"}>
+          <button className="mt-4 bg-secondary text-black py-2 px-4 rounded hover:bg-green-600">
             Apply For Tour Guide
           </button>
         </Link>

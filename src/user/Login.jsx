@@ -10,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(user);
 
   const signInUser = (e) => {
     e.preventDefault();
@@ -40,7 +39,6 @@ const Login = () => {
         };
         // to post user data
         axios.post(`${import.meta.env.VITE_URL}/user`, userInfo).then((res) => {
-          console.log(res.data);
         });
         toast.success(`Successfully logged in ${res.user.displayName}`);
       })

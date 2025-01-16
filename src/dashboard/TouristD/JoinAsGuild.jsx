@@ -13,7 +13,6 @@ const JoinAsGuild = () => {
         const cvLink = form.cvLink.value
         const status = "pending"
         const formData = {titel, reason, cvLink, status}
-      console.log(formData)
       
       await axios.post(`${import.meta.env.VITE_URL}/guide`, formData)
         .then(res => {
