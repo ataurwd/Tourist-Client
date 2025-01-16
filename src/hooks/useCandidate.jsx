@@ -10,7 +10,6 @@ const useCandidate = () => {
             return response.data;
             
         },
-        refetchInterval: 1000 * 60 * 5 // every 5 minutes
     })
     return [candidate, refetch]
 };
