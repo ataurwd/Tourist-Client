@@ -1,13 +1,16 @@
 import React from "react";
 import useCandidate from "./../../hooks/useCandidate";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const ManageCandidate = () => {
   const [candidate, refetch] = useCandidate();
-  const handleAccept = async (id) => {
+
+
+  // to update user role
+  const handleAccept = async (email) => {
     const response = await axios
-      .patch(`${import.meta.env.VITE_URL}/update-guide/${id}`)
+      .patch(`${import.meta.env.VITE_URL}/update-guide/${email}`)
       .then((res) => {
         Swal.fire({
           title: "Success!",
@@ -18,10 +21,26 @@ const ManageCandidate = () => {
         refetch();
       });
   };
+
+
+  // to delete or reject user
+  const handleReject = (id) => {
+    axios.delete(`${import.meta.env.VITE_URL}/guide/${id}`)
+      .then(res => {
+        if (res.data.deletedCount) {
+          Swal.fire({
+            title: "Reject user sucessfully",
+            icon: "success",
+            draggable: false,
+          });
+          refetch();
+      }
+    })
+  }
   return (
     <div className="max-w-6xl mx-auto p-5 mt-10">
       <h2 className="text-2xl font-bold mb-5">Applications</h2>
-      <table className="w-full table-auto border-collapse border border-gray-300">
+      {candidate.length > 0 ? (      <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
             <th className="border border-gray-300 px-4 py-2">Title</th>
@@ -55,13 +74,13 @@ const ManageCandidate = () => {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <button
-                  onClick={() => handleAccept(application._id)}
+                  onClick={() => handleAccept(application.email)}
                   className="bg-green-500 text-white px-4 py-1 rounded mr-2 hover:bg-green-600"
                 >
                   Accept
                 </button>
                 <button
-                  // onClick={() => handleReject(application._id)}
+                  onClick={() => handleReject(application._id)}
                   className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
                 >
                   Reject
@@ -70,7 +89,7 @@ const ManageCandidate = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>) : (" no data available")}
     </div>
   );
 };
