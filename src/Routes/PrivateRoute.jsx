@@ -1,16 +1,12 @@
 import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import { FormContext } from "../context/FormData";
-import useUser from "../hooks/useUser";
+import { FormContext } from "./../context/FormData";
 
-const UserRoute = ({ children }) => {
-  const { user, loading: userLoading } = useContext(FormContext);
-  const [loginUser, refetch, isLoading] = useUser();
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useContext(FormContext);
   const location = useLocation();
-
-  // Show a loading indicator if either user context or query is still loading
-  if (userLoading || isLoading) {
+  if (loading) {
     return (
       <div className="w-10 h-10 mx-auto mt-[50vh]">
         <div className="grid grid-cols-2 justify-center items-center gap-2 rounded-full">
@@ -22,17 +18,12 @@ const UserRoute = ({ children }) => {
       </div>
     );
   }
-
-  // If no user or their role doesn't match, redirect to login
-  if (!user || loginUser?.role !== "tourist") {
-    if (!user) {
-      toast.error("Please Login To See Details");
-    }
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  if (user && user?.email) {
+    return children;
   }
-
-  // Render children if user is logged in and role is "tourist"
-  return children;
+  if (!user) {
+    toast.error("Please Login To See Details");
+  }
+  return <Navigate state={location.pathname} to="/login" />;
 };
-
-export default UserRoute;
+export default PrivateRoute;

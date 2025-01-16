@@ -17,7 +17,8 @@ import GuideMenu from "../dashboard/guide/GuideMenu";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [loginUser] = useUser();
+  const [loginUser, isLoading] = useUser();
+  // if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="flex">

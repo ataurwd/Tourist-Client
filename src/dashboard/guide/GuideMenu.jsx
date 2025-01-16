@@ -9,7 +9,7 @@ const GuideMenu = ({isCollapsed}) => {
         <div>
              <div className="rounded-md p-4 bg-white my-2">
               <NavLink
-                to={"tourist-profile"}
+                to={"guide-profile"}
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
