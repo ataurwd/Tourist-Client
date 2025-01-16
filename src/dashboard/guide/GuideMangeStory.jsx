@@ -8,24 +8,12 @@ import "swiper/css";
 import Swal from "sweetalert2";
 import useUser from "../../hooks/useUser";
 import Loading from "../../components/Loading";
+import { Link } from "react-router-dom";
+import useStory from "../../hooks/useStory";
 
 const GuideMangeStory = () => {
-  const [loginUser] = useUser()
   const queryClient = useQueryClient();
-
-  // Fetch stories
-  const {
-    data: stories,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["touristStories", loginUser?.email],
-    queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_URL}/storie/${loginUser.email}`);
-      return response.data;
-    },
-  });
+  const [stories, isLoading, error, refetch] = useStory();
 
   // Delete story mutation
   const deleteMutation = useMutation({
@@ -36,29 +24,6 @@ const GuideMangeStory = () => {
       queryClient.invalidateQueries(["touristStories"]);
     },
   });
-
-  // Edit button handler
-  const handleEdit = async (e, id) => {
-    e.preventDefault();
-    const form = e.target;
-    const title = form.title.value;
-    const storyText = form.text.value;
-    const updateData = {
-      title,
-      storyText,
-      };
-    await axios
-      .patch(`${import.meta.env.VITE_URL}/update/${id}`, updateData)
-      .then((res) => {
-        refetch();
-        Swal.fire({
-          title: "Update Sucessfull!",
-          icon: "success",
-          draggable: false,
-        });
-        document.getElementById("my_modal_1").close();
-      });
-  };
 
   // Delete button handler
   const handleDelete = async (id) => {
@@ -100,9 +65,7 @@ const GuideMangeStory = () => {
 
   // Loading state
   if (isLoading) {
-    return (
-     <Loading/>
-    );
+    return <Loading />;
   }
 
   // Error state
@@ -144,14 +107,15 @@ const GuideMangeStory = () => {
               ))}
             </Swiper>
             <div className="flex space-x-3 mt-auto">
-              <button
+              <Link
+                to={`/dashboard/update/${story._id}`}
                 onClick={() =>
                   document.getElementById("my_modal_1").showModal()
                 }
                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
               >
                 Edit
-              </button>
+              </Link>
               <button
                 onClick={() => handleDelete(story._id)}
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"

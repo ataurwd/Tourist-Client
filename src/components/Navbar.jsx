@@ -13,7 +13,7 @@ const NavBer = () => {
   };
 
   return (
-    <div className="navbar sticky top-0 left-0 w-full z-50 bg-secondary shadow-md text-black">
+    <div className="navbar sticky top-0 left-0 w-full z-50 bg-gray-800 shadow-md text-gray-400 md:px-20">
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger Icon for Mobile */}
@@ -38,7 +38,7 @@ const NavBer = () => {
           </svg>
         </button>
         {/* Logo and Website Name */}
-        <Link to="/" className="font-semibold text-xl flex items-center">
+        <Link to="/" className="font-semibold text-xl flex items-center text-white">
           WebsiteName
         </Link>
       </div>
@@ -46,16 +46,16 @@ const NavBer = () => {
       {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 space-x-5 text-[17px] font-medium">
-          <NavLink to="/" className={({ isActive }) => (isActive ? "text-primary" : "text-black")}>
+          <NavLink to="/" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
             Home
           </NavLink>
-          <NavLink to="/community" className={({ isActive }) => (isActive ? "text-primary" : "text-black")}>
+          <NavLink to="/community" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
             Community
           </NavLink>
-          <NavLink to="/about-us" className={({ isActive }) => (isActive ? "text-primary" : "text-black")}>
+          <NavLink to="/about-us" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
             About Us
           </NavLink>
-          <NavLink to="/trips" className={({ isActive }) => (isActive ? "text-primary" : "text-black")}>
+          <NavLink to="/trips" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
             Trips
           </NavLink>
         </ul>
@@ -70,7 +70,7 @@ const NavBer = () => {
               className="rounded-full w-10 h-10 cursor-pointer"
               alt="User"
             />
-            <div className="absolute top-12 right-0 flex flex-col gap-2 w-48 bg-white p-3 shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+            <div className="absolute top-12 right-0 md:-left-20 flex flex-col gap-2 w-48 bg-white p-3 shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
               <h3 className="text-sm font-semibold">{user?.displayName}</h3>
               <p className="text-xs text-gray-600">{user?.email}</p>
               <Link to="/dashboard" className="text-sm text-black hover:text-gray-700">
@@ -100,7 +100,7 @@ const NavBer = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-lg lg:hidden">
+        <div className="absolute top-16 left-0 -md:right-16 w-full bg-white shadow-lg lg:hidden">
           <ul className="menu menu-vertical px-5 py-3 space-y-3">
             <NavLink to="/" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
               Home

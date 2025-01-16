@@ -20,6 +20,7 @@ import GuideAssigned from "./../dashboard/guide/GuideAssigned";
 import GuideAddStorie from "./../dashboard/guide/GuideAddStorie";
 import GuideMangeStory from "./../dashboard/guide/GuideMangeStory";
 import GuideRoute from "./GuideRoute";
+import UpateStorie from "../components/UpateStorie";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -123,6 +124,10 @@ const Router = () => {
             </GuideRoute>
           ),
         },
+        {
+          path: 'update/:id',
+          element: <UpateStorie/>,
+        }
       ],
     },
   ]);
