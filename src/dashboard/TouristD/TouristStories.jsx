@@ -88,7 +88,7 @@ const TouristStories = () => {
             className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
           >
             <h2 className="text-xl font-bold mb-2">{story.title}</h2>
-            <p className="text-gray-600 mb-4">{story.storyText}</p>
+            <p className="text-gray-600 mb-4">{story.storyText.slice(0, 100)}...</p>
             <Swiper
               spaceBetween={10}
               slidesPerView={1}
