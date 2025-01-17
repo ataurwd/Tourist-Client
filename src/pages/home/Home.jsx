@@ -3,16 +3,18 @@ import Heading from './Heading';
 import Overview from './Overview';
 import { FormContext } from './../../context/FormData';
 import TravelGuide from './TravelGuide';
+import HomeStory from './HomeStory';
+import { useLoaderData } from 'react-router-dom';
 
 const Home = () => {
-    const { user } = useContext(FormContext)
-    // console.log(user.photoURL)
-    console.log(user?.photoURL)
+    const storyData = useLoaderData();
+
     return (
         <div>
             <Heading />
             <Overview />
-            <TravelGuide/>
+            <TravelGuide />
+            <HomeStory storyData={ storyData} />
         </div>
     );
 };

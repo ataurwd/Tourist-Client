@@ -39,6 +39,7 @@ const Router = () => {
         {
           path: "/",
           element: <Home />,
+          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`)
         },
         {
           path: "about-us",
