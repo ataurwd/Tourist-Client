@@ -1,11 +1,15 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Title from "./Title";
+import useAllUser from "../hooks/useAllUser";
+import BookingForm from "./BookingForm";
+
 
 const PackageDetails = () => {
   const data = useLoaderData();
+  const [alluser] = useAllUser();
   return (
-    <div className="lg:px-32 lg:mt-10 md:px-16 px-3 md:mt-5 mt-2">
+    <div className="lg:px-32 lg:my-10 md:px-16 px-3 md:mt-5 mt-2">
       <div className="grid grid-cols-2 gap-4">
         {/* First Image: Spans 1 column and 2 rows */}
         <div className="row-span-2">
@@ -53,7 +57,8 @@ const PackageDetails = () => {
           <div className="collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" defaultChecked />
             <div className="collapse-title text-xl">
-             <span className="font-semibold text-primary">Day 1: </span> {data.faqs[0].question}
+              <span className="font-semibold text-primary">Day 1: </span>{" "}
+              {data.faqs[0].question}
             </div>
             <div className="collapse-content">
               <p>{data.faqs[0].answer}</p>
@@ -62,25 +67,41 @@ const PackageDetails = () => {
           <div className="collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div className="collapse-title text-xl font-medium">
-            <span className="font-semibold text-primary">Day 1: </span> {data.faqs[1].question}
+              <span className="font-semibold text-primary">Day 1: </span>{" "}
+              {data.faqs[1].question}
             </div>
             <div className="collapse-content">
-            <p>{data.faqs[1].answer}</p>
+              <p>{data.faqs[1].answer}</p>
             </div>
           </div>
           <div className="collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div className="collapse-title text-xl font-medium">
-            <span className="font-semibold text-primary">Day 1: </span> {data.faqs[2].question}
+              <span className="font-semibold text-primary">Day 1: </span>{" "}
+              {data.faqs[2].question}
             </div>
             <div className="collapse-content">
-            <p>{data.faqs[2].answer}</p>
+              <p>{data.faqs[2].answer}</p>
             </div>
           </div>
         </div>
 
+        {/* show all guide infor */}
+        <Title heading={'Meet Our All Tour Guides'}/>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-10">
+          {alluser
+            .filter((user) => user.role === "guide")
+            .map((item) => (
+              <Link to={`/guide/${item._id}`} key={item._id} className="border grid place-items-center p-5 text-center rounded-md shadow-sm">
+                <img className="w-20 h-20 object-cover rounded-full" src={item.photo} alt={item.name} />
+                <h1><span className="font-bold">Name:</span> {item.name}</h1>
+                <p><span className="font-bold">Role: </span>{item.role}</p>
+              </Link>
+            ))}
+        </div>
 
-        TODO: need to added all guide information here 
+        <BookingForm/>
+
       </div>
     </div>
   );

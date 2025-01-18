@@ -21,15 +21,16 @@ import GuideAddStorie from "./../dashboard/guide/GuideAddStorie";
 import GuideMangeStory from "./../dashboard/guide/GuideMangeStory";
 import GuideRoute from "./GuideRoute";
 import UpateStorie from "../components/UpateStorie";
-import AdminProfile from './../dashboard/admin/AdminProfile';
-import AddPackage from './../dashboard/admin/AddPackage';
-import AdminAddStories from './../dashboard/admin/AdminAddStories';
-import AdminAssigned from './../dashboard/admin/AdminAssigned';
-import AdminManageUser from './../dashboard/admin/AdminManageUser';
-import AdminStories from './../dashboard/admin/AdminStories';
-import ManageCandidate from './../dashboard/admin/ManageCandidate';
+import AdminProfile from "./../dashboard/admin/AdminProfile";
+import AddPackage from "./../dashboard/admin/AddPackage";
+import AdminAddStories from "./../dashboard/admin/AdminAddStories";
+import AdminAssigned from "./../dashboard/admin/AdminAssigned";
+import AdminManageUser from "./../dashboard/admin/AdminManageUser";
+import AdminStories from "./../dashboard/admin/AdminStories";
+import ManageCandidate from "./../dashboard/admin/ManageCandidate";
 import AdminRoute from "./AdminRoute";
-import PackageDetails from '../../src/components/PackageDetails'
+import PackageDetails from "../../src/components/PackageDetails";
+import GuideDetails from "../../src/components/GuideDetails";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -40,7 +41,7 @@ const Router = () => {
         {
           path: "/",
           element: <Home />,
-          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`)
+          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`),
         },
         {
           path: "about-us",
@@ -55,9 +56,19 @@ const Router = () => {
           element: <Trips />,
         },
         {
-          path: '/pakage/details/:id',
-          element: <PackageDetails />,
-          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/package/${params.id}`)
+          path: "/pakage/details/:id",
+          element: (
+            <PrivateRoute>
+              <PackageDetails />
+            </PrivateRoute>
+          ),
+          loader: ({ params }) =>
+            fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),
+        },
+        {
+          path: '/guide/:id',
+          element: <GuideDetails />,
+          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/users/${params.id}`),
         },
         {
           path: "login",
@@ -140,44 +151,68 @@ const Router = () => {
           ),
         },
         {
-          path: 'update/:id',
-          element: <UpateStorie/>,
+          path: "update/:id",
+          element: <UpateStorie />,
         },
-
-
 
         // for admin route
         {
-          path: 'admin-profile',
-          element: <AdminRoute><AdminProfile /></AdminRoute>
-          
+          path: "admin-profile",
+          element: (
+            <AdminRoute>
+              <AdminProfile />
+            </AdminRoute>
+          ),
         },
         {
-          path: 'admin-add-package',
-          element: <AdminRoute><AddPackage/></AdminRoute>
+          path: "admin-add-package",
+          element: (
+            <AdminRoute>
+              <AddPackage />
+            </AdminRoute>
+          ),
         },
         {
-          path: 'admin-add-story',
-          element: <AdminRoute><AdminAddStories/></AdminRoute>
+          path: "admin-add-story",
+          element: (
+            <AdminRoute>
+              <AdminAddStories />
+            </AdminRoute>
+          ),
         },
         {
-          path: 'admin-assigned',
-          element: <AdminRoute><AdminAssigned/></AdminRoute>
+          path: "admin-assigned",
+          element: (
+            <AdminRoute>
+              <AdminAssigned />
+            </AdminRoute>
+          ),
         },
         {
-          path: 'admin-manage-user',
-          element: <AdminRoute><AdminManageUser /></AdminRoute>,
-          loader: () => fetch(`${import.meta.env.VITE_URL}/users`)
+          path: "admin-manage-user",
+          element: (
+            <AdminRoute>
+              <AdminManageUser />
+            </AdminRoute>
+          ),
+          loader: () => fetch(`${import.meta.env.VITE_URL}/users`),
         },
         {
-          path: 'admin-story',
-          element: <AdminRoute><AdminStories/></AdminRoute>
+          path: "admin-story",
+          element: (
+            <AdminRoute>
+              <AdminStories />
+            </AdminRoute>
+          ),
         },
         {
-          path: 'admin-manage-candidate',
-          element: <AdminRoute><ManageCandidate/></AdminRoute>
-        }
-
+          path: "admin-manage-candidate",
+          element: (
+            <AdminRoute>
+              <ManageCandidate />
+            </AdminRoute>
+          ),
+        },
       ],
     },
   ]);
