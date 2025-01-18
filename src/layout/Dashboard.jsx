@@ -26,14 +26,14 @@ const Dashboard = () => {
       {/* Dashboard */}
       <div
         className={`${
-          isCollapsed ? "w-16" : "w-72 px-3"
+          isCollapsed ? "md:w-16 w-10" : "md:w-72 w-20 px-3"
         } bg-primary min-h-screen transition-all duration-300`}
       >
         {/* Toggle Button */}
         <button
           className={`${
             isCollapsed ? "justify-center" : "justify-end"
-          } flex items-center w-full p-4 text-white`}
+          } grid grid-cols-2 w-full p-4 text-white hidden md:block`}
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? (
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
         {/* back to home route everyone can see this */}
         <div className="border-b-2 my-4"></div>
-        <div className={`rounded-md p-4 bg-white my-2 ${isCollapsed ? 'mx-1' : ''}`}>
+        {/* <div className={`rounded-md p-4 bg-white my-2 ${isCollapsed ? 'mx-1' : ''}`}>
           <NavLink
             to={"/"}
             className={({ isActive }) =>
@@ -83,7 +83,7 @@ const Dashboard = () => {
             <TbHome className={`${isCollapsed ? "" : "mr-3"}`} size={24} />
             {!isCollapsed && "Home"}
           </NavLink>
-        </div>
+        </div> */}
       </div>
 
       {/* Main Content */}

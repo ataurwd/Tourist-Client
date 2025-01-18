@@ -8,8 +8,6 @@ import { NavLink } from "react-router-dom";
 import { MdAddTask } from "react-icons/md";
 import { RiProfileLine } from "react-icons/ri";
 
-
-
 const AdminMenu = ({ isCollapsed }) => {
   return (
     <div>
@@ -18,12 +16,14 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-profile"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
-          <TbHome className={`${isCollapsed ? "" : "mr-3"}`} size={24} />
-          {!isCollapsed && "Admin Profile"}
+          <TbHome className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+          <span className="hidden sm:inline">
+            {!isCollapsed && "Admin Profile"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -31,12 +31,15 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-assigned"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
-          <GoTasklist className={`${isCollapsed ? "" : "mr-3"}`} size={24} />
-          {!isCollapsed && "My Assigned Tours"}
+          <GoTasklist className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+
+          <span className="hidden sm:inline">
+            {!isCollapsed && "My Assigned Tours"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -44,15 +47,17 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-add-story"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
           <IoIosAddCircleOutline
-            className={`${isCollapsed ? "" : "mr-3"}`}
+            className={`${isCollapsed ? "" : "md:mr-3"}`}
             size={24}
           />
-          {!isCollapsed && "Add Stories"}
+          <span className="hidden sm:inline">
+            {!isCollapsed && "Add Stories"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -60,15 +65,17 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-story"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
           <MdHistoryToggleOff
-            className={`${isCollapsed ? "" : "mr-3"}`}
+            className={`${isCollapsed ? "" : "md:mr-3"}`}
             size={24}
           />
-          {!isCollapsed && "Manage Stories"}
+          <span className="hidden sm:inline">
+            {!isCollapsed && "Manage Stories"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -76,15 +83,14 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-add-package"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
-          <MdAddTask
-            className={`${isCollapsed ? "" : "mr-3"}`}
-            size={24}
-          />
-          {!isCollapsed && "Add Package"}
+          <MdAddTask className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+          <span className="hidden sm:inline">
+            {!isCollapsed && "Add Package"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -92,15 +98,14 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-manage-user"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
-          <RiProfileLine
-            className={`${isCollapsed ? "" : "mr-3"}`}
-            size={24}
-          />
-          {!isCollapsed && "Manage Users"}
+          <RiProfileLine className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+          <span className="hidden sm:inline">
+            {!isCollapsed && "Manage Users"}
+          </span>
         </NavLink>
       </div>
       <div className="rounded-md p-4 bg-white my-2">
@@ -108,15 +113,16 @@ const AdminMenu = ({ isCollapsed }) => {
           to={"admin-manage-candidate"}
           className={({ isActive }) =>
             `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "ml-5"
+              isCollapsed ? "justify-center" : "md:ml-5"
             }`
           }
         >
-          <CgProfile
-            className={`${isCollapsed ? "" : "mr-3"}`}
-            size={24}
-          />
-          {!isCollapsed && "Manage Candidates"}
+          <CgProfile className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+
+          <span className="hidden sm:inline">
+            {" "}
+            {!isCollapsed && "Manage Candidates"}
+          </span>
         </NavLink>
       </div>
     </div>
