@@ -3,13 +3,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormContext } from "./../context/FormData";
 import useAllUser from "../hooks/useAllUser";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const BookingForm = () => {
+const BookingForm = ({packageName}) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const { user } = useContext(FormContext);
   const [alluser] = useAllUser();
-console.log(alluser)
-  const handelBooking = (e) => {
+  const naviagate = useNavigate()
+
+
+  const handelBooking = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = user?.displayName;
@@ -18,9 +23,28 @@ console.log(alluser)
     const price = form.price.value;
     const date = selectedDate.toLocaleDateString();
     const tourGuide = form.tourGuide.value;
-    const formData = { name, email, photo, price, date, tourGuide };
-
-    console.log(formData);
+    const formData = {
+      name,
+      email,
+      photo,
+      price,
+      date,
+      tourGuide,
+      statas: "pending  ",
+      packageName: packageName,
+    };
+    await axios
+      .post(`${import.meta.env.VITE_URL}/guide-booking`, formData)
+      .then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            title: "Confirm your Booking",
+            icon: "success",
+            draggable: false,
+          });
+          naviagate('/dashboard/tourist-bookings')
+        }
+      });
   };
   return (
     <div>

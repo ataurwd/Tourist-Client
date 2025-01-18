@@ -66,9 +66,10 @@ const Router = () => {
             fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),
         },
         {
-          path: '/guide/:id',
+          path: "/guide/:id",
           element: <GuideDetails />,
-          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/users/${params.id}`),
+          loader: ({ params }) =>
+            fetch(`${import.meta.env.VITE_URL}/users/${params.id}`),
         },
         {
           path: "login",
@@ -90,15 +91,27 @@ const Router = () => {
       children: [
         {
           path: "tourist-stories",
-          element: <TouristStories />,
+          element: (
+            <UserRoute>
+              <TouristStories />
+            </UserRoute>
+          ),
         },
         {
           path: "tourist-profile",
-          element: <TouristProfile />,
+          element: (
+            <UserRoute>
+              <TouristProfile />
+            </UserRoute>
+          ),
         },
         {
           path: "tourist-bookings",
-          element: <TouristBooking />,
+          element: (
+            <UserRoute>
+              <TouristBooking />
+            </UserRoute>
+          ),
         },
         {
           path: "tourist-add-story",

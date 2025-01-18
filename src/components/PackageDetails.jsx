@@ -7,6 +7,7 @@ import BookingForm from "./BookingForm";
 
 const PackageDetails = () => {
   const data = useLoaderData();
+  console.log(data)
   const [alluser] = useAllUser();
   return (
     <div className="lg:px-32 lg:my-10 md:px-16 px-3 md:mt-5 mt-2">
@@ -58,30 +59,30 @@ const PackageDetails = () => {
             <input type="radio" name="my-accordion-4" defaultChecked />
             <div className="collapse-title text-xl">
               <span className="font-semibold text-primary">Day 1: </span>{" "}
-              {data.faqs[0].question}
+              {data.faqs[0].question || ''}
             </div>
             <div className="collapse-content">
-              <p>{data.faqs[0].answer}</p>
+              <p>{data.faqs[0].answer || ''}</p>
             </div>
           </div>
           <div className="collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div className="collapse-title text-xl font-medium">
               <span className="font-semibold text-primary">Day 1: </span>{" "}
-              {data.faqs[1].question}
+              {data.faqs[1].question || ''}
             </div>
             <div className="collapse-content">
-              <p>{data.faqs[1].answer}</p>
+              <p>{data.faqs[1].answer || ''}</p>
             </div>
           </div>
           <div className="collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div className="collapse-title text-xl font-medium">
               <span className="font-semibold text-primary">Day 1: </span>{" "}
-              {data.faqs[2].question}
+              {data.faqs[2].question || ''}
             </div>
             <div className="collapse-content">
-              <p>{data.faqs[2].answer}</p>
+              <p>{data.faqs[2].answer || ''}</p>
             </div>
           </div>
         </div>
@@ -100,8 +101,8 @@ const PackageDetails = () => {
             ))}
         </div>
 
-        <BookingForm/>
-
+        <BookingForm packageName={ data.packageName} />
+        TODO: now sent the form data to the database
       </div>
     </div>
   );

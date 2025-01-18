@@ -44,7 +44,7 @@ const TravelGuide = () => {
                 </figure>
                 <div className="card-body">
                   <div className="badge badge-outline">{tour.packageName}</div>
-                  <p>{tour.aboutTour}</p>
+                  <p>{tour.aboutTour.slice(0, 80)}...</p>
                   <p>
                     <span className="font-bold">Price: </span>
                     {tour.price} $

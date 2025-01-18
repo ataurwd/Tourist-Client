@@ -1,9 +1,10 @@
 import React from 'react';
+import AddStories from './../../components/shared/AddStories';
 
 const AdminAddStories = () => {
     return (
         <div>
-            add stories
+            <AddStories url={'/dashboard/admin-story'}/>
         </div>
     );
 };
