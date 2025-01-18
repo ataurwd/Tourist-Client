@@ -29,6 +29,7 @@ import AdminManageUser from './../dashboard/admin/AdminManageUser';
 import AdminStories from './../dashboard/admin/AdminStories';
 import ManageCandidate from './../dashboard/admin/ManageCandidate';
 import AdminRoute from "./AdminRoute";
+import PackageDetails from '../../src/components/PackageDetails'
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -52,6 +53,11 @@ const Router = () => {
         {
           path: "trips",
           element: <Trips />,
+        },
+        {
+          path: '/pakage/details/:id',
+          element: <PackageDetails />,
+          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/package/${params.id}`)
         },
         {
           path: "login",

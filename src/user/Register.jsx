@@ -10,7 +10,7 @@ import axios from "axios";
 const Register = () => {
   const [password, setPassword] = useState(false);
   
-  const { handelRegisterUser, setUser } = useContext(FormContext);
+  const { handelRegisterUser, setUser, user } = useContext(FormContext);
   const navigate = useNavigate();
 
   const handelRegister = (e) => {
@@ -47,7 +47,8 @@ const Register = () => {
         const userInfo = {
           email: res.user.email,
           name: name,
-          role: 'tourist'
+          role: 'tourist',
+          photo: photoURl,
         }
         // to post user data
         axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)

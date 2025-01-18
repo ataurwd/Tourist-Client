@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import useUser from "../../hooks/useUser";
-import useAllUser from "../../hooks/useAllUser";
 
 const AddPackage = () => {
-  const [alluser] = useAllUser();
   const [packageData, setPackageData] = useState({
     packageName: "",
     aboutTour: "",
@@ -14,8 +11,12 @@ const AddPackage = () => {
     price: "",
     tourDate: "",
     images: [],
+    faqs: [
+      { question: "", answer: "" },
+      { question: "", answer: "" },
+      { question: "", answer: "" },
+    ],
   });
-  const [packages, setPackages] = useState([]); // State to store added packages
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
 
@@ -23,6 +24,13 @@ const AddPackage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPackageData({ ...packageData, [name]: value });
+  };
+
+  // Handle FAQ changes
+  const handleFAQChange = (index, field, value) => {
+    const updatedFaqs = [...packageData.faqs];
+    updatedFaqs[index][field] = value;
+    setPackageData({ ...packageData, faqs: updatedFaqs });
   };
 
   // Handle image uploads
@@ -92,9 +100,19 @@ const AddPackage = () => {
           price: "",
           tourDate: "",
           images: [],
+          faqs: [
+            { question: "", answer: "" },
+            { question: "", answer: "" },
+            { question: "", answer: "" },
+          ],
         });
         setUploadedImageUrls([]);
       } else {
+        Swal.fire({
+          title: "Failed to Add Package",
+          icon: "error",
+          draggable: false,
+        });
       }
     } catch (error) {
       console.error("Error submitting package", error);
@@ -124,6 +142,19 @@ const AddPackage = () => {
           />
         </div>
         <div className="form-control">
+          <label className="label font-bold" htmlFor="aboutTour">
+            <span className="label-text">About Tour</span>
+          </label>
+          <textarea
+            id="aboutTour"
+            name="aboutTour"
+            value={packageData.aboutTour}
+            onChange={handleChange}
+            placeholder="Describe the tour"
+            className="textarea textarea-bordered w-full"
+          ></textarea>
+        </div>
+        <div className="form-control">
           <label className="label font-bold">
             <span className="label-text">Gallery (Upload Images)</span>
           </label>
@@ -135,19 +166,30 @@ const AddPackage = () => {
             className="file-input file-input-bordered w-full"
           />
         </div>
-        <div className="form-control">
-          <label className="label font-bold" htmlFor="aboutTour">
-            <span className="label-text">Tour Type</span>
-          </label>
-          <input
-            id="aboutTour"
-            name="aboutTour"
-            value={packageData.aboutTour}
-            onChange={handleChange}
-            placeholder="Enter Tour Type"
-            className="input input-bordered w-full"
-          />
-        </div>
+        {packageData.faqs.map((faq, index) => (
+          <div key={index} className="form-control space-y-2">
+            <label className="label font-bold">
+              <span className="label-text">FAQ {index + 1}</span>
+            </label>
+            <input
+              type="text"
+              value={faq.question}
+              onChange={(e) =>
+                handleFAQChange(index, "question", e.target.value)
+              }
+              placeholder="Enter Question"
+              className="input input-bordered w-full"
+            />
+            <textarea
+              value={faq.answer}
+              onChange={(e) =>
+                handleFAQChange(index, "answer", e.target.value)
+              }
+              placeholder="Enter Answer"
+              className="textarea textarea-bordered w-full"
+            ></textarea>
+          </div>
+        ))}
         <div className="form-control">
           <label className="label font-bold" htmlFor="price">
             <span className="label-text">Price</span>

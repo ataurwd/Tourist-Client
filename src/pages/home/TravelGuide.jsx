@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import usePackage from "./../../hooks/usePackage";
 import Title from "../../components/Title";
+import { Link } from "react-router-dom";
 
 const TravelGuide = () => {
   const [packageItem] = usePackage();
@@ -42,16 +43,16 @@ const TravelGuide = () => {
                   />
                 </figure>
                 <div className="card-body">
-                  <div className="badge badge-outline">{tour.aboutTour}</div>
-                  <p>{tour.packageName}</p>
+                  <div className="badge badge-outline">{tour.packageName}</div>
+                  <p>{tour.aboutTour}</p>
                   <p>
                     <span className="font-bold">Price: </span>
                     {tour.price} $
                   </p>
                   <div className="card-actions justify-end">
-                    <button className="px-5 py-1 rounded-md shadow-sm text-white font-semibold bg-primary">
+                    <Link to={`/pakage/details/${tour._id}`} className="px-5 py-1 rounded-md shadow-sm text-white font-semibold bg-primary">
                       Details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

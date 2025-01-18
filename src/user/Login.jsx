@@ -29,12 +29,13 @@ const Login = () => {
   const googleSignInUser = () => {
     googleLogin()
       .then((res) => {
-        setUser(res.user);
+        console.log(res.user)
         navigate(location?.state ? location.state : "/");
         const userInfo = {
           email: res.user.email,
           name: res.user.displayName,
           role: "tourist",
+          photo: res.user.photoURL,
         };
         // to post user data
         axios
