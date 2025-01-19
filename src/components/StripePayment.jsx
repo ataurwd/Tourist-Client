@@ -11,9 +11,7 @@ const stripePromiss = loadStripe(
 );
 
 const StripePayment = () => {
-  const [payment] = useAllPayment();
   const data = useLoaderData();
-  // console.log(payment.filter(item => item.itemId === data._id))
 
   return (
     <div>

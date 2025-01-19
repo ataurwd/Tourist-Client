@@ -13,7 +13,6 @@ const Payment = () => {
   const stripe = useStripe();
   const elements = useElements();
   const cardData = useLoaderData();
-  console.log(cardData);
   const navigate = useNavigate();
 
   useEffect(() => {

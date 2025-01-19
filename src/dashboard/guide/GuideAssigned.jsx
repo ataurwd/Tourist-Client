@@ -43,11 +43,6 @@ const GuideAssigned = () => {
 
   return (
     <div>
-      <p>
-        My guide assignments:{" "}
-        {guideAssigner?.filter((guide) => guide.tourGuide === user?.displayName)
-          .length || 0}
-      </p>
       <div className="overflow-x-auto mt-5 md:px-10 px-4">
         <table className="min-w-full bg-white border border-gray-300">
           <thead>

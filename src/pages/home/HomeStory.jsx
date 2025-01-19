@@ -5,9 +5,12 @@ import { FacebookShareButton } from "react-share";
 import { FaFacebook } from "react-icons/fa";
 import "swiper/css";
 import { FormContext } from "../../context/FormData";
+import { Link } from "react-router-dom";
+import useAllUser from "../../hooks/useAllUser";
 
 const HomeStory = ({ storyData }) => {
   const { user } = useContext(FormContext);
+  const [alluser] = useAllUser();
   return (
     <div className="md:my-10 mt-2 lg:px-20 md:px-10 px-4">
       <Title
@@ -63,6 +66,19 @@ const HomeStory = ({ storyData }) => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-center w-full mt-5 space-x-5">
+        {alluser.role !== 'guide' &&         <Link
+          to={'/dashboard/tourist-stories'}
+          className="bg-primary px-4 py-1 rounded-md text-white"
+        >
+          All Stories
+        </Link>
+}
+        <Link className="bg-primary px-4 py-1 rounded-md text-white">
+          Add Stories
+        </Link>
       </div>
     </div>
   );

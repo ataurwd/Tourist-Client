@@ -93,7 +93,7 @@ const BookingForm = ({packageName}) => {
                 value="https://example.com/image.jpg"
                 readOnly
               /> */}
-              <img src={user?.photoURL} className="rounded-full" alt="" />
+              <img src={user?.photoURL} className="rounded-full w-32 h-32" alt="" />
             </div>
             <div className="grid grid-cols-4 gap-5">
               <div className="grid grid-cols-2 gap-5 col-span-3">

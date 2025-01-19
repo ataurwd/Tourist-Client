@@ -3,12 +3,15 @@ import useAllUser from "../../hooks/useAllUser";
 import { FormContext } from "../../context/FormData";
 import usePackage from './../../hooks/usePackage';
 import useAllStories from "../../hooks/useAllStories";
+import useAllPayment from "../../hooks/useAllPayment";
 
 const AdminProfile = () => {
     const [alluser] = useAllUser()
     const { user } = useContext(FormContext)
     const [packageItem] = usePackage()
-    const [allStorie] = useAllStories()
+  const [allStorie] = useAllStories()
+  const [payment] = useAllPayment()
+  const allPayment = payment.reduce((total, sum) => total + sum.payment.amount, 0)
 
   const adminData = {
     name: "Admin John",
@@ -52,7 +55,7 @@ const AdminProfile = () => {
         {/* Total Payment */}
         <div className="bg-white shadow-md rounded-lg p-4">
           <h4 className="text-gray-600">Total Payment</h4>
-          <p className="text-2xl font-bold text-green-600">${stats.totalPayment}</p>
+          <p className="text-2xl font-bold text-green-600">${allPayment / 100}</p>
         </div>
 
         {/* Total Tour Guides */}

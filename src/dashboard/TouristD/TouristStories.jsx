@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import 'swiper/swiper.min.css';
 import "swiper/css";
 import Swal from "sweetalert2";
-import useUser from "../../hooks/useUser";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import useStory from "../../hooks/useStory";
@@ -122,46 +121,6 @@ const TouristStories = () => {
               >
                 Delete
               </button>
-
-              {/* update modal */}
-              <dialog id="my_modal_1" className="modal">
-                <div className="modal-box">
-                  <div
-                    className="flex justify-end font-bold cursor-pointer"
-                    onClick={closeModal}
-                  >
-                    X
-                  </div>
-                  <form onSubmit={(e) => handleEdit(e, story._id)}>
-                    <div className="mb-4">
-                      <label className="block text-gray-700">Title</label>
-                      <input
-                        name="title"
-                        defaultValue={story.title}
-                        type="text"
-                        className="mt-1 p-2 border border-gray-300 rounded w-full"
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-gray-700">Story Text</label>
-                      <textarea
-                        name="text"
-                        defaultValue={story.storyText}
-                        className="mt-1 p-2 border border-gray-300 rounded w-full"
-                        rows="4"
-                      ></textarea>
-                    </div>
-                    <button className="btn bg-secondary font-semibold">
-                      Update Now
-                    </button>
-                  </form>
-                  <div className="modal-action">
-                    <form method="dialog">
-                      {/* if there is a button in form, it will close the modal */}
-                    </form>
-                  </div>
-                </div>
-              </dialog>
             </div>
           </div>
         ))}
