@@ -48,7 +48,7 @@ const TouristBooking = () => {
         </thead>
         <tbody>
           {guideBooking.map((booking) => (
-            <tr key={booking.id}>
+            <tr key={booking._id}>
               <td className="px-6 py-3 border-b border-gray-300">
                 {booking.packageName}
               </td>

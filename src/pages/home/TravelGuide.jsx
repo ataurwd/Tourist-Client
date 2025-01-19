@@ -4,9 +4,21 @@ import "react-tabs/style/react-tabs.css";
 import usePackage from "./../../hooks/usePackage";
 import Title from "../../components/Title";
 import { Link } from "react-router-dom";
+import useAllUser from "../../hooks/useAllUser";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const TravelGuide = () => {
   const [packageItem] = usePackage();
+
+  const { data: guideData = []} = useQuery({
+    queryKey: ['allGuidesOnly'],
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_URL}/all-guides`)
+      return res.data;
+    }
+  })
+
   return (
     <div className="lg:px-20 md:px-10 px-4">
       <Title
@@ -60,7 +72,17 @@ const TravelGuide = () => {
           </div>
         </TabPanel>
         <TabPanel>
-          <h2>Any content 2</h2>
+        <Title heading={'Meet Our All Tour Guides'}/>
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mt-10">
+          {guideData
+            .map((item) => (
+              <Link to={`/guide/${item._id}`} key={item._id} className="border grid place-items-center p-5 text-center rounded-md shadow-sm">
+                <img className="w-20 h-20 object-cover rounded-full" src={item.photo} alt={item.name} />
+                <h1><span className="font-bold">Name:</span> {item.name}</h1>
+                <p><span className="font-bold">Role: </span>{item.role}</p>
+              </Link>
+            ))}
+        </div>
         </TabPanel>
       </Tabs>
     </div>

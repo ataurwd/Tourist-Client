@@ -102,7 +102,6 @@ const PackageDetails = () => {
         </div>
 
         <BookingForm packageName={ data.packageName} />
-        TODO: now sent the form data to the database
       </div>
     </div>
   );

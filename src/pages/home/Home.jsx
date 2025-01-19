@@ -11,8 +11,8 @@ const Home = () => {
 
     return (
         <div>
-            <Heading />
-            <Overview />
+            {/* <Heading /> */}
+            {/* <Overview /> */}
             <TravelGuide />
             <HomeStory storyData={ storyData} />
         </div>
