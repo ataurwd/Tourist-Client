@@ -30,7 +30,7 @@ const BookingForm = ({packageName}) => {
       price,
       date,
       tourGuide,
-      statas: "pending  ",
+      statas: "pending",
       packageName: packageName,
     };
     await axios
