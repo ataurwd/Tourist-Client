@@ -3,6 +3,7 @@ import usePackage from "../../hooks/usePackage";
 import Title from "./../../components/Title";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Trips = () => {
   const { data: packageItem = [] } = useQuery({
@@ -10,6 +11,7 @@ const Trips = () => {
     queryFn: async () => {
       const response = await axios(`${import.meta.env.VITE_URL}/packages/all`);
       return response.data;
+
     },
   });
   return (
@@ -32,16 +34,16 @@ const Trips = () => {
               />
             </figure>
             <div className="card-body">
-              <div className="badge badge-outline">{tour.aboutTour}</div>
-              <p>{tour.packageName}</p>
+              <div className="badge badge-outline">{tour.packageName}</div>
+              <p>{tour.aboutTour.slice(0, 50)}...</p>
               <p>
                 <span className="font-bold">Price: </span>
                 {tour.price} $
               </p>
               <div className="card-actions justify-end">
-                <button className="px-5 py-1 rounded-md shadow-sm text-white font-semibold bg-primary">
+                <Link to={`/pakage/details/${tour._id}`} className="px-5 py-1 rounded-md shadow-sm text-white font-semibold bg-primary">
                   Details
-                </button>
+                </Link>
               </div>
             </div>
           </div>

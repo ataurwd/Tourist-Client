@@ -7,12 +7,14 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const BookingForm = ({packageName}) => {
+const BookingForm = ({ packageName }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const { user } = useContext(FormContext);
   const [alluser] = useAllUser();
-  const naviagate = useNavigate()
+  const navigate = useNavigate();
 
+  // const admin = alluser.filter((item) => item.role === "admin")[0].role;
+  // const tourist = alluser.filter((item) => item.role === "tourist")[0].role;
 
   const handelBooking = async (e) => {
     e.preventDefault();
@@ -42,7 +44,17 @@ const BookingForm = ({packageName}) => {
             icon: "success",
             draggable: false,
           });
-          naviagate('/dashboard/tourist-bookings')
+          const isTourist = alluser.some((item) => item.role === "tourist");
+          const isAdmin = alluser.some((item) => item.role === "admin");
+  
+          if (isTourist) {
+            navigate("/dashboard/tourist-bookings");
+          } else if (isAdmin) {
+            navigate("/dashboard/admin-assigned");
+          } else {
+            // Fallback if neither role is found
+            navigate("/login");
+          }
         }
       });
   };
@@ -93,7 +105,11 @@ const BookingForm = ({packageName}) => {
                 value="https://example.com/image.jpg"
                 readOnly
               /> */}
-              <img src={user?.photoURL} className="rounded-full w-32 h-32" alt="" />
+              <img
+                src={user?.photoURL}
+                className="rounded-full w-32 h-32"
+                alt=""
+              />
             </div>
             <div className="grid grid-cols-4 gap-5">
               <div className="grid grid-cols-2 gap-5 col-span-3">
