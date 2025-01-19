@@ -31,6 +31,7 @@ import ManageCandidate from "./../dashboard/admin/ManageCandidate";
 import AdminRoute from "./AdminRoute";
 import PackageDetails from "../../src/components/PackageDetails";
 import GuideDetails from "../../src/components/GuideDetails";
+import StripePayment from './../components/StripePayment';
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -226,6 +227,11 @@ const Router = () => {
             </AdminRoute>
           ),
         },
+        {
+          path: '/dashboard/tourist-bookings/:id',
+          element: <StripePayment />,
+          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/guide-bookings/${params.id}`)
+        }
       ],
     },
   ]);

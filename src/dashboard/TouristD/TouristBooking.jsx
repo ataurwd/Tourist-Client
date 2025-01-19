@@ -1,27 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useContext } from "react";
-import { FormContext } from "../../context/FormData";
+import { Link } from "react-router-dom";
+import useAllPayment from "../../hooks/useAllPayment";
+import useBooking from "../../hooks/useBooking";
 
 const TouristBooking = () => {
-  const { user } = useContext(FormContext);
-  console.log(user);
-  const { data: guideBooking = [] } = useQuery({
-    queryKey: ["guideBooking"],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_URL}/guide-booking/${user.email}`
-      );
-      return response.data;
-    },
-  });
+  const [payment] = useAllPayment();
+  const [guideBooking] = useBooking();
   return (
     <div className="overflow-x-auto mt-5 md:px-10 px-4">
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
             <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
-              Package Name
+              Package Name {}
             </th>
             <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
               Tour Guide Name
@@ -53,29 +45,51 @@ const TouristBooking = () => {
                 {booking.date}
               </td>
               <td className="px-6 py-3 border-b border-gray-300">
-               ${booking.price}
+                ${booking.price}
               </td>
               <td className="px-6 py-3 border-b border-gray-300">
-              <div className="badge badge-outline">{booking.statas} </div>
+                <div className="badge badge-outline">{booking.statas} </div>
               </td>
               <td className="px-6 py-3 border-b border-gray-300 text-center">
-                {/* {booking.status === "pending" && ( */}
                 <>
+                  {/* Pay Button */}
                   <button
-                    //   onClick={() => handlePayment(booking.id)}
-                    disabled={booking.status === "pending"}
-                    className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 mr-2"
+                    disabled={
+                      booking.statas === "in-review" ||
+                      booking.statas === "accepted" ||
+                      booking.statas === "rejected"
+                    }
+                    className={`px-3 py-1 rounded-md mr-2 ${
+                      booking.statas === "in-review" ||
+                      booking.statas === "accepted" ||
+                      booking.statas === "rejected"
+                        ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                        : "bg-primary text-white hover:bg-primary-dark"
+                    }`}
                   >
-                    Pay
+                    <Link
+                      to={`/dashboard/tourist-bookings/${booking._id}`}
+                      className={`${
+                        booking.statas === "in-review" ||
+                        booking.statas === "accepted" ||
+                        booking.statas === "rejected"
+                          ? "cursor-not-allowed pointer-events-none"
+                          : ""
+                      }`}
+                    >
+                      Pay
+                    </Link>
                   </button>
+                      {console.log(booking.statas)}
+                  {/* Cancel Button */}
                   <button
-                    //   onClick={() => handleCancel(booking.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                    disabled={booking.statas !== "pending"}
+                    // onClick={() => handleCancel(booking._id)}
+                    className={`px-3 py-1 rounded-md ${booking.statas !== 'pending' ? 'bg-gray-300': 'bg-gray-400'}`}
                   >
                     Cancel
                   </button>
                 </>
-                 {/* )} */}
               </td>
             </tr>
           ))}

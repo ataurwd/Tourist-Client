@@ -71,19 +71,19 @@ const Dashboard = () => {
 
         {/* back to home route everyone can see this */}
         <div className="border-b-2 my-4"></div>
-        {/* <div className={`rounded-md p-4 bg-white my-2 ${isCollapsed ? 'mx-1' : ''}`}>
+        <div className={`rounded-md p-4 bg-white my-2 ${isCollapsed ? 'mx-1' : ''}`}>
           <NavLink
             to={"/"}
             className={({ isActive }) =>
               `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-                isCollapsed ? "justify-center" : "ml-5"
+                isCollapsed ? "justify-center" : "md:ml-5"
               }`
             }
           >
-            <TbHome className={`${isCollapsed ? "" : "mr-3"}`} size={24} />
-            {!isCollapsed && "Home"}
+            <TbHome className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+            <span className="hidden sm:inline">{!isCollapsed && "Home"}</span>
           </NavLink>
-        </div> */}
+        </div>
       </div>
 
       {/* Main Content */}

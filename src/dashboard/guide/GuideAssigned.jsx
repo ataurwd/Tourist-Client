@@ -19,39 +19,26 @@ const GuideAssigned = () => {
   });
 
   // Update booking statas function
-  const updateBookingstatas = async (id, newstatas) => {
-    try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_URL}/update-booking-statas/${id}`,
-        { statas: newstatas }
-      );
-      if (response.data.modifiedCount > 0) {
-        Swal.fire({
-          title: `statas updated to ${newstatas}`,
-          icon: "success",
-        });
-        refetch();
-      }
-    } catch (error) {
-      console.error("Failed to update statas", error);
-    }
+  const handleReject = async (id) => {
+    console.log(id);
+    await axios.patch(`${import.meta.env.VITE_URL}/update-status/${id}`);
+    Swal.fire({
+      title: "Rejected Successfully",
+      icon: "success",
+    });
+    refetch();
   };
 
   // Handle Reject button click
-  const handleReject = (id) => {
+  const handelAccept = async (id) => {
+    const res = await axios.patch(
+      `${import.meta.env.VITE_URL}/update-accepted/${id}`
+    );
     Swal.fire({
-      title: "Are you sure?",
-      text: "This will reject the booking.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, reject it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updateBookingstatas(id, "Rejected");
-      }
+      title: "Accepted Successfully",
+      icon: "success",
     });
+    refetch();
   };
 
   return (
@@ -123,7 +110,7 @@ const GuideAssigned = () => {
                           ? "bg-black text-white hover:bg-blue-600"
                           : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
-                      onClick={() => updateBookingstatas(booking._id, "accepted")}
+                      onClick={() => handelAccept(booking._id)}
                     >
                       Accept
                     </button>
