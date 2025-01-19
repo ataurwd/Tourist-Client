@@ -11,13 +11,13 @@ import axios from "axios";
 const TravelGuide = () => {
   const [packageItem] = usePackage();
 
-  const { data: guideData = []} = useQuery({
-    queryKey: ['allGuidesOnly'],
+  const { data: guideData = [] } = useQuery({
+    queryKey: ["allGuidesOnly"],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_URL}/all-guides`)
+      const res = await axios.get(`${import.meta.env.VITE_URL}/all-guides`);
       return res.data;
-    }
-  })
+    },
+  });
 
   return (
     <div className="lg:px-20 md:px-10 px-4">
@@ -55,16 +55,21 @@ const TravelGuide = () => {
                   />
                 </figure>
                 <div className="card-body">
-                  <div className="badge badge-outline">{tour.packageName}</div>
+                  <div className="badge badge-outline border-primary">{tour.packageName}</div>
                   <p>{tour.aboutTour.slice(0, 80)}...</p>
-                  <p>
-                    <span className="font-bold">Price: </span>
-                    {tour.price} $
-                  </p>
-                  <div className="card-actions justify-end">
-                    <Link to={`/pakage/details/${tour._id}`} className="px-5 py-1 rounded-md shadow-sm text-white font-semibold bg-primary">
-                      Details
-                    </Link>
+                  <div className="flex  justify-between items-center">
+                    <div className="card-actions justify-start">
+                      <Link
+                        to={`/pakage/details/${tour._id}`}
+                        className="px-5 py-1 rounded-md shadow-sm text-black border-2 border-primary font-semibold "
+                      >
+                        Details
+                      </Link>
+                    </div>
+                    <div>
+                      <span className="font-bold">Price: </span>
+                      <span className="font-extrabold text-primary">{tour.price}$</span> 
+                    </div>
                   </div>
                 </div>
               </div>
@@ -72,17 +77,29 @@ const TravelGuide = () => {
           </div>
         </TabPanel>
         <TabPanel>
-        <Title heading={'Meet Our All Tour Guides'}/>
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mt-10">
-          {guideData
-            .map((item) => (
-              <Link to={`/guide/${item._id}`} key={item._id} className="border grid place-items-center p-5 text-center rounded-md shadow-sm">
-                <img className="w-20 h-20 object-cover rounded-full" src={item.photo} alt={item.name} />
-                <h1><span className="font-bold">Name:</span> {item.name}</h1>
-                <p><span className="font-bold">Role: </span>{item.role}</p>
+          <Title heading={"Meet Our All Tour Guides"} />
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mt-10">
+            {guideData.map((item) => (
+              <Link
+                to={`/guide/${item._id}`}
+                key={item._id}
+                className="border grid place-items-center p-5 text-center rounded-md shadow-sm"
+              >
+                <img
+                  className="w-20 h-20 object-cover rounded-full"
+                  src={item.photo}
+                  alt={item.name}
+                />
+                <h1>
+                  <span className="font-bold">Name:</span> {item.name}
+                </h1>
+                <p>
+                  <span className="font-bold">Role: </span>
+                  {item.role}
+                </p>
               </Link>
             ))}
-        </div>
+          </div>
         </TabPanel>
       </Tabs>
     </div>

@@ -5,6 +5,7 @@ import { FormContext } from './../../context/FormData';
 import TravelGuide from './TravelGuide';
 import HomeStory from './HomeStory';
 import { useLoaderData } from 'react-router-dom';
+import JoinUs from './JoinUs';
 
 const Home = () => {
     const storyData = useLoaderData();
@@ -14,7 +15,8 @@ const Home = () => {
             <Heading />
             <Overview />
             <TravelGuide />
-            <HomeStory storyData={ storyData} />
+            <HomeStory storyData={storyData} />
+            <JoinUs/>
         </div>
     );
 };
