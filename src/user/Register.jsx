@@ -6,10 +6,11 @@ import toast from "react-hot-toast";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [password, setPassword] = useState(false);
-  
+
   const { handelRegisterUser, setUser, user } = useContext(FormContext);
   const navigate = useNavigate();
 
@@ -22,7 +23,10 @@ const Register = () => {
 
     // password validation
     if (password.length < 6) {
-      toast.error("Password should be at least 6 characters long");
+      Swal.fire({
+        title: "Password should be at least 6 characters long.",
+        icon: "error",
+      });
       return;
     }
 
@@ -30,41 +34,50 @@ const Register = () => {
     const lowerCase = /[a-z]/;
 
     if (!upperCase.test(password)) {
-      toast.error("Password must contain at least one uppercase letter.");
+      Swal.fire({
+        title: "Password must contain at least one uppercase letter.",
+        icon: "error",
+      });
       return;
     }
     if (!lowerCase.test(password)) {
-      toast.error("Password must contain at least one lowercase letter.");
+      Swal.fire({
+        title: "Password must contain at least one lowercase letter.",
+        icon: "error",
+      });
       return;
     }
 
     handelRegisterUser(email, password)
       .then((res) => {
-          toast.success("Registration successful");
-        navigate('/')
+        Swal.fire({
+          title: "sucessfully login",
+          icon: "success",
+        });
+        navigate("/");
 
         // to post the user infor to the server
         const userInfo = {
           email: res.user.email,
           name: name,
-          role: 'tourist',
+          role: "tourist",
           photo: photoURl,
-        }
+        };
         // to post user data
-        axios.post(`${import.meta.env.VITE_URL}/user`, userInfo)
-          .then(res => {
-          })
-        
+        axios
+          .post(`${import.meta.env.VITE_URL}/user`, userInfo)
+          .then((res) => {});
+
         // to update user profile in the firebase auth
         const profile = {
           displayName: name,
           photoURL: photoURl,
-        }
+        };
         updateProfile(auth.currentUser, profile).then(() => {
           setUser((prev) => {
-            return{...prev, displayName: name, photoURL: photoURl}
-          })
-        })
+            return { ...prev, displayName: name, photoURL: photoURl };
+          });
+        });
         setUser(res.user);
       })
 

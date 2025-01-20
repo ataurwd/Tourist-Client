@@ -17,14 +17,14 @@ const TouristMenu = ({isCollapsed}) => {
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "ml-5"}`
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
                 }
               >
                 <CgProfile
-                  className={`${isCollapsed ? "" : "mr-3"}`}
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
                   size={24}
                 />
-                {!isCollapsed && "Manage Profile"}
+                <span className="hidden sm:inline">{!isCollapsed && "Manage Profile"}</span>
               </NavLink>
             </div>
             <div className="rounded-md p-4 bg-white my-2">
@@ -33,14 +33,14 @@ const TouristMenu = ({isCollapsed}) => {
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "ml-5"}`
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
                 }
               >
                 <TbCalendar
-                  className={`${isCollapsed ? "" : "mr-3"}`}
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
                   size={24}
                 />
-                {!isCollapsed && "My Bookings"}
+                <span className="hidden sm:inline">{!isCollapsed && "My Bookings"}</span>
               </NavLink>
             </div>
             <div className="rounded-md p-4 bg-white my-2">
@@ -49,14 +49,14 @@ const TouristMenu = ({isCollapsed}) => {
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "ml-5"}`
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
                 }
               >
                 <IoIosAddCircleOutline
-                  className={`${isCollapsed ? "" : "mr-3"}`}
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
                   size={24}
                 />
-                {!isCollapsed && "Add Stories"}
+                <span className="hidden sm:inline">{!isCollapsed && "Add Stories"}</span>
               </NavLink>
             </div>
             <div className="rounded-md p-4 bg-white my-2">
@@ -65,14 +65,14 @@ const TouristMenu = ({isCollapsed}) => {
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "ml-5"}`
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
                 }
               >
                 <MdHistoryToggleOff
-                  className={`${isCollapsed ? "" : "mr-3"}`}
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
                   size={24}
                 />
-                {!isCollapsed && "Manage Stories"}
+                <span className="hidden sm:inline">{!isCollapsed && "Manage Stories"}</span>
               </NavLink>
             </div>
             <div className="rounded-md p-4 bg-white my-2">
@@ -81,14 +81,14 @@ const TouristMenu = ({isCollapsed}) => {
                 className={({ isActive }) =>
                   `flex items-center ${
                     isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "ml-5"}`
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
                 }
               >
                 <IoPersonAddOutline
-                  className={`${isCollapsed ? "" : "mr-3"}`}
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
                   size={24}
                 />
-                {!isCollapsed && "Join as tour guide"}
+                <span className="hidden sm:inline">{!isCollapsed && "Join as tour guide"}</span>
               </NavLink>
             </div>
         </div>

@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FormContext } from "../context/FormData";
+import useUser from "../hooks/useUser";
 
 const NavBer = () => {
   const { user, logoutUser } = useContext(FormContext);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [loginUser] = useUser();
 
   const signOut = () => {
     logoutUser();
@@ -38,7 +40,10 @@ const NavBer = () => {
           </svg>
         </button>
         {/* Logo and Website Name */}
-        <Link to="/" className="font-semibold text-xl flex items-center text-white">
+        <Link
+          to="/"
+          className="font-semibold text-xl flex items-center text-white"
+        >
           Treva
         </Link>
       </div>
@@ -46,16 +51,36 @@ const NavBer = () => {
       {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 space-x-5 text-[17px] font-medium">
-          <NavLink to="/" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "text-primary" : "text-white"
+            }
+          >
             Home
           </NavLink>
-          <NavLink to="/community" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
+          <NavLink
+            to="/community"
+            className={({ isActive }) =>
+              isActive ? "text-primary" : "text-white"
+            }
+          >
             Community
           </NavLink>
-          <NavLink to="/about-us" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
+          <NavLink
+            to="/about-us"
+            className={({ isActive }) =>
+              isActive ? "text-primary" : "text-white"
+            }
+          >
             About Us
           </NavLink>
-          <NavLink to="/trips" className={({ isActive }) => (isActive ? "text-primary" : "text-white")}>
+          <NavLink
+            to="/trips"
+            className={({ isActive }) =>
+              isActive ? "text-primary" : "text-white"
+            }
+          >
             Trips
           </NavLink>
         </ul>
@@ -67,20 +92,36 @@ const NavBer = () => {
           <div className="relative group">
             <img
               src={user?.photoURL || "/default-profile.png"}
-              className="rounded-full w-10 h-10 cursor-pointer"
+              className="rounded-full w-10 h-10 cursor-pointer object-cover"
               alt="User"
               referrerPolicy="no-referrer"
             />
             <div className="absolute top-12 right-0 md:-left-20 flex flex-col gap-2 w-48 bg-white p-3 shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
               <h3 className="text-sm font-semibold">{user?.displayName}</h3>
               <p className="text-xs text-gray-600">{user?.email}</p>
-              <Link to="/dashboard" className="text-sm text-black hover:text-gray-700">
-                Dashboard
-              </Link>
-              <Link to="/offer-announcements" className="text-sm text-black hover:text-gray-700">
+              <Link
+                  to={`${
+                    loginUser.role === "admin"
+                      ? "/dashboard/admin-profile"
+                      : loginUser.role === "guide"
+                      ? "/dashboard/guide-profile"
+                      : "/dashboard/tourist-profile"
+                  }`}
+                  className={ "text-black"
+                  }
+                >
+                  Dashboard
+                </Link>
+              <Link
+                to="/offer-announcements"
+                className="text-sm text-black hover:text-gray-700"
+              >
                 Offer Announcements
               </Link>
-              <button onClick={signOut} className="text-sm text-white bg-primary py-1 rounded-sm hover:bg-danger">
+              <button
+                onClick={signOut}
+                className="text-sm text-white bg-primary py-1 rounded-sm hover:bg-danger"
+              >
                 Logout
               </button>
             </div>
@@ -88,7 +129,9 @@ const NavBer = () => {
         ) : (
           <>
             <Link to="/login">
-              <button className="px-5 font-bold text-white py-1 rounded-md bg-primary">Login</button>
+              <button className="px-5 font-bold text-white py-1 rounded-md bg-primary">
+                Login
+              </button>
             </Link>
             <Link to="/register">
               <button className="px-5 font-bold text-white py-1 rounded-md bg-primary hidden md:block">
@@ -103,30 +146,65 @@ const NavBer = () => {
       {isMobileMenuOpen && (
         <div className="absolute top-16 left-0 -md:right-16 w-full bg-white shadow-lg lg:hidden">
           <ul className="menu menu-vertical px-5 py-3 space-y-3">
-            <NavLink to="/" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? "text-gray-400" : "text-black"
+              }
+            >
               Home
             </NavLink>
-            <NavLink to="/community" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
+            <NavLink
+              to="/community"
+              className={({ isActive }) =>
+                isActive ? "text-gray-400" : "text-black"
+              }
+            >
               Community
             </NavLink>
-            <NavLink to="/about-us" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
+            <NavLink
+              to="/about-us"
+              className={({ isActive }) =>
+                isActive ? "text-gray-400" : "text-black"
+              }
+            >
               About Us
             </NavLink>
-            <NavLink to="/trips" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
+            <NavLink
+              to="/trips"
+              className={({ isActive }) =>
+                isActive ? "text-gray-400" : "text-black"
+              }
+            >
               Trips
             </NavLink>
             {user && (
               <>
-                <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}>
+                <Link
+                  to={`${
+                    loginUser.role === "admin"
+                      ? "/dashboard/admin-profile"
+                      : loginUser.role === "guide"
+                      ? "/dashboard/guide-profile"
+                      : "/dashboard/tourist-profile"
+                  }`}
+                  className={ "text-gray-400"
+                  }
+                >
                   Dashboard
-                </NavLink>
+                </Link>
                 <NavLink
                   to="/offer-announcements"
-                  className={({ isActive }) => (isActive ? "text-gray-400" : "text-black")}
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-400" : "text-black"
+                  }
                 >
                   Offer Announcements
                 </NavLink>
-                <button onClick={signOut} className="text-red-500 text-sm hover:underline">
+                <button
+                  onClick={signOut}
+                  className="text-red-500 text-sm hover:underline"
+                >
                   Logout
                 </button>
               </>

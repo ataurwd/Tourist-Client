@@ -3,7 +3,7 @@ import React from 'react';
 import  axios  from 'axios';
 
 const useAllStories = () => {
-    const {data: allStorie = [], refetch } = useQuery({
+    const {data: allStorie = [], refetch, isLoading } = useQuery({
         queryKey: ['allSrotiesData'],
         queryFn: async () => {
             const res = axios.get(`${import.meta.env.VITE_URL}/stories`)
@@ -11,7 +11,7 @@ const useAllStories = () => {
         }
         
     })
-    return [allStorie, refetch];
+    return [allStorie, refetch,isLoading];
 };
 
 export default useAllStories;

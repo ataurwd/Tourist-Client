@@ -5,10 +5,13 @@ import "swiper/css";
 import Title from "../../components/Title";
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
+import Loading from './../../components/Loading';
 
 const Community = () => {
-  const [allStorie] = useAllStories();
-  const [count, setCount] = useState(0);
+  const [allStorie , isLoading] = useAllStories();
+  if (isLoading) {
+    <Loading/>
+  }
   return (
     <>
       <Title

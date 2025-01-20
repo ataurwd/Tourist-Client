@@ -53,68 +53,54 @@ const JoinUs = () => {
   ];
 
   return (
-    <div className="mt-20">
+    <div className="md:mt-20">
       <div
         className="md:h-[450px] relative py-10"
         style={{
           backgroundImage:
             "url('https://demo.egenslab.com/html/tourxpro/demo/assets/images/banner/map-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <Title
-          heading={"Explore The world"}
+          heading={"Explore The World"}
           text={
-            " Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores totam beatae nam nobis accusantium cum alias voluptas aliquid tempore ducimus."
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores totam beatae nam nobis accusantium cum alias voluptas aliquid tempore ducimus."
           }
         />
-        <div className="grid grid-cols-5 gap-5 place-items-center md:px-32 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 place-items-center px-5 sm:px-10 md:px-20 lg:px-32 relative">
           {countries.map((country) => (
             <motion.div
-            whileHover={{ y: -5 }}  
-            initial={{ y: 0 }}
-            animate={{ y: 0 }} 
-            transition={{
-              duration: 0.5, 
-              ease: "easeInOut",
-            }}
-            key={country.id}
-            className="w-52 h-40 rounded-md relative group overflow-hidden cursor-pointer"
-            style={{
-              backgroundImage: `url(${country.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            {/* Image overlay on hover */}
-            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
-          
-            {/* Text container */}
-            <div className="absolute p-3 bottom-0 w-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <h1 className="font-bold text-lg group-hover:text-primary transition-colors duration-300">
-                {country.name}
-              </h1>
-              <p className="text-sm group-hover:text-gray-300 transition-colors duration-300">
-                {country.description.slice(0, 40)}...
-              </p>
-            </div>
-          </motion.div>
-          
-          ))}
-        </div>
+              whileHover={{ y: -5 }}
+              initial={{ y: 0 }}
+              animate={{ y: 0 }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
+              key={country.id}
+              className="w-full sm:w-48 h-40 rounded-md relative group overflow-hidden cursor-pointer"
+              style={{
+                backgroundImage: `url(${country.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {/* Image overlay on hover */}
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
 
-        {/* Telegram Plane icon with smooth animation */}
-        <div className="absolute top-10 z-10 left-24">
-          <motion.div
-            initial={{ y: 0 }}
-            animate={{ y: [0, -10, 0] }} 
-            transition={{
-              duration: 2,
-              ease: "easeInOut",
-              repeat: Infinity,
-            }}
-          >
-            <FaTelegramPlane size={35} />
-          </motion.div>
+              {/* Text container */}
+              <div className="absolute p-3 bottom-0 w-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h1 className="font-bold text-lg group-hover:text-primary transition-colors duration-300">
+                  {country.name}
+                </h1>
+                <p className="text-sm group-hover:text-gray-300 transition-colors duration-300">
+                  {country.description.slice(0, 40)}...
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

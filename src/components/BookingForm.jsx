@@ -5,6 +5,7 @@ import { FormContext } from "./../context/FormData";
 import useAllUser from "../hooks/useAllUser";
 import axios from "axios";
 import Swal from "sweetalert2";
+import useUser from "./../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 
 const BookingForm = ({ packageName }) => {
@@ -12,9 +13,7 @@ const BookingForm = ({ packageName }) => {
   const { user } = useContext(FormContext);
   const [alluser] = useAllUser();
   const navigate = useNavigate();
-
-  // const admin = alluser.filter((item) => item.role === "admin")[0].role;
-  // const tourist = alluser.filter((item) => item.role === "tourist")[0].role;
+  const [loginUser] = useUser();
 
   const handelBooking = async (e) => {
     e.preventDefault();
@@ -35,6 +34,14 @@ const BookingForm = ({ packageName }) => {
       statas: "pending",
       packageName: packageName,
     };
+
+    if (loginUser.role === "guide") {
+      return Swal.fire({
+        title: "A Guide Can not booked",
+        icon: "error",
+        draggable: false,
+      });
+    }
     await axios
       .post(`${import.meta.env.VITE_URL}/guide-booking`, formData)
       .then((res) => {
@@ -44,17 +51,13 @@ const BookingForm = ({ packageName }) => {
             icon: "success",
             draggable: false,
           });
-          const isTourist = alluser.some((item) => item.role === "tourist");
-          const isAdmin = alluser.some((item) => item.role === "admin");
-  
-          if (isTourist) {
-            navigate("/dashboard/tourist-bookings");
-          } else if (isAdmin) {
-            navigate("/dashboard/admin-assigned");
-          } else {
-            // Fallback if neither role is found
-            navigate("/login");
-          }
+          navigate(
+            `${
+              loginUser.role === "admin"
+                ? "/dashboard/admin-assigned"
+                : "/dashboard/tourist-bookings"
+            }`
+          );
         }
       });
   };
@@ -107,18 +110,19 @@ const BookingForm = ({ packageName }) => {
               /> */}
               <img
                 src={user?.photoURL}
-                className="rounded-full w-32 h-32"
+                className="rounded-full w-32 h-32 object-cover"
                 alt=""
               />
             </div>
-            <div className="grid grid-cols-4 gap-5">
-              <div className="grid grid-cols-2 gap-5 col-span-3">
+            <div className="grid md:grid-cols-4 gap-5">
+              <div className="grid md:grid-cols-2 gap-5 col-span-3">
                 {/* Price */}
                 <div className="mb-4">
                   <label className="block text-gray-700 font-medium mb-2">
                     Price
                   </label>
                   <input
+                    required
                     type="number"
                     name="price"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
@@ -131,10 +135,11 @@ const BookingForm = ({ packageName }) => {
                     Tour Guide Name
                   </label>
                   <select
+                    required
                     name="tourGuide"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="">Select a guide</option>
+                    <option value="" disabled>Select a guide</option>
 
                     {alluser
                       .filter((user) => user.role === "guide")
@@ -153,6 +158,7 @@ const BookingForm = ({ packageName }) => {
                   Tour Date
                 </label>
                 <DatePicker
+                  required
                   selected={selectedDate}
                   onChange={(date) => setSelectedDate(date)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
@@ -164,11 +170,17 @@ const BookingForm = ({ packageName }) => {
             {/* Book Now Button */}
             <div className="text-center">
               <button
+                disabled={!user}
                 to="/confirmation"
-                className="bg-primary text-white px-6 py-2 rounded-md  focus:outline-none focus:ring-2 w-full"
+                className={` text-white px-6 py-2 rounded-md  focus:outline-none focus:ring-2 w-full ${
+                  !user ? "cursor-not-allowed bg-gray-300" : "bg-primary"
+                }`}
               >
                 Book Now
               </button>
+              <p className="mt-5 text-red-500">
+                {!user ? "Please Login To Booking Guide" : ""}
+              </p>
             </div>
           </form>
         </div>

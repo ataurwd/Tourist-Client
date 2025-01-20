@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FormContext } from "./../context/FormData";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { googleLogin, loginUser, user, setUser } = useContext(FormContext);
@@ -29,7 +30,10 @@ const Login = () => {
   const googleSignInUser = () => {
     googleLogin()
       .then((res) => {
-        console.log(res.user)
+        Swal.fire({
+          title: "sucessfully login",
+          icon: "success"
+        });
         navigate(location?.state ? location.state : "/");
         const userInfo = {
           email: res.user.email,
@@ -40,7 +44,7 @@ const Login = () => {
         // to post user data
         axios
           .post(`${import.meta.env.VITE_URL}/user`, userInfo)
-          .then((res) => {});
+          .then((res) => {console.log(res.data)});
       })
       .catch((er) => {
         toast.error(er.message);

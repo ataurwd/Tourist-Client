@@ -6,6 +6,7 @@ import TravelGuide from './TravelGuide';
 import HomeStory from './HomeStory';
 import { useLoaderData } from 'react-router-dom';
 import JoinUs from './JoinUs';
+import Galary from './Galary';
 
 const Home = () => {
     const storyData = useLoaderData();
@@ -16,7 +17,8 @@ const Home = () => {
             <Overview />
             <TravelGuide />
             <HomeStory storyData={storyData} />
-            <JoinUs/>
+            <JoinUs />
+            <Galary/>
         </div>
     );
 };

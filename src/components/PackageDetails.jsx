@@ -11,7 +11,7 @@ const PackageDetails = () => {
   const [alluser] = useAllUser();
   return (
     <div className="lg:px-32 lg:my-10 md:px-16 px-3 md:mt-5 mt-2">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
         {/* First Image: Spans 1 column and 2 rows */}
         <div className="row-span-2">
           <img
@@ -41,7 +41,7 @@ const PackageDetails = () => {
       </div>
 
       <div className="text-center md:my-10 space-y-3">
-        <h1 className="text-3xl font-semibold">
+        <h1 className="text-3xl font-semibold mt-8">
           Explore the Highlights of Your Adventure
         </h1>
         <p className="w-2/3 mx-auto">package name {data.aboutTour}</p>

@@ -59,9 +59,7 @@ const Router = () => {
         {
           path: "/pakage/details/:id",
           element: (
-            <PrivateRoute>
               <PackageDetails />
-            </PrivateRoute>
           ),
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),

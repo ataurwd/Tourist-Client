@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-spring/web": "^9.7.5",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.5.0",
     "@tanstack/react-query": "^5.64.1",
+    "@use-gesture/react": "^10.3.1",
     "axios": "^1.7.9",
     "firebase": "^11.1.0",
     "framer-motion": "^11.18.1",
@@ -36,7 +38,8 @@
     "sort-by": "^1.2.0",
     "stripe": "^17.5.0",
     "sweetalert2": "^11.15.10",
-    "swiper": "^11.2.1"
+    "swiper": "^11.2.1",
+    "vec-la": "^1.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

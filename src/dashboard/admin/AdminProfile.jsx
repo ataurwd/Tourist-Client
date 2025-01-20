@@ -30,8 +30,8 @@ const AdminProfile = () => {
   return (
     <div className="p-6">
       {/* Welcome Message */}
-      <div className="bg-blue-50 p-4 rounded-md mb-6">
-        <h2 className="text-2xl font-semibold text-blue-600">
+      <div className="bg-green-200 p-4 rounded-md mb-6">
+        <h2 className="text-2xl font-semibold text-primary">
           Welcome back, {user?.displayName}!
         </h2>
         <p className="text-gray-600">Here’s an overview of your admin dashboard.</p>
@@ -42,7 +42,7 @@ const AdminProfile = () => {
         <img
           src={user?.photoURL}
           alt="Admin"
-          className="w-20 h-20 rounded-full mr-4"
+          className="w-20 h-20 rounded-full mr-4 object-cover"
         />
         <div>
           <h3 className="text-xl font-semibold">{user.displayName}</h3>

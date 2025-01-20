@@ -13,6 +13,13 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+      },spacing: {
+        '400': '400px',
+      },
+      screens: {
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
       },
     },
   },
