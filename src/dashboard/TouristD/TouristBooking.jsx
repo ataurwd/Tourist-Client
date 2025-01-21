@@ -1,18 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import useBooking from "../../hooks/useBooking";
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
+import { FormContext } from "../../context/FormData";
 
 const TouristBooking = () => {
-  const [guideBooking, refetch] = useBooking();
   const [showCongrats, setShowCongrats] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(false);
+  const {user} = useContext(FormContext)
+
+  const [product, setProduct] = useState([]);
+  // for set total data count
+  const [count, totalCount] = useState(0);
+  // for update current page data
+  const [currentPage, setCurrentPage] = useState(0);
+  // for set how many item we want to show
+  const [item, setItem] = useState(10);
+
+  // for calculate total number of page
+  const numberOfpage = Math.ceil(count / item);
+
+  // for looping all pagination items
+  const pages = [...Array(numberOfpage).keys()];
+
+  // for get data fetching
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_URL}/guide-booking/${user.email}?page=${currentPage}&size=${item}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data));
+  }, [currentPage, item]);
+
+  // for get total count of data
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_URL}/countGuide/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => totalCount(data.result));
+  }, []);
+
+  // handel drop down item
+  const handleItemsPerPage = (e) => {
+    const val = parseInt(e.target.value);
+    setItem(val);
+    setCurrentPage(0);
+  };
 
   // This will store the number of bookings the user has made
-  const bookingCount = guideBooking.length;
+  const bookingCount = product.length;
 
   useEffect(() => {
     // Check if the user has more than 3 bookings
@@ -23,7 +57,7 @@ const TouristBooking = () => {
       setShowCongrats(false);
       setButtonEnabled(false);
     }
-  }, [guideBooking]);
+  }, [product]);
 
   const handleCancel = async (id) => {
     const res = await axios.delete(
@@ -35,9 +69,11 @@ const TouristBooking = () => {
         icon: "success",
         draggable: false,
       });
-      const updatedBookings = guideBooking.filter((booking) => booking._id !== id);
+      const updatedBookings = product.filter(
+        (booking) => booking._id !== id
+      );
       refetch();
-            if (updatedBookings.length <= 3) {
+      if (updatedBookings.length <= 3) {
         setShowCongrats(false);
         setButtonEnabled(false);
       }
@@ -51,7 +87,10 @@ const TouristBooking = () => {
           <Confetti className="w-full" />
           <div className="bg-green-100 text-primary py-3 px-5 rounded-md shadow-md">
             <h2 className="text-xl font-bold">Congratulations!</h2>
-            <p>You have unlocked a special discount for booking more than 3 times!</p>
+            <p>
+              You have unlocked a special discount for booking more than 3
+              times!
+            </p>
             <button
               disabled={!buttonEnabled}
               className={`mt-3 px-4 py-2 rounded-md ${
@@ -70,7 +109,7 @@ const TouristBooking = () => {
         <thead>
           <tr>
             <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
-              Package Name
+              #
             </th>
             <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
               Tour Guide Name
@@ -90,10 +129,10 @@ const TouristBooking = () => {
           </tr>
         </thead>
         <tbody>
-          {guideBooking.map((booking) => (
+          {product.map((booking, index) => (
             <tr key={booking._id}>
               <td className="px-6 py-3 border-b border-gray-300">
-                {booking.packageName}
+                {index + 1}
               </td>
               <td className="px-6 py-3 border-b border-gray-300">
                 {booking.tourGuide}
@@ -164,6 +203,29 @@ const TouristBooking = () => {
           ))}
         </tbody>
       </table>
+
+            {/* Pagination */}
+            <div className="my-10 flex justify-center">
+        {pages.map((page) => (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`px-4 mx-3 rounded-sm ${
+              currentPage === page
+                ? "bg-primary text-white"
+                : "bg-gray-200 text-black"
+            }`}
+          >
+            {page + 1}
+          </button>
+        ))}
+        <select className="border-2 rounded-sm" value={item} onChange={handleItemsPerPage}>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
     </div>
   );
 };

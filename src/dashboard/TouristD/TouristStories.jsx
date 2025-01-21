@@ -13,7 +13,6 @@ import useStory from "../../hooks/useStory";
 const TouristStories = () => {
   const queryClient = useQueryClient();
   const [stories, isLoading, error, refetch] = useStory();
-
   // Delete story mutation
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
@@ -95,7 +94,7 @@ const TouristStories = () => {
               pagination={{ clickable: true }}
               className="w-full h-48 mb-4"
             >
-              {story.images.map((image, index) => (
+              {story?.images?.map((image, index) => (
                 <SwiperSlide key={index}>
                   <img
                     src={image}

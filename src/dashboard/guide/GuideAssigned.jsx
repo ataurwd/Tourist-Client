@@ -18,6 +18,7 @@ const GuideAssigned = () => {
     },
   });
 
+  console.log(guideAssigner)
   // Update booking statas function
   const handleReject = async (id) => {
     console.log(id);
@@ -76,7 +77,7 @@ const GuideAssigned = () => {
                     {booking.packageName}
                   </td>
                   <td className="px-6 py-3 border-b border-gray-300">
-                    {booking.touristName}
+                    {booking.name}
                   </td>
                   <td className="px-6 py-3 border-b border-gray-300">
                     {booking.date}

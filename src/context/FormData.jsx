@@ -9,11 +9,11 @@ import {
   import React, { createContext, useEffect, useState } from "react";
   import { auth } from './../firebase/firebase.init';
 import axios from "axios";
-import { myAxios } from "../hooks/useAxios";
+import useAxios, { myAxios } from "../hooks/useAxios";
 
   export const FormContext = createContext(null);
   
-  const FormData = ({ children }) => {
+const FormData = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
   

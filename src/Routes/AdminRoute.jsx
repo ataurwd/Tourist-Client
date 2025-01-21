@@ -12,7 +12,11 @@ const AdminRoute = ({ children }) => {
 
   // Show a loading indicator if either user context or query is still loading
   if (userLoading || isLoading) {
-    return <Loading />;
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   // If no user or their role doesn't match, redirect to login

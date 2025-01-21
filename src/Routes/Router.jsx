@@ -165,6 +165,7 @@ const Router = () => {
         {
           path: "update/:id",
           element: <UpateStorie />,
+          loader: ({params}) => (`${import.meta.env.VITE_URL}/stories/${params.id}`)
         },
 
         // for admin route

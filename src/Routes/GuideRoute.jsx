@@ -3,7 +3,6 @@ import { Navigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FormContext } from "../context/FormData";
 import useUser from "../hooks/useUser";
-import Loading from "../components/Loading";
 
 const GuideRoute = ({ children }) => {
   const { user, loading: userLoading } = useContext(FormContext);
@@ -12,7 +11,11 @@ const GuideRoute = ({ children }) => {
 
   // Show a loading indicator if either user context or query is still loading
   if (userLoading || isLoading) {
-    return <Loading />;
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   // If no user or their role doesn't match, redirect to login

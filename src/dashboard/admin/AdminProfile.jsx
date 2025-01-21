@@ -1,30 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import useAllUser from "../../hooks/useAllUser";
 import { FormContext } from "../../context/FormData";
-import usePackage from './../../hooks/usePackage';
+import usePackage from "./../../hooks/usePackage";
 import useAllStories from "../../hooks/useAllStories";
 import useAllPayment from "../../hooks/useAllPayment";
+import Swal from "sweetalert2";
 
 const AdminProfile = () => {
-    const [alluser] = useAllUser()
-    const { user } = useContext(FormContext)
-    const [packageItem] = usePackage()
-  const [allStorie] = useAllStories()
-  const [payment] = useAllPayment()
-  const allPayment = payment.reduce((total, sum) => total + sum.payment.amount, 0)
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [alluser] = useAllUser();
+  const { user, setUser } = useContext(FormContext);
+  const [packageItem] = usePackage();
+  const [allStorie] = useAllStories();
+  const [payment] = useAllPayment();
+  const allPayment = payment.reduce(
+    (total, sum) => total + sum.payment.amount,
+    0
+  );
+  const [formData, setFormData] = useState({ ...user });
 
-  const adminData = {
-    name: "Admin John",
-    role: "Super Admin",
-    picture: "https://via.placeholder.com/150", // Replace with actual image URL
+  // Open modal
+  const handleEditClick = () => {
+    setFormData({ ...user });
+    setModalOpen(true);
+  };
+  // Close modal
+  const handleModalClose = () => {
+    setModalOpen(false);
   };
 
-  const stats = {
-    totalPayment: 15000,
-    totalTourGuides: 8,
-    totalPackages: 20,
-    totalClients: 50,
-    totalStories: 35,
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Save changes
+  const handleSave = () => {
+    setUser({ ...formData }); // Update user in context
+    setModalOpen(false);
+    Swal.fire({
+      title: "Profile Updated",
+      icon: "success",
+      draggable: false,
+    });
   };
 
   return (
@@ -34,7 +53,9 @@ const AdminProfile = () => {
         <h2 className="text-2xl font-semibold text-primary">
           Welcome back, {user?.displayName}!
         </h2>
-        <p className="text-gray-600">Here’s an overview of your admin dashboard.</p>
+        <p className="text-gray-600">
+          Here’s an overview of your admin dashboard.
+        </p>
       </div>
 
       {/* Admin Information */}
@@ -46,7 +67,9 @@ const AdminProfile = () => {
         />
         <div>
           <h3 className="text-xl font-semibold">{user.displayName}</h3>
-          <p className="text-gray-600"><span className="font-bold">Role:</span> Admin</p>
+          <p className="text-gray-600">
+            <span className="font-bold">Role:</span> Admin
+          </p>
         </div>
       </div>
 
@@ -55,25 +78,33 @@ const AdminProfile = () => {
         {/* Total Payment */}
         <div className="bg-white shadow-md rounded-lg p-4">
           <h4 className="text-gray-600">Total Payment</h4>
-          <p className="text-2xl font-bold text-green-600">${allPayment / 100}</p>
+          <p className="text-2xl font-bold text-green-600">
+            ${allPayment / 100}
+          </p>
         </div>
 
         {/* Total Tour Guides */}
         <div className="bg-white shadow-md rounded-lg p-4">
           <h4 className="text-gray-600">Total Tour Guides</h4>
-          <p className="text-2xl font-bold text-blue-600">{alluser.filter(guide => guide.role === 'guide').length}</p>
+          <p className="text-2xl font-bold text-blue-600">
+            {alluser.filter((guide) => guide.role === "guide").length}
+          </p>
         </div>
 
         {/* Total Packages */}
         <div className="bg-white shadow-md rounded-lg p-4">
           <h4 className="text-gray-600">Total Packages</h4>
-          <p className="text-2xl font-bold text-purple-600">{packageItem.length}</p>
+          <p className="text-2xl font-bold text-purple-600">
+            {packageItem.length}
+          </p>
         </div>
 
         {/* Total Clients */}
         <div className="bg-white shadow-md rounded-lg p-4">
           <h4 className="text-gray-600">Total Clients</h4>
-          <p className="text-2xl font-bold text-orange-600">{alluser.filter(guide => guide.role === 'tourist').length}</p>
+          <p className="text-2xl font-bold text-orange-600">
+            {alluser.filter((guide) => guide.role === "tourist").length}
+          </p>
         </div>
 
         {/* Total Stories */}
@@ -82,6 +113,80 @@ const AdminProfile = () => {
           <p className="text-2xl font-bold text-pink-600">{allStorie.length}</p>
         </div>
       </div>
+      <button
+        onClick={handleEditClick}
+        className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 mr-3"
+      >
+        Edit Profile
+      </button>
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Name</label>
+                <input
+                  type="text"
+                  name="displayName"
+                  value={formData.displayName}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Photo URL
+                </label>
+                <input
+                  type="text"
+                  name="photoURL"
+                  value={formData.photoURL}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Role</label>
+                <input
+                  type="text"
+                  name="role"
+                  value={user?.role || "Tourist"}
+                  readOnly
+                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={user?.email}
+                  readOnly
+                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleModalClose}
+                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2 hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
