@@ -45,7 +45,7 @@ const TouristBooking = () => {
   };
 
   return (
-    <div className="overflow-x-auto my-10 md:px-10 px-4">
+    <div className="overflow-x-auto my-10 md:px-10">
       {showCongrats && (
         <div className="relative my-5">
           <Confetti className="w-full" />

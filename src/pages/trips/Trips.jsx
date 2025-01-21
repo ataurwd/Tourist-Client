@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import usePackage from "../../hooks/usePackage";
 import Title from "./../../components/Title";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import useAxios from "../../hooks/useAxios";
 
 const Trips = () => {
+  const secureAxios = useAxios()
+
   const { data: packageItem = [] } = useQuery({
     queryKey: ["allpackages"],
     queryFn: async () => {
-      const response = await axios(`${import.meta.env.VITE_URL}/packages/all`);
+      const response = await secureAxios.get(`/packages/all`);
       return response.data;
 
     },

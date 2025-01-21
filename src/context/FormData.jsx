@@ -8,6 +8,8 @@ import {
   } from "firebase/auth";
   import React, { createContext, useEffect, useState } from "react";
   import { auth } from './../firebase/firebase.init';
+import axios from "axios";
+import { myAxios } from "../hooks/useAxios";
 
   export const FormContext = createContext(null);
   
@@ -41,8 +43,18 @@ import {
   
     //   for save user
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          setUser(currentUser);      
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        if (currentUser?.email) {
+          await myAxios.post(
+            `/jwt`,
+            { email: currentUser.email },
+            { withCredentials: true }
+          ).then(res => {'login infor',console.log(res.data)})
+          setUser(currentUser);
+        } else {
+          setUser(currentUser);
+          await myAxios.get(`/logout`, { withCredentials: true }).then(res => {'logout infor',console.log(res.data)})     
+        }
         setLoading(false);
       });
   

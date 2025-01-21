@@ -24,7 +24,7 @@ const AdminAssigned = () => {
     }
   };
   return (
-    <div className="overflow-x-auto my-10 md:px-10 px-4">
+    <div className="overflow-x-auto my-10 md:px-10">
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
