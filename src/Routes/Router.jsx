@@ -32,12 +32,14 @@ import AdminRoute from "./AdminRoute";
 import PackageDetails from "../../src/components/PackageDetails";
 import GuideDetails from "../../src/components/GuideDetails";
 import StripePayment from './../components/StripePayment';
+import ErrorPage from "../components/ErrorPage";
 
 const Router = () => {
   const route = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorPage/>,
       children: [
         {
           path: "/",
@@ -82,6 +84,7 @@ const Router = () => {
     },
     {
       path: "dashboard",
+      errorElement: <ErrorPage/>,
       element: (
         <PrivateRoute>
           <Dashboard />
