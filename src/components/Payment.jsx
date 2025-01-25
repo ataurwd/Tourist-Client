@@ -11,7 +11,7 @@ const Payment = () => {
   const [clientSecrate, setClientSecrate] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useContext(FormContext);
-  const [, refetch] = useBooking();
+  const [guideBooking, refetch] = useBooking();
   const stripe = useStripe();
   const elements = useElements();
   const cardData = useLoaderData();
@@ -78,6 +78,7 @@ const Payment = () => {
           icon: "success",
           draggable: false,
         });
+        refetch()
         navigate(
           `${
             loginUser.role === "admin"

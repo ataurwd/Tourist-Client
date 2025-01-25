@@ -6,9 +6,7 @@ import useAllPayment from "../hooks/useAllPayment";
 import { useLoaderData } from "react-router-dom";
 
 // const stripePromiss = loadStripe(`${import.meta.VITE_PAYMENT}`)
-const stripePromiss = loadStripe(
-  "pk_test_51QgVp5RwZ10FIGO8sYxfqWwsf4CdbmxL4PcXPC8g5V7rzsyBHXSPXeqav1OeavcfpchBAM2FBnK20KruX3TjXxud00LQkCz8LL"
-);
+const stripePromiss = loadStripe(import.meta.env.VITE_STRITEKEY);
 
 const StripePayment = () => {
   const data = useLoaderData();
