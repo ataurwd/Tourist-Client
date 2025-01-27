@@ -13,7 +13,6 @@ const AdminAssigned = () => {
     const res = await axios.delete(
       `${import.meta.env.VITE_URL}/guide-booking/${id}`
     );
-    console.log(res.data)
     if (res.data.deletedCount) {
       Swal.fire({
         title: "Package Delted Successfully",

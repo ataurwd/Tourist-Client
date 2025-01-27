@@ -49,11 +49,11 @@ const FormData = ({ children }) => {
             `/jwt`,
             { email: currentUser.email },
             { withCredentials: true }
-          ).then(res => {'login infor',console.log(res.data)})
+          )
           setUser(currentUser);
         } else {
           setUser(currentUser);
-          await myAxios.get(`/logout`, { withCredentials: true }).then(res => {'logout infor',console.log(res.data)})     
+          await myAxios.get(`/logout`, { withCredentials: true }).then(res => {})     
         }
         setLoading(false);
       });

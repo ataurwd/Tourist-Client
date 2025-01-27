@@ -7,7 +7,6 @@ import BookingForm from "./BookingForm";
 
 const PackageDetails = () => {
   const data = useLoaderData();
-  console.log(data)
   const [alluser] = useAllUser();
   return (
     <div className="lg:px-32 lg:my-10 md:px-16 px-3 md:mt-5 mt-2">

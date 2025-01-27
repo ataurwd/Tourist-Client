@@ -18,10 +18,8 @@ const GuideAssigned = () => {
     },
   });
 
-  console.log(guideAssigner)
   // Update booking statas function
   const handleReject = async (id) => {
-    console.log(id);
     await axios.patch(`${import.meta.env.VITE_URL}/update-status/${id}`);
     Swal.fire({
       title: "Rejected Successfully",

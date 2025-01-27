@@ -24,7 +24,6 @@ const Payment = () => {
         price: cardData.price,
       })
       .then((res) => {
-        console.log(res.data.clientSecret);
         setClientSecrate(res.data.clientSecret);
       });
   }, [cardData.price]);
@@ -67,7 +66,6 @@ const Payment = () => {
         });
 
       if (cardErrr) {
-        console.log("Confirmation error:", cardErrr);
         setLoading(false);
         return;
       }

@@ -44,7 +44,6 @@ const Login = () => {
         // to post user data
         axios
           .post(`${import.meta.env.VITE_URL}/user`, userInfo)
-          .then((res) => {console.log(res.data)});
       })
       .catch((er) => {
         toast.error(er.message);
