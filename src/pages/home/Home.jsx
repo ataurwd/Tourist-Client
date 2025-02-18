@@ -8,6 +8,7 @@ import { useLoaderData } from 'react-router-dom';
 import JoinUs from './JoinUs';
 import Galary from './Galary';
 import BestSells from './BestSells';
+import WhyChoseUs from './WhyChoseUs';
 
 const Home = () => {
     const storyData = useLoaderData();
@@ -15,9 +16,10 @@ const Home = () => {
     return (
         <div>
             <Heading />
-            <Overview />
+            {/* <Overview /> */}
             <TravelGuide />
-            <BestSells/>
+            <BestSells />
+            <WhyChoseUs/>
             <HomeStory storyData={storyData} />
             <JoinUs />
             <Galary/>
