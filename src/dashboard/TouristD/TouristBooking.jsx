@@ -105,25 +105,25 @@ const TouristBooking = () => {
         </div>
       )}
 
-      <table className="min-w-full bg-white border border-gray-300">
+      <table className="min-w-full border border-gray-300">
         <thead>
           <tr>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
               #
             </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
               Tour Guide Name
             </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
               Tour Date
             </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
               Price
             </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
               Status
             </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-center text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 border-b-2 border-gray-300 text-center text-sm font-medium text-gray-400">
               Actions
             </th>
           </tr>

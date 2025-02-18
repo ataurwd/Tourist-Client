@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdHistoryToggleOff } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { GoTasklist } from "react-icons/go";
+import { ThemeContext } from "../../context/Theme";
 
 const GuideMenu = ({ isCollapsed }) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   return (
     <div>
       <div className="rounded-md p-4 bg-white my-2">

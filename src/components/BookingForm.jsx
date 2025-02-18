@@ -64,15 +64,15 @@ const BookingForm = ({ packageName }) => {
   return (
     <div>
       <div className="flex justify-center items-center mt-10">
-        <div className="bg-white p-8 rounded-lg w-full">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        <div className=" p-8 rounded-lg w-full">
+          <h2 className="text-2xl font-semibold text-gray-400 mb-6 text-center">
             Book Your Tour{}
           </h2>
           <form onSubmit={handelBooking}>
             <div className="grid grid-cols-2 gap-5">
               {/* Tourist Name */}
               <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block text-gray-400 font-medium mb-2">
                   Tourist Name
                 </label>
                 <input
@@ -85,7 +85,7 @@ const BookingForm = ({ packageName }) => {
 
               {/* Tourist Email */}
               <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block text-gray-400 font-medium mb-2">
                   Tourist Email
                 </label>
                 <input
@@ -99,7 +99,7 @@ const BookingForm = ({ packageName }) => {
 
             {/* Tourist Image URL */}
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className="block text-gray-400 font-medium mb-2">
                 Tourist Image
               </label>
               {/* <input
@@ -118,26 +118,26 @@ const BookingForm = ({ packageName }) => {
               <div className="grid md:grid-cols-2 gap-5 col-span-3">
                 {/* Price */}
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label className="block  font-medium mb-2">
                     Price
                   </label>
                   <input
                     required
                     type="number"
                     name="price"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Enter price"
                   />
                 </div>
                 {/* Tour Guide Name */}
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label className="block text-gray-400 font-medium mb-2">
                     Tour Guide Name
                   </label>
                   <select
                     required
                     name="tourGuide"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="" disabled>Select a guide</option>
 
@@ -154,14 +154,14 @@ const BookingForm = ({ packageName }) => {
 
               {/* Tour Date */}
               <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block text-gray-400 font-medium mb-2">
                   Tour Date
                 </label>
                 <DatePicker
                   required
                   selected={selectedDate}
                   onChange={(date) => setSelectedDate(date)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholderText="Select a date"
                 />
               </div>

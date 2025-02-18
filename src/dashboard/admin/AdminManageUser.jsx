@@ -66,8 +66,8 @@ const AdminManageUser = () => {
     : filteredData;
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 p-8 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+    <div className="max-w-6xl mx-auto mt-10 p-8 bg- shadow-md rounded-lg">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-400">
         User Information
       </h1>
 
@@ -75,7 +75,7 @@ const AdminManageUser = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <input
           type="text"
-          className="border border-gray-300 rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="border border-gray-300 bg-white rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -94,7 +94,7 @@ const AdminManageUser = () => {
 
       {/* User Table */}
       <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300 text-left bg-gray-50">
+          <table className="w-full border border-gray-300 text-left">
             <thead>
               <tr className="bg-primary text-white">
                 <th className="border border-gray-300 px-6 py-3 font-medium">
@@ -117,16 +117,16 @@ const AdminManageUser = () => {
                   <tr
                     key={user._id}
                     className={`${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-100"
+                      index % 2 === 0 ? "bg-" : "bg-"
                     } transition-colors`}
                   >
-                    <td className="border border-gray-300 px-6 py-3 text-gray-700">
+                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
                       {index + 1}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 text-gray-700">
+                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
                       {user.name}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 text-gray-700">
+                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
                       {user.email}
                     </td>
                     <td className="border border-gray-300 px-6 py-3">

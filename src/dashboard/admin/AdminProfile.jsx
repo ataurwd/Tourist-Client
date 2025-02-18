@@ -53,13 +53,13 @@ const AdminProfile = () => {
         <h2 className="text-2xl font-semibold text-primary">
           Welcome back, {user?.displayName}!
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-400">
           Here’s an overview of your admin dashboard.
         </p>
       </div>
 
       {/* Admin Information */}
-      <div className="bg-white shadow-md rounded-lg p-4 mb-6 flex items-center">
+      <div className="bg- shadow-md rounded-lg p-4 mb-6 flex items-center">
         <img
           src={user?.photoURL}
           alt="Admin"
@@ -67,7 +67,7 @@ const AdminProfile = () => {
         />
         <div>
           <h3 className="text-xl font-semibold">{user.displayName}</h3>
-          <p className="text-gray-600">
+          <p className="text-gray-400">
             <span className="font-bold">Role:</span> Admin
           </p>
         </div>
@@ -76,40 +76,40 @@ const AdminProfile = () => {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Total Payment */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h4 className="text-gray-600">Total Payment</h4>
+        <div className=" shadow-md rounded-lg p-4">
+          <h4 className="text-gray-400">Total Payment</h4>
           <p className="text-2xl font-bold text-green-600">
             ${allPayment / 100}
           </p>
         </div>
 
         {/* Total Tour Guides */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h4 className="text-gray-600">Total Tour Guides</h4>
+        <div className=" shadow-md rounded-lg p-4">
+          <h4 className="text-gray-400">Total Tour Guides</h4>
           <p className="text-2xl font-bold text-blue-600">
             {alluser.filter((guide) => guide.role === "guide").length}
           </p>
         </div>
 
         {/* Total Packages */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h4 className="text-gray-600">Total Packages</h4>
+        <div className=" shadow-md rounded-lg p-4">
+          <h4 className="text-gray-400">Total Packages</h4>
           <p className="text-2xl font-bold text-purple-600">
             {packageItem.length}
           </p>
         </div>
 
         {/* Total Clients */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h4 className="text-gray-600">Total Clients</h4>
+        <div className=" shadow-md rounded-lg p-4">
+          <h4 className="text-gray-400">Total Clients</h4>
           <p className="text-2xl font-bold text-orange-600">
             {alluser.filter((guide) => guide.role === "tourist").length}
           </p>
         </div>
 
         {/* Total Stories */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h4 className="text-gray-600">Total Stories</h4>
+        <div className=" shadow-md rounded-lg p-4">
+          <h4 className="text-gray-400">Total Stories</h4>
           <p className="text-2xl font-bold text-pink-600">{allStorie.length}</p>
         </div>
       </div>
@@ -122,7 +122,7 @@ const AdminProfile = () => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+          <div className=" p-6 rounded-lg shadow-lg w-full max-w-lg">
             <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
             <form>
               <div className="mb-4">
@@ -171,7 +171,7 @@ const AdminProfile = () => {
                 <button
                   type="button"
                   onClick={handleModalClose}
-                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2 hover:bg-gray-600"
+                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2 hover:bg-gray-400"
                 >
                   Cancel
                 </button>

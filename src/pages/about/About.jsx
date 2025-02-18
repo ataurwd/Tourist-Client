@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "../../context/Theme";
 
 const About = () => {
+    const { theme, toggleTheme } = useContext(ThemeContext);
+  
   return (
-    <section className="bg-gray-100 py-12">
+    <section className={`py-12 ${theme === "dark" ? "text-gray-400" : "text-gray-800"}`}>
       <div className="container mx-auto px-6 md:px-12">
-        <div className="bg-white shadow-lg rounded-lg p-6 md:p-12">
+        <div className=" shadow-lg rounded-lg p-6 md:p-12">
           <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-primary">
             Meet the Developer
           </h3>
-          <p className="text-gray-600 leading-relaxed mb-6">
+          <p className=" leading-relaxed mb-6">
             Hi, I’m <span className="font-bold text-primary">Ataur Rahman</span>, a dedicated
             and passionate{" "}
             <span className="font-bold text-primary" >Frontend Web Developer</span> with
@@ -22,10 +25,10 @@ const About = () => {
             , I have honed my skills to craft visually appealing and functional
             websites.
           </p>
-          <h4 className="text-xl font-semibold text-gray-800 mb-2">
+          <h4 className="text-xl font-semibold  mb-2">
             Developer Skills
           </h4>
-          <ul className="list-disc pl-5 text-gray-600 mb-6">
+          <ul className="list-disc pl-5  mb-6">
             <li>Frontend: React.js, Tailwind CSS, HTML, CSS, JavaScript</li>
             <li>Backend: Node.js, MongoDB, Express.js</li>
             <li>
@@ -33,10 +36,10 @@ const About = () => {
               authentication.
             </li>
           </ul>
-          <h4 className="text-xl font-semibold text-gray-800 mb-2">
+          <h4 className="text-xl font-semibold mb-2">
             Projects I’ve Worked On
           </h4>
-          <ul className="list-disc pl-5 text-gray-600 mb-6">
+          <ul className="list-disc pl-5  mb-6">
             <li>
               <span className="font-bold">Pet Adoption Website:</span> Features
               category-based buttons, real-time data fetching, and hover
@@ -54,7 +57,7 @@ const About = () => {
               professional portfolio to showcase skills and projects.
             </li>
           </ul>
-          <h4 className="text-xl font-semibold text-gray-800 mb-4">
+          <h4 className="text-xl font-semibold mb-4">
             Explore My Work
           </h4>
           <div className="flex flex-col md:flex-row gap-4">

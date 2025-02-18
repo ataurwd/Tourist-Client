@@ -36,7 +36,7 @@ const JoinAsGuild = () => {
     })
   };
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-md mt-5">
+    <div className="max-w-lg mx-auto p-6 bg- shadow-lg rounded-md mt-5">
       <h2 className="text-2xl font-bold mb-6 text-center text-primary">
         Tour Guide Application
       </h2>

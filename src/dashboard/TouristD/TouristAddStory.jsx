@@ -89,11 +89,11 @@ const TouristAddStory = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-primary">Add a New Story</h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl"
+        className=" p-6 rounded-lg shadow-lg w-full max-w-2xl"
       >
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium mb-2">
@@ -107,7 +107,7 @@ const TouristAddStory = () => {
             onChange={handleChange}
             placeholder="Enter story title"
             required
-            className="w-full border border-gray-300 rounded px-3 py-2"
+            className="w-full bg-white border border-gray-300 rounded px-3 py-2"
           />
         </div>
         <div className="mb-4">
@@ -122,7 +122,7 @@ const TouristAddStory = () => {
             placeholder="Write your story here..."
             rows="6"
             required
-            className="w-full border border-gray-300 rounded px-3 py-2"
+            className="w-full bg-white border border-gray-300 rounded px-3 py-2"
           />
         </div>
         <div className="mb-4">
@@ -136,7 +136,7 @@ const TouristAddStory = () => {
             onChange={handleImageUpload}
             accept="image/*"
             multiple
-            className="w-full border border-gray-300 rounded px-3 py-2"
+            className="w-full border bg-white border-gray-300 rounded px-3 py-2"
           />
           {storyData.images.length > 0 && (
             <div className="mt-2">

@@ -38,17 +38,17 @@ const TouristProfile = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-4">Welcome, {user?.displayName}!</h1>
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+      <div className=" p-6 rounded-lg shadow-lg w-full max-w-md text-center">
         <img
           src={user?.photoURL}
           alt="User"
           className="w-32 h-32 rounded-full mx-auto mb-4"
         />
         <h2 className="text-xl font-semibold">{user?.displayName}</h2>
-        <p className="text-gray-600">{user?.email}</p>
-        <p className="text-gray-600">
+        <p className="text-gray-400">{user?.email}</p>
+        <p className="text-gray-400">
           {" "}
           <span className="font-bold">Role: </span>
           {loginUser?.role}

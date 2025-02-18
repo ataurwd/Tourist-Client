@@ -77,13 +77,13 @@ const TouristStories = () => {
   };
   // Render the stories in card format
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6  min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Tourist Stories</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {stories.map((story) => (
           <div
             key={story._id}
-            className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
+            className="bg- p-4 rounded-lg shadow-lg flex flex-col"
           >
             <h2 className="text-xl font-bold mb-2">{story.title}</h2>
             <p className="text-gray-600 mb-4">{story.storyText.slice(0, 100)}...</p>

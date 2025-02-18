@@ -124,7 +124,7 @@ const AddPackage = () => {
       <h1 className="text-3xl font-bold text-center mb-3">Add Package</h1>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white shadow-md rounded-lg p-6"
+        className="space-y-6  shadow-md rounded-lg p-6"
       >
         {/* Form Fields */}
         <div className="form-control">
