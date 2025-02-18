@@ -33,6 +33,7 @@ import PackageDetails from "../../src/components/PackageDetails";
 import GuideDetails from "../../src/components/GuideDetails";
 import StripePayment from './../components/StripePayment';
 import ErrorPage from "../components/ErrorPage";
+import Contact from "../pages/contact/Contact";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -55,8 +56,12 @@ const Router = () => {
           element: <Community />,
         },
         {
+          path: "contact",
+          element: <Contact />,
+        },
+        {
           path: "trips",
-          element: <Trips />,
+          element: <PrivateRoute><Trips /></PrivateRoute>,
         },
         {
           path: "/pakage/details/:id",

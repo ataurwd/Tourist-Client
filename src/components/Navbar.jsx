@@ -75,13 +75,28 @@ const NavBer = () => {
           >
             About Us
           </NavLink>
+          {user ? (
+            <>
+              {" "}
+              <NavLink
+                to="/trips"
+                className={({ isActive }) =>
+                  isActive ? "text-primary" : "text-white"
+                }
+              >
+                Trips
+              </NavLink>
+            </>
+          ) : (
+            ""
+          )}
           <NavLink
-            to="/trips"
+            to="/contact"
             className={({ isActive }) =>
               isActive ? "text-primary" : "text-white"
             }
           >
-            Trips
+            Contact Us
           </NavLink>
         </ul>
       </div>
@@ -100,18 +115,17 @@ const NavBer = () => {
               <h3 className="text-sm font-semibold">{user?.displayName}</h3>
               <p className="text-xs text-gray-600">{user?.email}</p>
               <Link
-                  to={`${
-                    loginUser.role === "admin"
-                      ? "/dashboard/admin-profile"
-                      : loginUser.role === "guide"
-                      ? "/dashboard/guide-profile"
-                      : "/dashboard/tourist-profile"
-                  }`}
-                  className={ "text-black"
-                  }
-                >
-                  Dashboard
-                </Link>
+                to={`${
+                  loginUser.role === "admin"
+                    ? "/dashboard/admin-profile"
+                    : loginUser.role === "guide"
+                    ? "/dashboard/guide-profile"
+                    : "/dashboard/tourist-profile"
+                }`}
+                className={"text-black"}
+              >
+                Dashboard
+              </Link>
               <Link
                 to="/offer-announcements"
                 className="text-sm text-black hover:text-gray-700"
@@ -178,6 +192,14 @@ const NavBer = () => {
             >
               Trips
             </NavLink>
+            <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive ? "text-primary" : "text-white"
+            }
+          >
+            Contact Us
+          </NavLink>
             {user && (
               <>
                 <Link
@@ -188,8 +210,7 @@ const NavBer = () => {
                       ? "/dashboard/guide-profile"
                       : "/dashboard/tourist-profile"
                   }`}
-                  className={ "text-gray-400"
-                  }
+                  className={"text-gray-400"}
                 >
                   Dashboard
                 </Link>

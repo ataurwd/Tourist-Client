@@ -8,7 +8,7 @@ import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
 import Loading from './../../components/Loading';
 
 const Community = () => {
-  const [allStorie , isLoading] = useAllStories();
+  const [allStorie, refetch,isLoading] = useAllStories();
   if (isLoading) {
     <Loading/>
   }
