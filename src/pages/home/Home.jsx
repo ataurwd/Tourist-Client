@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
-import Heading from './Heading';
-import Overview from './Overview';
-import { FormContext } from './../../context/FormData';
-import TravelGuide from './TravelGuide';
-import HomeStory from './HomeStory';
+import React from 'react';
 import { useLoaderData } from 'react-router-dom';
-import JoinUs from './JoinUs';
-import Galary from './Galary';
 import BestSells from './BestSells';
-import WhyChoseUs from './WhyChoseUs';
-import Testimonial from './Testimonial';
-import Gallery from './Gallery';
 import Blogs from './Blogs';
+import Galary from './Galary';
+import Gallery from './Gallery';
+import Heading from './Heading';
+import HomeStory from './HomeStory';
+import JoinUs from './JoinUs';
+import Testimonial from './Testimonial';
+import TravelGuide from './TravelGuide';
+import WhyChoseUs from './WhyChoseUs';
 
 const Home = () => {
     const storyData = useLoaderData();
