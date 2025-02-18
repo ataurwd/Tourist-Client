@@ -9,6 +9,9 @@ import JoinUs from './JoinUs';
 import Galary from './Galary';
 import BestSells from './BestSells';
 import WhyChoseUs from './WhyChoseUs';
+import Testimonial from './Testimonial';
+import Gallery from './Gallery';
+import Blogs from './Blogs';
 
 const Home = () => {
     const storyData = useLoaderData();
@@ -19,9 +22,12 @@ const Home = () => {
             {/* <Overview /> */}
             <TravelGuide />
             <BestSells />
+            <Gallery/>
             <WhyChoseUs/>
             <HomeStory storyData={storyData} />
             <JoinUs />
+            <Testimonial />
+            <Blogs/>
             <Galary/>
         </div>
     );
