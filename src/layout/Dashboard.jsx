@@ -1,21 +1,14 @@
 import React, { useContext, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import {
-  TbHome,
-  TbCalendar,
-  TbCreditCard,
-  TbShoppingCart,
-} from "react-icons/tb";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { CgProfile } from "react-icons/cg";
-import { MdHistoryToggleOff } from "react-icons/md";
-import { IoPersonAddOutline } from "react-icons/io5";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import useUser from "../hooks/useUser";
-import TouristMenu from "../dashboard/TouristD/TouristMenu";
-import GuideMenu from "../dashboard/guide/GuideMenu";
-import AdminMenu from "../dashboard/admin/AdminMenu";
+import {
+  TbHome
+} from "react-icons/tb";
+import { NavLink, Outlet } from "react-router-dom";
 import { ThemeContext } from "../context/Theme";
+import TouristMenu from "../dashboard/TouristD/TouristMenu";
+import AdminMenu from "../dashboard/admin/AdminMenu";
+import GuideMenu from "../dashboard/guide/GuideMenu";
+import useUser from "../hooks/useUser";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);

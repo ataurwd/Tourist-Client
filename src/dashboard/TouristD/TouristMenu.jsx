@@ -7,6 +7,7 @@ import {
   import { MdHistoryToggleOff } from "react-icons/md";
   import { IoPersonAddOutline } from "react-icons/io5";
   import { IoIosAddCircleOutline } from "react-icons/io";
+import { FiPieChart } from 'react-icons/fi';
 
 const TouristMenu = ({isCollapsed}) => {
     return (
@@ -25,6 +26,22 @@ const TouristMenu = ({isCollapsed}) => {
                   size={24}
                 />
                 <span className="hidden sm:inline">{!isCollapsed && "Manage Profile"}</span>
+              </NavLink>
+            </div>
+            <div className="rounded-md p-4 bg-white my-2">
+              <NavLink
+                to={"tourist-overview"}
+                className={({ isActive }) =>
+                  `flex items-center ${
+                    isActive ? "text-primary" : "text-black"
+                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
+                }
+              >
+                <FiPieChart
+                  className={`${isCollapsed ? "" : "md:mr-3"}`}
+                  size={24}
+                />
+                <span className="hidden sm:inline">{!isCollapsed && "Overview"}</span>
               </NavLink>
             </div>
             <div className="rounded-md p-4 bg-white my-2">

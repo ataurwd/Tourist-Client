@@ -35,6 +35,7 @@ import StripePayment from './../components/StripePayment';
 import ErrorPage from "../components/ErrorPage";
 import Contact from "../pages/contact/Contact";
 import AdminOverview from "../dashboard/admin/AdminOverview";
+import TouristOverview from "../dashboard/TouristD/TouristOverview";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -102,6 +103,14 @@ const Router = () => {
           element: (
             <UserRoute>
               <TouristStories />
+            </UserRoute>
+          ),
+        },
+        {
+          path: "tourist-overview",
+          element: (
+            <UserRoute>
+              <TouristOverview />
             </UserRoute>
           ),
         },
