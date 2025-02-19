@@ -7,6 +7,7 @@ import { TbHome } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import { MdAddTask } from "react-icons/md";
 import { RiProfileLine } from "react-icons/ri";
+import { FiPieChart } from "react-icons/fi";
 
 const AdminMenu = ({ isCollapsed }) => {
   return (
@@ -23,6 +24,23 @@ const AdminMenu = ({ isCollapsed }) => {
           <TbHome className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
           <span className="hidden sm:inline">
             {!isCollapsed && "Admin Profile"}
+          </span>
+        </NavLink>
+      </div>
+      <div className="rounded-md p-4 bg-white my-2">
+        <NavLink
+          to={"overview"}
+          className={({ isActive }) =>
+            `flex items-center ${isActive ? "text-primary" : "text-black"} ${
+              isCollapsed ? "justify-center" : "md:ml-5"
+            }`
+          }
+        >
+          <FiPieChart className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+
+          <span className="hidden sm:inline">
+            {" "}
+            {!isCollapsed && "Overview"}
           </span>
         </NavLink>
       </div>
@@ -102,7 +120,10 @@ const AdminMenu = ({ isCollapsed }) => {
             }`
           }
         >
-          <RiProfileLine className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
+          <RiProfileLine
+            className={`${isCollapsed ? "" : "md:mr-3"}`}
+            size={24}
+          />
           <span className="hidden sm:inline">
             {!isCollapsed && "Manage Users"}
           </span>

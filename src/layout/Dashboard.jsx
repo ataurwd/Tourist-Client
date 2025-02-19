@@ -30,7 +30,7 @@ const Dashboard = () => {
       <div
         className={`${
           isCollapsed ? "md:w-16 w-10" : "md:w-72 w-20 px-3"
-        } ${theme === "dark" ? "bg-secondary" : "bg-primary"} min-h-screen transition-all duration-300`}
+        } ${theme === "dark" ? "bg- border-r-2" : "bg-primary border-r-2 border-primary"} min-h-screen transition-all duration-300`}
       >
         <div className={`flex ${isCollapsed ? "flex-col" : ""}`}>
           {/* Toggle Button */}

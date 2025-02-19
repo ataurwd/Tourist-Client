@@ -34,6 +34,7 @@ import GuideDetails from "../../src/components/GuideDetails";
 import StripePayment from './../components/StripePayment';
 import ErrorPage from "../components/ErrorPage";
 import Contact from "../pages/contact/Contact";
+import AdminOverview from "../dashboard/admin/AdminOverview";
 
 const Router = () => {
   const route = createBrowserRouter([
@@ -182,6 +183,14 @@ const Router = () => {
           element: (
             <AdminRoute>
               <AdminProfile />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "overview",
+          element: (
+            <AdminRoute>
+              <AdminOverview />
             </AdminRoute>
           ),
         },
