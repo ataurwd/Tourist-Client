@@ -98,7 +98,7 @@ const AdminAssigned = () => {
                       booking.statas === "in-review" ||
                       booking.statas === "rejected" ||
                       booking.statas === "accepted"
-                        ? "cursor-not-allowed pointer-events-none"
+                        ? "cursor-not-allowed pointer-events-none text-gray-700"
                         : ""
                     }`}
                   >
