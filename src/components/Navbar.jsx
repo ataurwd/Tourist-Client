@@ -48,13 +48,8 @@ const NavBer = () => {
         <div className="flex items-center justify-between h-12">
           {/* Logo Section */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2 group">
-              <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-black text-lg shadow-premium">
-                T
-              </span>
-              <span className="font-display font-extrabold text-xl tracking-tight text-slate-800 dark:text-white transition-colors group-hover:text-primary">
-                Treva
-              </span>
+            <Link to="/" className="flex items-center gap-2 group w-20">
+              <img src="https://i.ibb.co.com/D6LvnBF/Screenshot-at-Jun-04-15-03-33-removebg-preview.png" alt="" />
             </Link>
           </div>
 
