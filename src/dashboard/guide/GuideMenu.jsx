@@ -1,85 +1,37 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdHistoryToggleOff } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { GoTasklist } from "react-icons/go";
-import { ThemeContext } from "../../context/Theme";
 
 const GuideMenu = ({ isCollapsed }) => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const items = [
+    { to: "guide-profile", icon: CgProfile, label: "Manage Profile" },
+    { to: "guide-assigned", icon: GoTasklist, label: "Assigned Tours" },
+    { to: "guide-add-story", icon: IoIosAddCircleOutline, label: "Add Stories" },
+    { to: "guide-manage-story", icon: MdHistoryToggleOff, label: "Manage Stories" }
+  ];
 
   return (
-    <div>
-      <div className="rounded-md p-4 bg-white my-2">
+    <div className="space-y-1">
+      {items.map((item) => (
         <NavLink
-          to={"guide-profile"}
+          key={item.to}
+          to={item.to}
           className={({ isActive }) =>
-            `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "md:ml-5"
-            }`
+            `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              isActive
+                ? "bg-primary/10 text-primary border-l-2 border-primary"
+                : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
+            } ${isCollapsed ? "justify-center" : ""}`
           }
+          title={isCollapsed ? item.label : ""}
         >
-          <CgProfile className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
-          <span className="hidden sm:inline">
-            {!isCollapsed && "Manage Profile"}
-          </span>
+          <item.icon className="h-5 w-5 flex-shrink-0" />
+          {!isCollapsed && <span className="truncate">{item.label}</span>}
         </NavLink>
-      </div>
-      <div className="rounded-md p-4 bg-white my-2">
-        <NavLink
-          to={"guide-assigned"}
-          className={({ isActive }) =>
-            `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "md:ml-5"
-            }`
-          }
-        >
-          <GoTasklist className={`${isCollapsed ? "" : "md:mr-3"}`} size={24} />
-          <span className="hidden sm:inline">
-            {" "}
-            {!isCollapsed && "My Assigned Tours"}
-          </span>
-        </NavLink>
-      </div>
-      <div className="rounded-md p-4 bg-white my-2">
-        <NavLink
-          to={"guide-add-story"}
-          className={({ isActive }) =>
-            `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "md:ml-5"
-            }`
-          }
-        >
-          <IoIosAddCircleOutline
-            className={`${isCollapsed ? "" : "md:mr-3"}`}
-            size={24}
-          />
-          <span className="hidden sm:inline">
-            {" "}
-            {!isCollapsed && "Add Stories"}
-          </span>
-        </NavLink>
-      </div>
-      <div className="rounded-md p-4 bg-white my-2">
-        <NavLink
-          to={"guide-manage-story"}
-          className={({ isActive }) =>
-            `flex items-center ${isActive ? "text-primary" : "text-black"} ${
-              isCollapsed ? "justify-center" : "md:ml-5"
-            }`
-          }
-        >
-          <MdHistoryToggleOff
-            className={`${isCollapsed ? "" : "md:mr-3"}`}
-            size={24}
-          />
-          <span className="hidden sm:inline">
-            {" "}
-            {!isCollapsed && "Manage Stories"}
-          </span>
-        </NavLink>
-      </div>
+      ))}
     </div>
   );
 };

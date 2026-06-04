@@ -4,14 +4,16 @@ import "react-tabs/style/react-tabs.css";
 import usePackage from "./../../hooks/usePackage";
 import Title from "../../components/Title";
 import { Link } from "react-router-dom";
-import useAllUser from "../../hooks/useAllUser";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Card from "../../components/shared/Card";
+import Button from "../../components/shared/Button";
+import SkeletonCard from "../../components/shared/SkeletonCard";
 
 const TravelGuide = () => {
-  const [packageItem] = usePackage();
+  const [packageItem, isPackagesLoading] = usePackage();
 
-  const { data: guideData = [] } = useQuery({
+  const { data: guideData = [], isLoading: isGuidesLoading } = useQuery({
     queryKey: ["allGuidesOnly"],
     queryFn: async () => {
       const res = await axios.get(`${import.meta.env.VITE_URL}/all-guides`);
@@ -20,86 +22,104 @@ const TravelGuide = () => {
   });
 
   return (
-    <div className="lg:px-20 md:px-10 px-4">
+    <div id="packages" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20">
       <Title
-        heading={"Tourism and Travel Guide"}
-        text={
-          "A Tourism and Travel Guide is your essential companion to exploring the world. It serves as a comprehensive resource for travelers, offering valuable information about destinations, attractions, culture, and experiences."
-        }
+        heading="Tourism and Travel Guide"
+        text="Discover tailored packages curated by local experts or consult directly with certified tour guides to build your custom itinerary."
       />
-      <Tabs>
-        <TabList className={"flex justify-center rounded-md my-5 space-x-2"}>
-          <Tab
-            className="border text-center px-3 py-1 rounded-[10px] tabstem  cursor-pointer"
-            selectedClassName="bg-primary text-white"
-          >
-            Our Packages
-          </Tab>
-          <Tab
-            className="border text-center px-3 py-1 rounded-[10px] tabstem cursor-pointer"
-            selectedClassName="bg-primary text-white"
-          >
-            Meet Our Tour Guides
-          </Tab>
-        </TabList>
 
+      <Tabs className="w-full">
+        {/* Custom Tab List */}
+        <div className="flex justify-center mb-10">
+          <TabList className="flex gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
+            <Tab
+              className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-500 dark:text-slate-400 cursor-pointer focus:outline-none transition-all"
+              selectedClassName="bg-primary text-white shadow-premium"
+            >
+              Our Packages
+            </Tab>
+            <Tab
+              className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-500 dark:text-slate-400 cursor-pointer focus:outline-none transition-all"
+              selectedClassName="bg-primary text-white shadow-premium"
+            >
+              Meet Our Guides
+            </Tab>
+          </TabList>
+        </div>
+
+        {/* Packages Panel */}
         <TabPanel>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {packageItem.slice(0, 3).map((tour) => (
-              <div key={tour._id} className="card bg-base-100 shadow-xl">
-                <figure>
-                  <img
-                    src={tour.images[0]}
-                    className="object-cover w-full h-72"
-                    alt="Shoes"
-                  />
-                </figure>
-                <div className="card-body">
-                  <div className="badge badge-outline border-primary">{tour.packageName}</div>
-                  <p>{tour.aboutTour.slice(0, 80)}...</p>
-                  <div className="flex  justify-between items-center">
-                    <div className="card-actions justify-start">
-                      <Link
-                        to={`/pakage/details/${tour._id}`}
-                        className="px-5 py-1 rounded-md shadow-sm text-black border-2 border-primary font-semibold "
-                      >
-                        Details
-                      </Link>
-                    </div>
-                    <div>
-                      <span className="font-bold">Price: </span>
-                      <span className="font-extrabold text-primary">{tour.price}$</span> 
-                    </div>
+          {isPackagesLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((n) => (
+                <SkeletonCard key={n} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {packageItem.slice(0, 3).map((tour) => (
+                <Card
+                  key={tour._id}
+                  image={tour.images[0]}
+                  title={tour.packageName}
+                  subtitle="EXPERIENCE TRIP"
+                  badge={
+                    <span className="bg-primary/90 text-white text-xs font-extrabold px-3 py-1 rounded-full shadow-premium">
+                      ${tour.price}
+                    </span>
+                  }
+                  className="flex flex-col h-full"
+                >
+                  <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-6 leading-relaxed flex-grow">
+                    {tour.aboutTour}
+                  </p>
+                  <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-auto">
+                    <Link to={`/pakage/details/${tour._id}`} className="w-full">
+                      <Button variant="outline" size="sm" className="w-full font-bold">
+                        View Details
+                      </Button>
+                    </Link>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabPanel>
+
+        {/* Guides Panel */}
         <TabPanel>
-          <Title heading={"Meet Our All Tour Guides"} />
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mt-10">
-            {guideData.map((item) => (
-              <Link
-                to={`/guide/${item._id}`}
-                key={item._id}
-                className="border grid place-items-center p-5 text-center rounded-md shadow-sm"
-              >
-                <img
-                  className="w-20 h-20 object-cover rounded-full"
-                  src={item.photo}
-                  alt={item.name}
-                />
-                <h1>
-                  <span className="font-bold">Name:</span> {item.name}
-                </h1>
-                <p>
-                  <span className="font-bold">Role: </span>
-                  {item.role}
-                </p>
-              </Link>
-            ))}
-          </div>
+          {isGuidesLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className="shimmer-bg h-48 rounded-2xl"></div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+              {guideData.map((item) => (
+                <Link
+                  to={`/guide/${item._id}`}
+                  key={item._id}
+                  className="group bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-premium flex flex-col items-center"
+                >
+                  <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
+                    <div className="absolute inset-0 bg-primary/10 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <img
+                      className="w-20 h-20 object-cover rounded-full border-2 border-primary/20 group-hover:border-primary shadow-sm relative z-10"
+                      src={item.photo}
+                      alt={item.name}
+                    />
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 font-display line-clamp-1 group-hover:text-primary transition-colors">
+                    {item.name}
+                  </h4>
+                  <span className="text-xs text-slate-400 capitalize mt-1">
+                    {item.role || "Guide"}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
         </TabPanel>
       </Tabs>
     </div>

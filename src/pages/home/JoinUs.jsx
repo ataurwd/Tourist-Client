@@ -1,6 +1,5 @@
 import React from "react";
 import Title from "../../components/Title";
-import { FaTelegramPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const JoinUs = () => {
@@ -8,95 +7,87 @@ const JoinUs = () => {
     {
       id: 1,
       name: "France",
-      description:
-        "France is known for its rich history, stunning architecture, and culinary delights.",
+      description: "Rich history, architecture, and gourmet culinary experiences.",
       touristSpot: "Eiffel Tower",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbLIYwKpcMLfIl6Gac98JSAf5TNN0JI2K7Qw&s",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbLIYwKpcMLfIl6Gac98JSAf5TNN0JI2K7Qw&s",
     },
     {
       id: 2,
       name: "Japan",
-      description:
-        "Japan is a land of contrasts, blending traditional culture with modern technology.",
+      description: "Contrasts of ancient temples, neon lights, and Mt. Fuji scenery.",
       touristSpot: "Mount Fuji",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9F3Ch8VMg8W8maHQUGGuegZFr9XSws84AiA&s",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9F3Ch8VMg8W8maHQUGGuegZFr9XSws84AiA&s",
     },
     {
       id: 3,
       name: "Italy",
-      description:
-        "Italy boasts an extraordinary cultural heritage, from art to architecture, and is famous for its cuisine.",
+      description: "Extraordinary cultural heritage, historic ruins, and pasta wonders.",
       touristSpot: "Colosseum",
-      image:
-        "https://images.javatpoint.com/tourist-places/images/tourist-places-in-italy2.png",
+      image: "https://images.javatpoint.com/tourist-places/images/tourist-places-in-italy2.png",
     },
     {
       id: 4,
       name: "Australia",
-      description:
-        "Australia offers a diverse landscape, from the Great Barrier Reef to its bustling cities and outback.",
+      description: "The Great Barrier Reef, coastal cities, and iconic outback terrains.",
       touristSpot: "Sydney Opera House",
-      image:
-        "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/09/Sydney_Opera_House_-_Dec_2008.jpg",
+      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/09/Sydney_Opera_House_-_Dec_2008.jpg",
     },
     {
       id: 5,
       name: "Brazil",
-      description:
-        "Brazil is known for its vibrant culture, beautiful beaches, and iconic landmarks like the Christ the Redeemer statue.",
+      description: "Vibrant beaches, Amazon wilderness, and Christ the Redeemer.",
       touristSpot: "Christ the Redeemer",
-      image:
-        "https://images.javatpoint.com/tourist-places/images/tourist-places-in-brazil3.png",
+      image: "https://images.javatpoint.com/tourist-places/images/tourist-places-in-brazil3.png",
     },
   ];
 
   return (
-    <div className="md:mt-20">
-      <div
-        className="md:h-[450px] relative py-10"
+    <div className="relative py-20 overflow-hidden bg-slate-50/50 dark:bg-slate-900/10 border-y border-slate-100 dark:border-slate-800/40">
+      {/* Subtle world map background overlay */}
+      <div 
+        className="absolute inset-0 opacity-10 dark:opacity-5 pointer-events-none"
         style={{
-          backgroundImage:
-            "url('https://demo.egenslab.com/html/tourxpro/demo/assets/images/banner/map-bg.png')",
+          backgroundImage: "url('https://demo.egenslab.com/html/tourxpro/demo/assets/images/banner/map-bg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      >
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <Title
-          heading={"Explore The World"}
-          text={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores totam beatae nam nobis accusantium cum alias voluptas aliquid tempore ducimus."
-          }
+          heading="Explore The World"
+          text="Embark on cross-continental journeys and explore premium global locations with seasoned travel packages."
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 place-items-center px-5 sm:px-10 md:px-20 lg:px-32 relative">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
           {countries.map((country) => (
             <motion.div
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               initial={{ y: 0 }}
-              animate={{ y: 0 }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               key={country.id}
-              className="w-full sm:w-48 h-40 rounded-md relative group overflow-hidden cursor-pointer"
-              style={{
-                backgroundImage: `url(${country.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
+              className="group h-[320px] rounded-2xl relative overflow-hidden cursor-pointer shadow-premium hover:shadow-premium-hover border border-slate-100 dark:border-slate-800/50 bg-slate-800"
             >
-              {/* Image overlay on hover */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
+              {/* Background Cover Image */}
+              <img
+                src={country.image}
+                alt={country.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
 
-              {/* Text container */}
-              <div className="absolute p-3 bottom-0 w-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h1 className="font-bold text-lg group-hover:text-primary transition-colors duration-300">
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent group-hover:from-primary-dark/95 transition-all duration-300"></div>
+
+              {/* Content Panel */}
+              <div className="absolute inset-0 p-5 flex flex-col justify-end text-white">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary group-hover:text-white transition-colors duration-300">
+                  {country.touristSpot}
+                </span>
+                <h3 className="text-xl font-bold font-display leading-tight mt-1 mb-2 group-hover:translate-x-1 transition-transform">
                   {country.name}
-                </h1>
-                <p className="text-sm group-hover:text-gray-300 transition-colors duration-300">
-                  {country.description.slice(0, 40)}...
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-3">
+                  {country.description}
                 </p>
               </div>
             </motion.div>

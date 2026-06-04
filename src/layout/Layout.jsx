@@ -5,11 +5,12 @@ import Footer from "../components/Footer";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
       <Navbar />
-      <div className="min-h-[calc(100vh-29vh)]">
+      {/* Pushed down by navbar height (fixed top-0) */}
+      <main className="flex-grow pt-24 pb-12">
         <Outlet />
-      </div>
+      </main>
       <Footer />
     </div>
   );

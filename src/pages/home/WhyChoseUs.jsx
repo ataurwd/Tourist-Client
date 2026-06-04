@@ -2,45 +2,68 @@ import React from "react";
 import { FaHandshake, FaShieldAlt, FaClock } from "react-icons/fa";
 
 const WhyChoseUs = () => {
+  const reasons = [
+    {
+      icon: FaHandshake,
+      title: "Trusted Service",
+      description: "We work with fully verified guides and local tour operators to ensure a premium journey you can trust.",
+      color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+    },
+    {
+      icon: FaShieldAlt,
+      title: "Secure & Safe",
+      description: "Your health and travel security is our absolute priority. Secure checkout and refund policies guaranteed.",
+      color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
+    },
+    {
+      icon: FaClock,
+      title: "24/7 Concierge",
+      description: "Our dedicated adventure support team is available round-the-clock to manage any unforeseen circumstances.",
+      color: "text-amber-400 bg-amber-500/10 border-amber-500/20"
+    }
+  ];
+
   return (
     <section
-      className="relative bg-cover bg-center text-white py-24 my-5"
+      className="relative bg-cover bg-center py-28 my-10 overflow-hidden"
       style={{
         backgroundImage: "url('https://mtsobek.imgix.net/2023/10/Europe-Italy-Trekkers-Following-Age-Old-Trails-Past-Secret-Mountain-Lakes-near-the-Mont-Blanc-Mountains-in-the-Alps-scaled.jpg?fm=pjpg')",
+        backgroundAttachment: "fixed" // Parallax effect
       }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+      {/* Immersive Dark Overlay with Gradient */}
+      <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]"></div>
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-8">Why Choose Us?</h2>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+        <div className="space-y-4 max-w-2xl mx-auto">
+          <span className="text-xs font-bold tracking-widest text-primary bg-primary/10 border border-primary/20 backdrop-blur-md px-4 py-1.5 rounded-full uppercase">
+            Platform Benefits
+          </span>
+          <h2 className="text-3xl md:text-5xl font-black font-display tracking-tight text-white">
+            Why Choose Treva?
+          </h2>
+          <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+            We bridge the gap between travelers seeking authentic local experiences and professional guides dedicated to delivering quality service.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Reason 1 */}
-          <div className="flex flex-col items-center">
-            <FaHandshake className="text-6xl text-blue-400 mb-4" />
-            <h3 className="text-2xl font-semibold mb-2">Trusted Service</h3>
-            <p className="text-lg">
-              We provide reliable and professional service you can trust.
-            </p>
-          </div>
-
-          {/* Reason 2 */}
-          <div className="flex flex-col items-center">
-            <FaShieldAlt className="text-6xl text-green-400 mb-4" />
-            <h3 className="text-2xl font-semibold mb-2">Secure & Safe</h3>
-            <p className="text-lg">
-              Your safety is our priority with industry-standard security.
-            </p>
-          </div>
-
-          {/* Reason 3 */}
-          <div className="flex flex-col items-center">
-            <FaClock className="text-6xl text-yellow-400 mb-4" />
-            <h3 className="text-2xl font-semibold mb-2">24/7 Support</h3>
-            <p className="text-lg">
-              Our dedicated team is available 24/7 to assist you anytime.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+          {reasons.map((reason, idx) => (
+            <div
+              key={idx}
+              className="glass-panel border border-white/5 bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-premium-hover transition-all duration-300 hover:-translate-y-1 text-center flex flex-col items-center group"
+            >
+              <div className={`p-4 rounded-2xl border mb-6 transition-all duration-300 group-hover:scale-110 ${reason.color}`}>
+                <reason.icon size={36} />
+              </div>
+              <h3 className="text-xl font-bold font-display text-white mb-3">
+                {reason.title}
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {reason.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

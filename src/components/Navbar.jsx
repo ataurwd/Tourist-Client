@@ -1,287 +1,271 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FormContext } from "../context/FormData";
 import useUser from "../hooks/useUser";
 import { ThemeContext } from './../context/Theme';
+import { HiMenuAlt3, HiX, HiSun, HiMoon } from "react-icons/hi";
 
 const NavBer = () => {
   const { user, logoutUser } = useContext(FormContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const [loginUser] = useUser();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const signOut = () => {
     logoutUser();
     navigate("/login");
   };
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Community", path: "/community" },
+    { name: "About Us", path: "/about-us" },
+    ...(user ? [{ name: "Trips", path: "/trips" }] : []),
+    { name: "Contact Us", path: "/contact" }
+  ];
+
   return (
-    <div className={`navbar sticky top-0 left-0 w-full z-50 bg-gray-800 shadow-md text-gray-400 md:px-20`}>
-      {/* Navbar Start */}
-      <div className="navbar-start flex items-center">
-        {/* Hamburger Icon for Mobile */}
-        <button
-          onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-          className="btn btn-ghost lg:hidden"
-          aria-label="Toggle navigation"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16m-8 6h8"
-            />
-          </svg>
-        </button>
-        {/* Logo and Website Name */}
-        <Link
-          to="/"
-          className="font-semibold text-xl flex items-center text-white"
-        >
-          Treva
-        </Link>
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+      isScrolled 
+        ? "bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-lg border-b border-slate-100 dark:border-slate-800/50 py-3" 
+        : "bg-transparent py-5"
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-12">
+          {/* Logo Section */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2 group">
+              <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-black text-lg shadow-premium">
+                T
+              </span>
+              <span className="font-display font-extrabold text-xl tracking-tight text-slate-800 dark:text-white transition-colors group-hover:text-primary">
+                Treva
+              </span>
+            </Link>
+          </div>
+
+          {/* Desktop NavLinks */}
+          <div className="hidden lg:flex items-center space-x-8">
+{navLinks.map((link) => (
+  <NavLink
+    key={link.path}
+    to={link.path}
+    className={({ isActive }) =>
+      `text-sm font-semibold tracking-wide transition-all duration-200 hover:text-primary ${
+        isActive
+          ? "text-primary active-nav-link"
+          : isScrolled
+          ? "text-black dark:text-slate-300"
+          : "text-white dark:text-white"
+      }`
+    }
+  >
+    {link.name}
+  </NavLink>
+))}
+          </div>
+
+          {/* Action Buttons & Theme Switcher */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-500 dark:text-slate-400 transition-colors border border-slate-200/50 dark:border-slate-700/40"
+              aria-label="Toggle Theme"
+            >
+              {theme === "light" ? (
+                <HiMoon className="h-5 w-5 text-slate-700" />
+              ) : (
+                <HiSun className="h-5 w-5 text-amber-400" />
+              )}
+            </button>
+
+            {/* Profile / Auth Trigger */}
+            {user ? (
+              <div className="relative group">
+                <button className="flex items-center gap-2 p-1.5 rounded-xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                  <img
+                    src={user?.photoURL || "/default-profile.png"}
+                    className="rounded-lg w-8 h-8 object-cover border border-slate-200 dark:border-slate-700"
+                    alt="User profile"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span className={`text-xs font-semibold text-black dark:text-slate-300 max-w-[100px] truncate pr-1 ${isScrolled ? "text-black" : "text-white"}`}>
+                    {user?.displayName?.split(" ")[0]}
+                  </span>
+                </button>
+
+                {/* Dropdown Menu */}
+                <div className="absolute top-12 right-0 w-52 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/80 rounded-2xl shadow-2xl p-2.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+                  <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-700/50 mb-1.5">
+                    <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+                      {user?.displayName}
+                    </h4>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <Link
+                    to={
+                      loginUser?.role === "admin"
+                        ? "/dashboard/admin-profile"
+                        : loginUser?.role === "guide"
+                        ? "/dashboard/guide-profile"
+                        : "/dashboard/tourist-profile"
+                    }
+                    className="flex items-center px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/offer-announcements"
+                    className="flex items-center px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors"
+                  >
+                    Announcements
+                  </Link>
+                  <div className="border-t border-slate-100 dark:border-slate-700/50 my-1.5"></div>
+                  <button
+                    onClick={signOut}
+                    className="w-full text-left px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 text-xs font-bold text-white bg-primary hover:bg-primary-dark rounded-xl shadow-premium transition-all duration-200 transform hover:-translate-y-0.5"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Icon & Actions */}
+          <div className="flex items-center lg:hidden gap-3">
+            {/* Theme Toggle (Mobile) */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
+              aria-label="Toggle Theme"
+            >
+              {theme === "light" ? (
+                <HiMoon className="h-5 w-5 text-slate-700" />
+              ) : (
+                <HiSun className="h-5 w-5 text-amber-400" />
+              )}
+            </button>
+
+            {/* Hamburger button */}
+            <button
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? <HiX className="h-6 w-6" /> : <HiMenuAlt3 className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Navbar Center */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-5 text-[17px] font-medium">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-white"
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/community"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-white"
-            }
-          >
-            Community
-          </NavLink>
-          <NavLink
-            to="/about-us"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-white"
-            }
-          >
-            About Us
-          </NavLink>
-          {user ? (
-            <>
-              {" "}
+      {/* Mobile Drawer (Slide down) */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shadow-2xl p-5 lg:hidden animate-fade-in-up">
+          <div className="flex flex-col gap-4">
+            {navLinks.map((link) => (
               <NavLink
-                to="/trips"
+                key={link.path}
+                to={link.path}
+                onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) =>
-                  isActive ? "text-primary" : "text-white"
+                  `text-sm font-bold transition-colors ${
+                    isActive ? "text-primary" : "text-slate-700 dark:text-slate-300"
+                  }`
                 }
               >
-                Trips
+                {link.name}
               </NavLink>
-            </>
-          ) : (
-            ""
-          )}
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-white"
-            }
-          >
-            Contact Us
-          </NavLink>
-        </ul>
-      </div>
+            ))}
 
-      {/* Navbar End */}
-      <div className="navbar-end flex items-center space-x-4">
-
-      <button
-          onClick={toggleTheme}
-          className={`px-4 py-2 text-sm font-bold transition duration-300 rounded-md ${
-            theme === "light" ? "text-white" : "text-white bg-themeDatak"
-          }`}
-        >
-          {theme === "light" ? (
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-6 h-6"
-            >
-              <path
-                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                className="fill-sky-400/20 stroke-primary"
-              ></path>
-              <path
-                d="M12 4v1M17.66 6.344l-.828.828M20.005 12.004h-1M17.66 17.664l-.828-.828M12 20.01V19M6.34 17.664l.835-.836M3.995 12.004h1.01M6 6l.835.836"
-                className="stroke-primary"
-              ></path>
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M17.715 15.15A6.5 6.5 0 0 1 9 6.035C6.106 6.922 4 9.645 4 12.867c0 3.94 3.153 7.136 7.042 7.136 3.101 0 5.734-2.032 6.673-4.853Z"
-                className="fill-sky-400/20"
-              ></path>
-              <path
-                d="m17.715 15.15.95.316a1 1 0 0 0-1.445-1.185l.495.869ZM9 6.035l.846.534a1 1 0 0 0-1.14-1.49L9 6.035Zm8.221 8.246a5.47 5.47 0 0 1-2.72.718v2a7.47 7.47 0 0 0 3.71-.98l-.99-1.738Zm-2.72.718A5.5 5.5 0 0 1 9 9.5H7a7.5 7.5 0 0 0 7.5 7.5v-2ZM9 9.5c0-1.079.31-2.082.845-2.93L8.153 5.5A7.47 7.47 0 0 0 7 9.5h2Zm-4 3.368C5 10.089 6.815 7.75 9.292 6.99L8.706 5.08C5.397 6.094 3 9.201 3 12.867h2Zm6.042 6.136C7.718 19.003 5 16.268 5 12.867H3c0 4.48 3.588 8.136 8.042 8.136v-2Zm5.725-4.17c-.81 2.433-3.074 4.17-5.725 4.17v2c3.552 0 6.553-2.327 7.622-5.537l-1.897-.632Z"
-                className="fill-white"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M17 3a1 1 0 0 1 1 1 2 2 0 0 0 2 2 1 1 0 1 1 0 2 2 2 0 0 0-2 2 1 1 0 1 1-2 0 2 2 0 0 0-2-2 1 1 0 1 1 0-2 2 2 0 0 0 2-2 1 1 0 0 1 1-1Z"
-                className="fill-white"
-              ></path>
-            </svg>
-          )}
-        </button>
-        {user ? (
-          <div className="relative group">
-            <img
-              src={user?.photoURL || "/default-profile.png"}
-              className="rounded-full w-10 h-10 cursor-pointer object-cover"
-              alt="User"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute top-12 right-0 md:-left-20 flex flex-col gap-2 w-48 bg-white p-3 shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-              <h3 className="text-sm font-semibold">{user?.displayName}</h3>
-              <p className="text-xs text-gray-600">{user?.email}</p>
-              <Link
-                to={`${
-                  loginUser.role === "admin"
-                    ? "/dashboard/admin-profile"
-                    : loginUser.role === "guide"
-                    ? "/dashboard/guide-profile"
-                    : "/dashboard/tourist-profile"
-                }`}
-                className={"text-black"}
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/offer-announcements"
-                className="text-sm text-black hover:text-gray-700"
-              >
-                Offer Announcements
-              </Link>
-              <button
-                onClick={signOut}
-                className="text-sm text-white bg-primary py-1 rounded-sm hover:bg-danger"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <Link to="/login">
-              <button className="px-5 font-bold text-white py-1 rounded-md bg-primary">
-                Login
-              </button>
-            </Link>
-            <Link to="/register">
-              <button className="px-5 font-bold text-white py-1 rounded-md bg-primary hidden md:block">
-                Register
-              </button>
-            </Link>
-          </>
-        )}
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="absolute top-16 left-0 -md:right-16 w-full bg-white shadow-lg lg:hidden">
-          <ul className="menu menu-vertical px-5 py-3 space-y-3">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive ? "text-gray-400" : "text-black"
-              }
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/community"
-              className={({ isActive }) =>
-                isActive ? "text-gray-400" : "text-black"
-              }
-            >
-              Community
-            </NavLink>
-            <NavLink
-              to="/about-us"
-              className={({ isActive }) =>
-                isActive ? "text-gray-400" : "text-black"
-              }
-            >
-              About Us
-            </NavLink>
-            <NavLink
-              to="/trips"
-              className={({ isActive }) =>
-                isActive ? "text-gray-400" : "text-black"
-              }
-            >
-              Trips
-            </NavLink>
-            <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-white"
-            }
-          >
-            Contact Us
-          </NavLink>
             {user && (
               <>
                 <Link
-                  to={`${
-                    loginUser.role === "admin"
+                  to={
+                    loginUser?.role === "admin"
                       ? "/dashboard/admin-profile"
-                      : loginUser.role === "guide"
+                      : loginUser?.role === "guide"
                       ? "/dashboard/guide-profile"
                       : "/dashboard/tourist-profile"
-                  }`}
-                  className={"text-gray-400"}
+                  }
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-primary transition-colors"
                 >
                   Dashboard
                 </Link>
-                <NavLink
+                <Link
                   to="/offer-announcements"
-                  className={({ isActive }) =>
-                    isActive ? "text-gray-400" : "text-black"
-                  }
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-primary transition-colors"
                 >
                   Offer Announcements
-                </NavLink>
-                <button
-                  onClick={signOut}
-                  className="text-red-500 text-sm hover:underline"
-                >
-                  Logout
-                </button>
+                </Link>
               </>
             )}
-          </ul>
+
+            <div className="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+
+            {user ? (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  signOut();
+                }}
+                className="w-full text-center py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-all"
+              >
+                Logout
+              </button>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-premium transition-all"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
+    </nav>
   );
 };
 

@@ -6,93 +6,115 @@ import { FaFacebook } from "react-icons/fa";
 import "swiper/css";
 import { FormContext } from "../../context/FormData";
 import { Link } from "react-router-dom";
-import useAllUser from "../../hooks/useAllUser";
 import useUser from "../../hooks/useUser";
+import Button from "../../components/shared/Button";
+import Card from "../../components/shared/Card";
 
-const HomeStory = ({ storyData }) => {
+const HomeStory = ({ storyData = [] }) => {
   const { user } = useContext(FormContext);
   const [loginUser] = useUser();
+
+  const handleShareSuccess = () => {
+    // optional tracking
+  };
+
   return (
-    <div className="md:my-10 mt-2 lg:px-20 md:px-10 px-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <Title
-        heading={"Stories from Travelers"}
-        text={
-          "Dive into captivating tales from adventurers around the world. From life-changing encounters to breathtaking experiences, these stories showcase the beauty, challenges, and magic of exploring new places. Let their journeys inspire your next adventure!"
-        }
+        heading="Stories from Travelers"
+        text="Dive into captivating tales from adventurers around the world. Let their journeys inspire your next coordinates!"
       />
-      {/* Story Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      {/* Story Section Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-10">
         {storyData.slice(0, 4).map((story) => (
-          <div
-            key={story._id}
-            className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
-          >
-            <Swiper
-              spaceBetween={10}
-              slidesPerView={1}
-              navigation
-              pagination={{ clickable: true }}
-              className="w-full h-48 mb-4"
-            >
-              {story.images.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <img
-                    src={image}
-                    alt={`Story ${index + 1}`}
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <h2 className="text-xl font-bold mb-2">{story.title}</h2>
-            <p className="text-gray-600 mb-4">
-              {story.storyText.slice(0, 100)}...
-            </p>
-            {/* Facebook Share Button */}
-            <div className="mt-auto">
-              <FacebookShareButton
-                url={window.location.href}
-                quote={story.title}
-                hashtag="#TravelStories"
+          <div key={story._id} className="flex flex-col h-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition-all duration-300 hover:-translate-y-1">
+            {/* Swiper slider wrapper */}
+            <div className="relative h-48 w-full group overflow-hidden">
+              <Swiper
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={true}
+                pagination={{ clickable: true }}
+                className="w-full h-full"
               >
-                {user ? (
-                  <button className="flex items-center space-x-2 bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 transition">
-                    <FaFacebook size={20} />
-                    <span>Share on Facebook</span>
-                  </button>
-                ) : (
-                  ""
-                )}
-              </FacebookShareButton>
+                {story.images.map((image, index) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      src={image}
+                      alt={`Story ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+
+            {/* Content area */}
+            <div className="p-5 flex flex-col flex-grow">
+              <span className="text-[10px] font-bold text-primary tracking-widest uppercase mb-1.5 block">
+                Traveler Journal
+              </span>
+              <h3 className="text-md font-bold text-slate-800 dark:text-slate-100 font-display line-clamp-1 mb-2">
+                {story.title}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 mb-6">
+                {story.storyText}
+              </p>
+
+              {/* Share Trigger */}
+              <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <FacebookShareButton
+                  url={window.location.href}
+                  quote={story.title}
+                  hashtag="#TrevaTravels"
+                  onShareWindowClose={handleShareSuccess}
+                  className="w-full"
+                >
+                  {user ? (
+                    <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-[#1877F2] hover:bg-[#166FE5] text-white text-xs font-bold rounded-xl transition duration-200 shadow-sm active:scale-95">
+                      <FaFacebook size={16} />
+                      <span>Share Story</span>
+                    </button>
+                  ) : (
+                    <div className="text-[10px] text-center text-slate-400 py-2">
+                      Login to share story
+                    </div>
+                  )}
+                </FacebookShareButton>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center w-full mt-5 space-x-5">
+      {/* Admin / Guide / Tourist control triggers */}
+      <div className="flex justify-center items-center gap-4 mt-12">
         <Link
           to={`${
-            loginUser.role === "admin"
+            loginUser?.role === "admin"
               ? "/dashboard/admin-story"
-              : loginUser.role === "guide"
+              : loginUser?.role === "guide"
               ? "/dashboard/guide-manage-story"
               : "/dashboard/tourist-stories"
           }`}
-          className="bg-primary px-4 py-1 rounded-md text-white"
         >
-          All Stories
+          <Button variant="outline" size="sm" className="font-bold">
+            All Stories
+          </Button>
         </Link>
         <Link
           to={`${
-            loginUser.role === "admin"
+            loginUser?.role === "admin"
               ? "/dashboard/admin-add-story"
-              : loginUser.role === "guide"
+              : loginUser?.role === "guide"
               ? "/dashboard/guide-add-story"
               : "/dashboard/tourist-add-story"
           }`}
-          className="bg-primary px-4 py-1 rounded-md text-white"
         >
-          Add Stories
+          <Button variant="primary" size="sm" className="font-bold">
+            Share Your Story
+          </Button>
         </Link>
       </div>
     </div>

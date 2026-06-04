@@ -21,7 +21,7 @@ Welcome to the Tourism Management System! This platform is designed to enhance t
 This website is built using modern web technologies:
 
 - **Frontend:**
-  - HTML5, CSS3, JavaScript
+  - JavaScript,
   - Framework: React.js
   - Styling: Tailwind CSS
 - **Backend:**

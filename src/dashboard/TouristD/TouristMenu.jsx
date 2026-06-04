@@ -1,115 +1,41 @@
-import React from 'react';
+import { FiPieChart, FiUser } from 'react-icons/fi';
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoPersonAddOutline } from "react-icons/io5";
+import { MdHistoryToggleOff } from "react-icons/md";
+import { TbCalendar } from "react-icons/tb";
 import { NavLink } from 'react-router-dom';
-import {
-    TbCalendar,
-  } from "react-icons/tb";
-  import { CgProfile } from "react-icons/cg";
-  import { MdHistoryToggleOff } from "react-icons/md";
-  import { IoPersonAddOutline } from "react-icons/io5";
-  import { IoIosAddCircleOutline } from "react-icons/io";
-import { FiPieChart } from 'react-icons/fi';
 
-const TouristMenu = ({isCollapsed}) => {
-    return (
-        <div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-profile"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <CgProfile
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "Manage Profile"}</span>
-              </NavLink>
-            </div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-overview"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <FiPieChart
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "Overview"}</span>
-              </NavLink>
-            </div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-bookings"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <TbCalendar
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "My Bookings"}</span>
-              </NavLink>
-            </div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-add-story"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <IoIosAddCircleOutline
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "Add Stories"}</span>
-              </NavLink>
-            </div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-stories"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <MdHistoryToggleOff
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "Manage Stories"}</span>
-              </NavLink>
-            </div>
-            <div className="rounded-md p-4 bg-white my-2">
-              <NavLink
-                to={"tourist-guild"}
-                className={({ isActive }) =>
-                  `flex items-center ${
-                    isActive ? "text-primary" : "text-black"
-                  } ${isCollapsed ? "justify-center" : "md:ml-5"}`
-                }
-              >
-                <IoPersonAddOutline
-                  className={`${isCollapsed ? "" : "md:mr-3"}`}
-                  size={24}
-                />
-                <span className="hidden sm:inline">{!isCollapsed && "Join as tour guide"}</span>
-              </NavLink>
-            </div>
-        </div>
-    );
+const TouristMenu = ({ isCollapsed }) => {
+  const items = [
+    { to: "tourist-profile", icon: FiUser, label: "Manage Profile" },
+    { to: "tourist-overview", icon: FiPieChart, label: "Overview" },
+    { to: "tourist-bookings", icon: TbCalendar, label: "My Bookings" },
+    { to: "tourist-add-story", icon: IoIosAddCircleOutline, label: "Add Stories" },
+    { to: "tourist-stories", icon: MdHistoryToggleOff, label: "Manage Stories" },
+    { to: "tourist-guild", icon: IoPersonAddOutline, label: "Join as Guide" }
+  ];
+
+  return (
+    <div className="space-y-1">
+      {items.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              isActive
+                ? "bg-primary/10 text-primary border-l-2 border-primary"
+                : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
+            } ${isCollapsed ? "justify-center" : ""}`
+          }
+          title={isCollapsed ? item.label : ""}
+        >
+          <item.icon className="h-5 w-5 flex-shrink-0" />
+          {!isCollapsed && <span className="truncate">{item.label}</span>}
+        </NavLink>
+      ))}
+    </div>
+  );
 };
 
 export default TouristMenu;

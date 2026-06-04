@@ -2,45 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: 248 250 252;       /* Slate 50 */
+    --foreground: 15 23 42;          /* Slate 900 */
+    --card: 255 255 255;             /* White */
+    --card-foreground: 15 23 42;     /* Slate 900 */
+    --popover: 255 255 255;          /* White */
+    --popover-foreground: 15 23 42;  /* Slate 900 */
+    --border: 226 232 240;           /* Slate 200 */
+    --input: 226 232 240;            /* Slate 200 */
+    --ring: 16 185 129;              /* Emerald 500 */
+    --muted: 100 116 139;            /* Slate 500 */
+  }
 
+  [data-theme="dark"] {
+    --background: 15 23 42;          /* Slate 900 */
+    --foreground: 248 250 252;       /* Slate 50 */
+    --card: 30 41 59;                /* Slate 800 */
+    --card-foreground: 248 250 252;  /* Slate 50 */
+    --popover: 30 41 59;             /* Slate 800 */
+    --popover-foreground: 248 250 252;/* Slate 50 */
+    --border: 51 65 85;              /* Slate 700 */
+    --input: 51 65 85;               /* Slate 700 */
+    --ring: 16 185 129;              /* Emerald 500 */
+    --muted: 148 163 184;            /* Slate 400 */
+  }
 
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
 
-
-
-
-
-.tabstem{
-    border-radius: 10px !important;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    letter-spacing: -0.02em;
+  }
 }
 
+@layer components {
+  /* Premium Glassmorphism Utility */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
 
-.c {
-    position: absolute;
-    max-width: 500px;
-    max-height: 500px;
-    width: 350px;
-    height: 200px;
-    cursor: pointer;
-    will-change: transform, opacity;
+  [data-theme="dark"] .glass-panel {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
-  
-  .front,
-  .back {
-    background-size: cover;
+
+  /* Shimmer / Skeleton Loader Effect */
+  .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      rgba(226, 232, 240, 0.6) 25%,
+      rgba(203, 213, 225, 0.9) 37%,
+      rgba(226, 232, 240, 0.6) 63%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
-  
-  .back {
-    background-image: url(https://images.unsplash.com/photo-1544511916-0148ccdeb877?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1901&q=80i&auto=format&fit=crop);
+
+  [data-theme="dark"] .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      rgba(30, 41, 59, 0.6) 25%,
+      rgba(51, 65, 85, 0.9) 37%,
+      rgba(30, 41, 59, 0.6) 63%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
-  
-  .front {
-    background-image: url(https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&w=1181&q=80&auto=format&fit=crop);
+
+  .tabstem {
+    border-radius: 10px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  .container {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-  }
-  
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.5);
+}
+
+/* Smooth active menu link indicators */
+.active-nav-link {
+  position: relative;
+}
+
+.active-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(16, 185, 129);
+  border-radius: 2px;
+}
