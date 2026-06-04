@@ -36,7 +36,7 @@ const Galary = () => {
     },
     {
       id: 6,
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBapPJ2sobnKRhPulDYwUsRjCHJrjimakOgw&s",
+      img: "https://i.ibb.co.com/vxV6dhSM/download-1.jpg",
       title: "Mountain Peak",
       description: "Reach the peak of majestic mountains, offering panoramic views and a sense of triumph and adventure.",
     },

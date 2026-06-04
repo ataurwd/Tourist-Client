@@ -11,7 +11,7 @@ const JoinUs = () => {
       "Discover world-renowned architecture, exquisite cuisine, charming villages, and timeless cultural heritage.",
     touristSpot: "Eiffel Tower",
     image:
-      "https://images.unsplash.com/photo-1502602898536-47ad22581b52?auto=format&fit=crop&w=1200&q=80",
+      "https://i.ibb.co.com/vxV6dhSM/download-1.jpg",
   },
   {
     id: 2,

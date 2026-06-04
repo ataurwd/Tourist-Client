@@ -10,15 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 
 
 const BestSells = () => {
-  const secureAxios = useAxios();
-  
-  const { data: packageItem = [], isLoading } = useQuery({
-    queryKey: ["allpackages"],
-    queryFn: async () => {
-      const response = await secureAxios.get(`/packages/all`);
-      return response.data;
-    },
-  });  
+   const [packageItem, , isPackagesLoading] = usePackage();
+
   const latestTours = packageItem.slice(2, 8);
 
   return (
@@ -28,7 +21,7 @@ const BestSells = () => {
         text="Discover our recently added adventure packages featuring premier itineraries, top local guide support, and immersive experiences." 
       />
 
-      {isLoading ? (
+      {isPackagesLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <SkeletonCard key={n} />
@@ -65,9 +58,9 @@ const BestSells = () => {
           ))}
         </div>
       )}
-      <div className="flex justifi-center item-center">
+      {/* <div className="flex justifi-center item-center">
         <Button className="mt-6 w-40">See All</Button>
-      </div>
+      </div> */}
     </div>
   );
 };
