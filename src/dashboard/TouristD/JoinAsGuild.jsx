@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import { FormContext } from "../../context/FormData";
 import Button from "../../components/shared/Button";
 
@@ -21,19 +21,11 @@ const JoinAsGuild = () => {
     try {
       const res = await axios.post(`${import.meta.env.VITE_URL}/guide`, formData);
       if (res.data.insertedId) {
-        Swal.fire({
-          title: "Application Submitted Successfully!",
-          text: "We will review your application soon.",
-          icon: "success",
-        });
+        toast.success("Application Submitted! We will review it soon.");
         form.reset();
       }
     } catch (err) {
-      Swal.fire({
-        title: "Submission Error",
-        text: err.response?.data?.message || "You might have already applied.",
-        icon: "error",
-      });
+      toast.error(err.response?.data?.message || "You might have already applied.");
     } finally {
       setIsSubmitting(false);
     }

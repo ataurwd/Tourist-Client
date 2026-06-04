@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import useStory from "../../hooks/useStory";
@@ -16,35 +16,20 @@ const TouristStories = () => {
 
   // Delete button handler
   const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this story!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm("Are you sure? You won't be able to revert this story!")) return;
 
-    if (result.isConfirmed) {
+    {
       try {
         const res = await axios.delete(
           `${import.meta.env.VITE_URL}/story/${id}`
         );
         if (res.data.deletedCount) {
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your story has been deleted.",
-            icon: "success",
-          });
+          toast.success("Story deleted successfully!");
           refetch();
         }
       } catch (error) {
         console.error("Error deleting story:", error);
-        Swal.fire({
-          title: "Error",
-          text: "Something went wrong while deleting the story.",
-          icon: "error",
-        });
+        toast.error("Something went wrong while deleting the story.");
       }
     }
   };

@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FormContext } from "./../context/FormData";
 import useAllUser from "../hooks/useAllUser";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import useUser from "./../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import Button from "./shared/Button";
@@ -41,21 +41,14 @@ const BookingForm = ({ packageName }) => {
     };
 
     if (loginUser.role === "guide") {
-      return Swal.fire({
-        title: "A Guide Can not booked",
-        icon: "error",
-        draggable: false,
-      });
+      toast.error("Guides cannot book tours.");
+      return;
     }
     await axios
       .post(`${import.meta.env.VITE_URL}/guide-booking`, formData)
       .then((res) => {
         if (res.data.insertedId) {
-          Swal.fire({
-            title: "Confirm your Booking",
-            icon: "success",
-            draggable: false,
-          });
+          toast.success("Booking Confirmed Successfully!");
           navigate(
             `${
               loginUser.role === "admin"

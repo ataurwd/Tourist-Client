@@ -1,7 +1,7 @@
 import React from "react";
 import useCandidate from "./../../hooks/useCandidate";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import StatusBadge from "../../components/shared/StatusBadge";
 import { FiEye } from "react-icons/fi";
@@ -11,44 +11,23 @@ const ManageCandidate = () => {
 
   // to update user role
   const handleAccept = async (email) => {
-    const result = await Swal.fire({
-      title: "Promote to Tour Guide?",
-      text: `Do you want to approve this application and update ${email} to a Tour Guide?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, approve",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm(`Approve this application and update ${email} to Tour Guide?`)) return;
 
-    if (result.isConfirmed) {
+    {
       await axios.patch(`${import.meta.env.VITE_URL}/update-guide/${email}`);
-      Swal.fire({
-        title: "Success!",
-        text: "User role has been updated to guide.",
-        icon: "success",
-      });
+      toast.success("User role has been updated to guide.");
       refetch();
     }
   };
 
   // to delete or reject user
   const handleReject = async (id) => {
-    const result = await Swal.fire({
-      title: "Reject Application?",
-      text: "Do you want to decline this Tour Guide application?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, reject",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm("Do you want to decline this Tour Guide application?")) return;
 
-    if (result.isConfirmed) {
+    {
       const res = await axios.delete(`${import.meta.env.VITE_URL}/guide/${id}`);
       if (res.data.deletedCount) {
-        Swal.fire({
-          title: "Application Rejected Successfully",
-          icon: "success",
-        });
+        toast.success("Application Rejected Successfully!");
         refetch();
       }
     }

@@ -2,10 +2,9 @@ import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { FormContext } from "./../context/FormData";
 import axios from "axios";
-import Swal from "sweetalert2";
 import Button from "../components/shared/Button";
 
 const Login = () => {
@@ -35,10 +34,7 @@ const Login = () => {
   const googleSignInUser = () => {
     googleLogin()
       .then((res) => {
-        Swal.fire({
-          title: "Successfully logged in!",
-          icon: "success",
-        });
+        toast.success("Successfully logged in!");
         navigate(location?.state ? location.state : "/");
         const userInfo = {
           email: res.user.email,

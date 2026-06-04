@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import { FiUpload, FiImage, FiX } from "react-icons/fi";
 
@@ -96,10 +96,7 @@ const AddPackage = () => {
         packageToSubmit
       );
       if (response.data.insertedId) {
-        Swal.fire({
-          title: "Package Added Successfully",
-          icon: "success",
-        });
+        toast.success("Package Added Successfully!");
         form.reset();
         setPackageData({
           packageName: "",
@@ -117,10 +114,7 @@ const AddPackage = () => {
         });
         setUploadedImageUrls([]);
       } else {
-        Swal.fire({
-          title: "Failed to Add Package",
-          icon: "error",
-        });
+        toast.error("Failed to Add Package.");
       }
     } catch (error) {
       console.error("Error submitting package", error);

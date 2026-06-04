@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { FormContext } from "../context/FormData";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import useBooking from "../hooks/useBooking";
 import useUser from "../hooks/useUser";
 import Button from "./shared/Button";
@@ -51,11 +51,7 @@ const Payment = () => {
 
       if (error) {
         console.error("Error creating payment method:", error);
-        Swal.fire({
-          title: "Payment Error",
-          text: error.message || "Failed to parse credit card details.",
-          icon: "error",
-        });
+        toast.error(error.message || "Failed to parse credit card details.");
         setLoading(false);
         return;
       }
@@ -72,21 +68,13 @@ const Payment = () => {
         });
 
       if (cardErrr) {
-        Swal.fire({
-          title: "Card Declined",
-          text: cardErrr.message || "Payment transaction declined.",
-          icon: "error",
-        });
+        toast.error(cardErrr.message || "Payment transaction declined.");
         setLoading(false);
         return;
       }
 
       if (paymentIntent.status === "succeeded") {
-        Swal.fire({
-          title: "Payment Successful",
-          text: `Charged $${cardData.price} successfully!`,
-          icon: "success",
-        });
+        toast.success(`Payment Successful! Charged $${cardData.price}.`);
         refetch();
         navigate(
           `${
@@ -116,11 +104,7 @@ const Payment = () => {
       }
     } catch (err) {
       console.error("Payment processing error:", err);
-      Swal.fire({
-        title: "Processing Failure",
-        text: "Something went wrong while executing Stripe transaction.",
-        icon: "error",
-      });
+      toast.error("Something went wrong while processing your payment.");
     } finally {
       setLoading(false);
     }

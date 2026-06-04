@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { FormContext } from "../../context/FormData";
 import useUser from "../../hooks/useUser";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import Modal from "../../components/shared/Modal";
 import { FiEdit2, FiMail, FiCheckCircle } from "react-icons/fi";
@@ -33,11 +33,7 @@ const GuideProfile = () => {
   const handleSave = () => {
     setUser({ ...formData }); // Update user in context
     setModalOpen(false);
-    Swal.fire({
-      title: "Profile Updated Successfully",
-      icon: "success",
-      draggable: false,
-    });
+    toast.success("Profile Updated Successfully!");
   };
 
   return (

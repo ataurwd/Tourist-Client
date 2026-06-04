@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { FormContext } from "./../context/FormData";
 import Loading from "../components/Loading";
 

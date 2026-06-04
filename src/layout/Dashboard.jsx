@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { FiChevronLeft, FiChevronRight, FiMenu } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight, FiMenu, FiX } from "react-icons/fi";
 import { TbHome } from "react-icons/tb";
 import { NavLink, Outlet, Link } from "react-router-dom";
 import { ThemeContext } from "../context/Theme";
@@ -9,6 +9,7 @@ import AdminMenu from "../dashboard/admin/AdminMenu";
 import GuideMenu from "../dashboard/guide/GuideMenu";
 import useUser from "../hooks/useUser";
 import { HiSun, HiMoon } from "react-icons/hi";
+import { Toaster } from "sonner";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -132,7 +133,7 @@ const Dashboard = () => {
                 onClick={() => setIsMobileOpen(false)}
                 className="p-2 text-slate-400 hover:text-white"
               >
-                <HiX size={20} />
+                <FiX size={20} />
               </button>
             </div>
 
@@ -184,6 +185,7 @@ const Dashboard = () => {
           <Outlet />
         </main>
       </div>
+      <Toaster richColors position="top-right" />
     </div>
   );
 };

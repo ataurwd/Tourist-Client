@@ -4,7 +4,7 @@ import { FormContext } from "../../context/FormData";
 import usePackage from "./../../hooks/usePackage";
 import useAllStories from "../../hooks/useAllStories";
 import useAllPayment from "../../hooks/useAllPayment";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import Modal from "../../components/shared/Modal";
 import { FiEdit2, FiMail, FiUsers, FiMap, FiMessageSquare, FiTrendingUp } from "react-icons/fi";
@@ -45,10 +45,7 @@ const AdminProfile = () => {
   const handleSave = () => {
     setUser({ ...formData }); // Update user in context
     setModalOpen(false);
-    Swal.fire({
-      title: "Profile Updated Successfully",
-      icon: "success",
-    });
+    toast.success("Profile Updated Successfully!");
   };
 
   return (

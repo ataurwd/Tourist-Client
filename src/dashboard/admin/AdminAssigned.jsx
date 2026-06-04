@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import useBooking from "../../hooks/useBooking";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import StatusBadge from "../../components/shared/StatusBadge";
 import Button from "../../components/shared/Button";
 
@@ -10,24 +10,14 @@ const AdminAssigned = () => {
   const [guideBooking, refetch, isLoading] = useBooking();
 
   const handelCancel = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to cancel this booking?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, cancel it!",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm("Are you sure? Do you want to cancel this booking?")) return;
 
-    if (result.isConfirmed) {
+    {
       const res = await axios.delete(
         `${import.meta.env.VITE_URL}/guide-booking/${id}`
       );
       if (res.data.deletedCount) {
-        Swal.fire({
-          title: "Booking Cancelled Successfully",
-          icon: "success",
-        });
+        toast.success("Booking Cancelled Successfully!");
         refetch();
       }
     }

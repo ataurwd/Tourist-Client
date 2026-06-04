@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/shared/Button";
 import { FiMapPin, FiPhone, FiMail, FiSend } from "react-icons/fi";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,11 +14,7 @@ const Contact = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       e.target.reset();
-      Swal.fire({
-        title: "Message Sent!",
-        text: "We'll get back to you within 24 hours.",
-        icon: "success",
-      });
+      toast.success("Message Sent! We'll get back to you within 24 hours.");
     }, 1500);
   };
 

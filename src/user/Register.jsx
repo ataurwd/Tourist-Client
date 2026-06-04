@@ -2,11 +2,10 @@ import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { FormContext } from "../context/FormData";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 import axios from "axios";
-import Swal from "sweetalert2";
 import Button from "../components/shared/Button";
 
 const Register = () => {
@@ -26,10 +25,7 @@ const Register = () => {
     // password validation
     if (password.length < 6) {
       setIsLoading(false);
-      Swal.fire({
-        title: "Password should be at least 6 characters long.",
-        icon: "error",
-      });
+      toast.error("Password should be at least 6 characters long.");
       return;
     }
 
@@ -38,28 +34,19 @@ const Register = () => {
 
     if (!upperCase.test(password)) {
       setIsLoading(false);
-      Swal.fire({
-        title: "Password must contain at least one uppercase letter.",
-        icon: "error",
-      });
+      toast.error("Password must contain at least one uppercase letter.");
       return;
     }
     if (!lowerCase.test(password)) {
       setIsLoading(false);
-      Swal.fire({
-        title: "Password must contain at least one lowercase letter.",
-        icon: "error",
-      });
+      toast.error("Password must contain at least one lowercase letter.");
       return;
     }
 
     handelRegisterUser(email, password)
       .then((res) => {
         setIsLoading(false);
-        Swal.fire({
-          title: "Account Created Successfully!",
-          icon: "success",
-        });
+        toast.success("Account Created Successfully!");
         navigate("/");
 
         const userInfo = {

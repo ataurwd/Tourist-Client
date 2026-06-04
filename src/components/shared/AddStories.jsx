@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import useUser from "../../hooks/useUser";
 import Button from "./Button";
 import { FiUpload, FiImage, FiX } from "react-icons/fi";
@@ -86,14 +86,12 @@ const AddStories = ({ url }) => {
         storyToSubmit
       );
       if (response.data.insertedId) {
-        Swal.fire({
-          title: "Story Added Successfully!",
-          icon: "success",
-        });
+        toast.success("Story Added Successfully!");
         navigate(url); // Redirect to another page
       }
     } catch (error) {
       console.error("Error submitting story", error);
+      toast.error("Failed to add story. Please try again.");
     }
   };
 

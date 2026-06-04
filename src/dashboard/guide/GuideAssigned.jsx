@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { FormContext } from "./../../context/FormData";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import StatusBadge from "../../components/shared/StatusBadge";
 import Button from "../../components/shared/Button";
 
@@ -22,44 +22,24 @@ const GuideAssigned = () => {
 
   // Update booking status function (Reject)
   const handleReject = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to reject this booking assignation?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, reject it!",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm("Are you sure? Do you want to reject this booking assignation?")) return;
 
-    if (result.isConfirmed) {
+    {
       await axios.patch(`${import.meta.env.VITE_URL}/update-status/${id}`);
-      Swal.fire({
-        title: "Rejected Successfully",
-        icon: "success",
-      });
+      toast.success("Rejected Successfully!");
       refetch();
     }
   };
 
   // Update booking status function (Accept)
   const handelAccept = async (id) => {
-    const result = await Swal.fire({
-      title: "Accept Booking?",
-      text: "Do you want to accept this booking assignation?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, accept",
-      cancelButtonText: "Cancel",
-    });
+    if (!window.confirm("Do you want to accept this booking assignation?")) return;
 
-    if (result.isConfirmed) {
+    {
       await axios.patch(
         `${import.meta.env.VITE_URL}/update-accepted/${id}`
       );
-      Swal.fire({
-        title: "Accepted Successfully",
-        icon: "success",
-      });
+      toast.success("Accepted Successfully!");
       refetch();
     }
   };

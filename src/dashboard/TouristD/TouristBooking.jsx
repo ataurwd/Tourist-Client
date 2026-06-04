@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import Confetti from "react-confetti";
 import { FormContext } from "../../context/FormData";
 import StatusBadge from "../../components/shared/StatusBadge";
@@ -62,24 +62,14 @@ const TouristBooking = () => {
   };
 
   const handleCancel = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to cancel this booking?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, cancel it!",
-      cancelButtonText: "No, keep it",
-    });
+    if (!window.confirm("Are you sure? Do you want to cancel this booking?")) return;
 
-    if (result.isConfirmed) {
+    {
       const res = await axios.delete(
         `${import.meta.env.VITE_URL}/guide-booking/${id}`
       );
       if (res.data.deletedCount) {
-        Swal.fire({
-          title: "Booking Cancelled Successfully",
-          icon: "success",
-        });
+        toast.success("Booking Cancelled Successfully!");
         const updatedBookings = product.filter((booking) => booking._id !== id);
         setProduct(updatedBookings);
         totalCount((prev) => Math.max(0, prev - 1));

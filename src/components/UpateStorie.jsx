@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useStory from "../hooks/useStory";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import Button from "./shared/Button";
@@ -54,11 +54,7 @@ const UpdateStorie = () => {
     } catch (error) {
       setIsUploading(false);
       console.error("Image upload failed", error);
-      Swal.fire({
-        title: "Upload Failed",
-        text: "Something went wrong while uploading your images.",
-        icon: "error",
-      });
+      toast.error("Something went wrong while uploading your images.");
     }
   };
 
@@ -86,10 +82,7 @@ const UpdateStorie = () => {
       );
       if (res.data.modifiedCount || res.data.matchedCount) {
         refetch();
-        Swal.fire({
-          title: "Update Successful!",
-          icon: "success",
-        });
+        toast.success("Story Updated Successfully!");
         navigate(
           `${
             loginUser?.role === "guide"
@@ -102,11 +95,7 @@ const UpdateStorie = () => {
       }
     } catch (error) {
       console.error("Update failed", error);
-      Swal.fire({
-        title: "Error",
-        text: "Could not update the story.",
-        icon: "error",
-      });
+      toast.error("Could not update the story.");
     }
   };
 
