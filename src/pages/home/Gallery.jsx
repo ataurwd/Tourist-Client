@@ -28,7 +28,7 @@ const Gallery = () => {
       location: "Sylhet, Bangladesh",
     },
     {
-      img: "https://i.ibb.co.com/8L4vdL6L/unnamed.jpg",
+      img: "https://i.ibb.co.com/c0kBqrb/download-1.jpg",
       title: "Cox's Bazar Beach",
       location: "Cox's Bazar, Bangladesh",
     },

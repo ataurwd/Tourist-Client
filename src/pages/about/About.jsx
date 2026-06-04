@@ -75,7 +75,7 @@ const About = () => {
             </p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-2">
-              <a href="https://ataur-wd.netlify.app/" target="_blank" rel="noreferrer">
+              <a href="https://dev-portfolio-eosin-three.vercel.app/" target="_blank" rel="noreferrer">
                 <Button variant="primary" size="sm" className="font-bold gap-2">
                   <FaGlobe /> Portfolio
                 </Button>

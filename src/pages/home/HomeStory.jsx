@@ -26,7 +26,7 @@ const HomeStory = ({ storyData = [] }) => {
       />
 
       {/* Story Section Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
         {storyData.slice(0, 4).map((story) => (
           <div key={story._id} className="flex flex-col h-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition-all duration-300 hover:-translate-y-1">
             {/* Swiper slider wrapper */}

@@ -4,42 +4,61 @@ import { motion } from "framer-motion";
 
 const JoinUs = () => {
   const countries = [
-    {
-      id: 1,
-      name: "France",
-      description: "Rich history, architecture, and gourmet culinary experiences.",
-      touristSpot: "Eiffel Tower",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbLIYwKpcMLfIl6Gac98JSAf5TNN0JI2K7Qw&s",
-    },
-    {
-      id: 2,
-      name: "Japan",
-      description: "Contrasts of ancient temples, neon lights, and Mt. Fuji scenery.",
-      touristSpot: "Mount Fuji",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9F3Ch8VMg8W8maHQUGGuegZFr9XSws84AiA&s",
-    },
-    {
-      id: 3,
-      name: "Italy",
-      description: "Extraordinary cultural heritage, historic ruins, and pasta wonders.",
-      touristSpot: "Colosseum",
-      image: "https://images.javatpoint.com/tourist-places/images/tourist-places-in-italy2.png",
-    },
-    {
-      id: 4,
-      name: "Australia",
-      description: "The Great Barrier Reef, coastal cities, and iconic outback terrains.",
-      touristSpot: "Sydney Opera House",
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/09/Sydney_Opera_House_-_Dec_2008.jpg",
-    },
-    {
-      id: 5,
-      name: "Brazil",
-      description: "Vibrant beaches, Amazon wilderness, and Christ the Redeemer.",
-      touristSpot: "Christ the Redeemer",
-      image: "https://images.javatpoint.com/tourist-places/images/tourist-places-in-brazil3.png",
-    },
-  ];
+  {
+    id: 1,
+    name: "France",
+    description:
+      "Discover world-renowned architecture, exquisite cuisine, charming villages, and timeless cultural heritage.",
+    touristSpot: "Eiffel Tower",
+    image:
+      "https://images.unsplash.com/photo-1502602898536-47ad22581b52?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 2,
+    name: "Japan",
+    description:
+      "Experience the perfect blend of ancient traditions, futuristic cities, breathtaking landscapes, and exceptional hospitality.",
+    touristSpot: "Mount Fuji",
+    image:
+      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 3,
+    name: "Italy",
+    description:
+      "Explore historic landmarks, artistic masterpieces, scenic coastlines, and authentic Mediterranean cuisine.",
+    touristSpot: "Colosseum",
+    image:
+      "https://images.unsplash.com/photo-1525874684015-58379d421a52?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 4,
+    name: "Australia",
+    description:
+      "From vibrant cities to natural wonders, enjoy diverse wildlife, stunning beaches, and unforgettable adventures.",
+    touristSpot: "Sydney Opera House",
+    image:
+      "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 5,
+    name: "Brazil",
+    description:
+      "Immerse yourself in vibrant culture, tropical landscapes, world-famous festivals, and breathtaking coastlines.",
+    touristSpot: "Christ the Redeemer",
+    image:
+      "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 6,
+    name: "Switzerland",
+    description:
+      "Experience majestic alpine scenery, pristine lakes, luxury travel, and picturesque mountain villages.",
+    touristSpot: "Matterhorn",
+    image:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+  },
+];
 
   return (
     <div className="relative py-20 overflow-hidden bg-slate-50/50 dark:bg-slate-900/10 border-y border-slate-100 dark:border-slate-800/40">
@@ -59,7 +78,7 @@ const JoinUs = () => {
           text="Embark on cross-continental journeys and explore premium global locations with seasoned travel packages."
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-10">
           {countries.map((country) => (
             <motion.div
               whileHover={{ y: -6, scale: 1.02 }}
