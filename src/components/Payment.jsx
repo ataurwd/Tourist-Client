@@ -1,5 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { FormContext } from "../context/FormData";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -9,30 +9,19 @@ import useUser from "../hooks/useUser";
 import Button from "./shared/Button";
 import { FiCreditCard, FiUser, FiCalendar, FiMapPin, FiInfo } from "react-icons/fi";
 
-const Payment = () => {
-  const [clientSecrate, setClientSecrate] = useState("");
+const Payment = ({ clientSecret }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useContext(FormContext);
-  const [guideBooking, refetch] = useBooking();
+  const [, refetch] = useBooking();
   const stripe = useStripe();
   const elements = useElements();
   const cardData = useLoaderData();
   const navigate = useNavigate();
   const [loginUser] = useUser();
 
-  useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_URL}/stripe-payment`, {
-        price: cardData.price,
-      })
-      .then((res) => {
-        setClientSecrate(res.data.clientSecret);
-      });
-  }, [cardData.price]);
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !clientSecret) {
       return;
     }
 
@@ -44,28 +33,18 @@ const Payment = () => {
     setLoading(true);
 
     try {
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: card,
-      });
-
-      if (error) {
-        console.error("Error creating payment method:", error);
-        toast.error(error.message || "Failed to parse credit card details.");
-        setLoading(false);
-        return;
-      }
-
-      const { paymentIntent, error: cardErrr } =
-        await stripe.confirmCardPayment(clientSecrate, {
+      const { paymentIntent, error: cardErrr } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
           payment_method: {
-            card: card,
+            card,
             billing_details: {
               email: user?.email || "default@example.com",
               name: user?.displayName || "Anonymous",
             },
           },
-        });
+        }
+      );
 
       if (cardErrr) {
         toast.error(cardErrr.message || "Payment transaction declined.");
@@ -73,8 +52,18 @@ const Payment = () => {
         return;
       }
 
-      if (paymentIntent.status === "succeeded") {
+      if (paymentIntent?.status === "succeeded") {
         toast.success(`Payment Successful! Charged $${cardData.price}.`);
+
+        await axios.post(`${import.meta.env.VITE_URL}/payment`, {
+          itemId: cardData._id,
+          payment: paymentIntent,
+        });
+
+        await axios.patch(
+          `${import.meta.env.VITE_URL}/update-guide-status/${cardData._id}`
+        );
+
         refetch();
         navigate(
           `${
@@ -83,28 +72,13 @@ const Payment = () => {
               : "/dashboard/tourist-bookings"
           }`
         );
-
-        axios
-          .post(`${import.meta.env.VITE_URL}/payment`, {
-            itemId: cardData._id,
-            payment: paymentIntent,
-          })
-          .then(async (res) => {
-            if (res.data.insertedId) {
-              const response = await axios.patch(
-                `${import.meta.env.VITE_URL}/update-guide-status/${
-                  cardData._id
-                }`
-              );
-              if (response.status === 200) {
-                refetch();
-              }
-            }
-          });
       }
     } catch (err) {
       console.error("Payment processing error:", err);
-      toast.error("Something went wrong while processing your payment.");
+      toast.error(
+        err.response?.data?.message ||
+          "Something went wrong while processing your payment."
+      );
     } finally {
       setLoading(false);
     }
@@ -231,7 +205,7 @@ const Payment = () => {
                 type="submit"
                 variant="primary"
                 size="md"
-                disabled={!stripe || !clientSecrate || loading}
+                disabled={!stripe || !clientSecret || loading}
                 loading={loading}
                 className="w-full font-bold text-base gap-2"
               >
