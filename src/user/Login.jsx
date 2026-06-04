@@ -1,28 +1,33 @@
 import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FormContext } from "./../context/FormData";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Button from "../components/shared/Button";
 
 const Login = () => {
   const { googleLogin, loginUser, user, setUser } = useContext(FormContext);
   const [password, setPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const signInUser = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     loginUser(email, password)
       .then((res) => {
-        const user = res.user;
+        setIsLoading(false);
         navigate(location?.state ? location.state : "/");
       })
       .catch((er) => {
+        setIsLoading(false);
         toast.error(er.message);
       });
   };
@@ -31,8 +36,8 @@ const Login = () => {
     googleLogin()
       .then((res) => {
         Swal.fire({
-          title: "sucessfully login",
-          icon: "success"
+          title: "Successfully logged in!",
+          icon: "success",
         });
         navigate(location?.state ? location.state : "/");
         const userInfo = {
@@ -41,9 +46,7 @@ const Login = () => {
           role: "tourist",
           photo: res.user.photoURL,
         };
-        // to post user data
-        axios
-          .post(`${import.meta.env.VITE_URL}/user`, userInfo)
+        axios.post(`${import.meta.env.VITE_URL}/user`, userInfo);
       })
       .catch((er) => {
         toast.error(er.message);
@@ -51,85 +54,129 @@ const Login = () => {
   };
 
   return (
-    <div className="flex mt-[7vh] items-center justify-center dark:bg-gray-900">
-      <div className="w-full max-w-lg mx-auto rounded-xl shadow-lg bg-white p-8 mb-[10vh] dark:bg-zinc-800">
-        <h2 className="pb-6 text-center text-3xl font-semibold text-primary dark:text-secondary">
-          Login Now
-        </h2>
-        <form className="flex flex-col gap-4" onSubmit={signInUser}>
-          {/* Email Input */}
-          <input
-            className="w-full rounded-lg border border-primary bg-transparent py-2 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-300"
-            type="email"
-            placeholder="Email"
-            name="email"
-            required
-          />
-
-          {/* Password Input */}
-          <div className="relative w-full">
-            <input
-              className="w-full rounded-lg border border-primary bg-transparent py-2 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-300"
-              id="password"
-              placeholder="Enter password"
-              name="password"
-              type={password ? "text" : "password"}
-              required
-            />
-            <div
-              className="absolute top-2.5 right-4 cursor-pointer"
-              onClick={() => setPassword(!password)}
-            >
-              {password ? (
-                <FaEye size={18} className="text-gray-600 dark:text-gray-400" />
-              ) : (
-                <FaEyeSlash
-                  size={18}
-                  className="text-gray-600 dark:text-gray-400"
-                />
-              )}
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 animate-fade-in-up">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white dark:bg-slate-800 rounded-3xl shadow-premium overflow-hidden border border-slate-100 dark:border-slate-700/50">
+        
+        {/* Left Decorative Panel */}
+        <div className="hidden lg:flex relative bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 p-12 flex-col justify-center">
+          {/* Decorative Blobs */}
+          <div className="absolute top-10 right-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-10 left-10 w-48 h-48 bg-secondary/15 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 space-y-6">
+            <span className="text-xs font-bold tracking-widest text-primary uppercase bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+              Welcome Back
+            </span>
+            <h2 className="text-3xl font-extrabold font-display text-white tracking-tight leading-tight">
+              Continue Your <br />
+              <span className="text-primary">Adventure</span>
+            </h2>
+            <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
+              Sign in to manage your bookings, share travel stories, and explore handpicked tour packages from local experts.
+            </p>
+            <div className="flex items-center gap-3 pt-4">
+              <div className="flex -space-x-2">
+                {["https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=60",
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=60",
+                  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=60"
+                ].map((src, i) => (
+                  <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-slate-900 object-cover" />
+                ))}
+              </div>
+              <p className="text-xs text-slate-400">
+                <span className="text-white font-bold">2,400+</span> travelers trust Treva
+              </p>
             </div>
           </div>
-
-          {/* Create Account Link */}
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Don’t have an account?{" "}
-            <Link to="/register" className="text-primary hover:underline">
-              Create one
-            </Link>
-          </p>
-
-          {/* Login Button */}
-          <button
-            className="w-full rounded-lg  py-3 bg-primary font-medium"
-            type="submit"
-          >
-            Login
-          </button>
-        </form>
-
-        {/* Divider */}
-        <div className="relative my-6 flex items-center">
-          <hr className="w-full border-gray-300 dark:border-gray-700" />
-          <span className="absolute left-1/2 -translate-x-1/2 bg-white px-4 text-sm text-gray-500 dark:bg-zinc-800 dark:text-gray-400">
-            OR
-          </span>
         </div>
 
-        {/* Google Login Button */}
-        <button
-          onClick={googleSignInUser}
-          className="mx-auto flex items-center justify-center w-full rounded-lg border border-primary py-3 text-primary hover: dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-        >
-          <span className="pr-2 text-lg">Sign in with</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            className="w-6 h-6 fill-current"
+        {/* Right Form Panel */}
+        <div className="p-8 md:p-12 flex flex-col justify-center">
+          <div className="space-y-1 mb-8">
+            <h2 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+              Sign In
+            </h2>
+            <p className="text-sm text-slate-400">
+              Enter your credentials to access your account.
+            </p>
+          </div>
+
+          <form className="space-y-5" onSubmit={signInUser}>
+            {/* Email */}
+            <div>
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+                Email Address
+              </label>
+              <input
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+                type="email"
+                placeholder="you@example.com"
+                name="email"
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all pr-12"
+                  placeholder="••••••••"
+                  name="password"
+                  type={password ? "text" : "password"}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-4 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  onClick={() => setPassword(!password)}
+                >
+                  {password ? <FaEye size={16} /> : <FaEyeSlash size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Account Link */}
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-primary font-bold hover:underline">
+                Create one
+              </Link>
+            </p>
+
+            {/* Login Button */}
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={isLoading}
+              className="w-full font-bold text-base"
+            >
+              Sign In
+            </Button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-8 flex items-center">
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-700" />
+            <span className="flex-shrink-0 mx-4 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+              Or continue with
+            </span>
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-700" />
+          </div>
+
+          {/* Google Button */}
+          <button
+            onClick={googleSignInUser}
+            className="w-full flex items-center justify-center gap-3 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 active:scale-[0.98]"
           >
-            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
-          </svg>
-        </button>
+            <FcGoogle className="h-5 w-5" />
+            Sign in with Google
+          </button>
+        </div>
       </div>
     </div>
   );

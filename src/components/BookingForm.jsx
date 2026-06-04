@@ -7,6 +7,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import useUser from "./../hooks/useUser";
 import { useNavigate } from "react-router-dom";
+import Button from "./shared/Button";
+import Title from "./Title";
+import { FiCalendar, FiDollarSign, FiUser } from "react-icons/fi";
 
 const BookingForm = ({ packageName }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -14,6 +17,8 @@ const BookingForm = ({ packageName }) => {
   const [alluser] = useAllUser();
   const navigate = useNavigate();
   const [loginUser] = useUser();
+
+  const guides = alluser.filter((u) => u.role === "guide");
 
   const handelBooking = async (e) => {
     e.preventDefault();
@@ -61,130 +66,114 @@ const BookingForm = ({ packageName }) => {
         }
       });
   };
+
   return (
-    <div>
-      <div className="flex justify-center items-center mt-10">
-        <div className=" p-8 rounded-lg w-full">
-          <h2 className="text-2xl font-semibold text-gray-400 mb-6 text-center">
-            Book Your Tour{}
-          </h2>
-          <form onSubmit={handelBooking}>
-            <div className="grid grid-cols-2 gap-5">
-              {/* Tourist Name */}
-              <div className="mb-4">
-                <label className="block text-gray-400 font-medium mb-2">
-                  Tourist Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 cursor-not-allowed"
-                  value={user?.displayName}
-                  readOnly
-                />
-              </div>
-
-              {/* Tourist Email */}
-              <div className="mb-4">
-                <label className="block text-gray-400 font-medium mb-2">
-                  Tourist Email
-                </label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 cursor-not-allowed"
-                  value={user?.email}
-                  readOnly
-                />
-              </div>
-            </div>
-
-            {/* Tourist Image URL */}
-            <div className="mb-4">
-              <label className="block text-gray-400 font-medium mb-2">
-                Tourist Image
-              </label>
-              {/* <input
-                type="url"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 cursor-not-allowed"
-                value="https://example.com/image.jpg"
-                readOnly
-              /> */}
-              <img
-                src={user?.photoURL}
-                className="rounded-full w-32 h-32 object-cover"
-                alt=""
-              />
-            </div>
-            <div className="grid md:grid-cols-4 gap-5">
-              <div className="grid md:grid-cols-2 gap-5 col-span-3">
-                {/* Price */}
-                <div className="mb-4">
-                  <label className="block  font-medium mb-2">
-                    Price
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    name="price"
-                    className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Enter price"
-                  />
-                </div>
-                {/* Tour Guide Name */}
-                <div className="mb-4">
-                  <label className="block text-gray-400 font-medium mb-2">
-                    Tour Guide Name
-                  </label>
-                  <select
-                    required
-                    name="tourGuide"
-                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="" disabled>Select a guide</option>
-
-                    {alluser
-                      .filter((user) => user.role === "guide")
-                      .map((guide, index) => (
-                        <option key={index} value={guide.name || guide.id}>
-                          {guide.name || "Unnamed Guide"}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Tour Date */}
-              <div className="mb-4">
-                <label className="block text-gray-400 font-medium mb-2">
-                  Tour Date
-                </label>
-                <DatePicker
-                  required
-                  selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
-                  className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholderText="Select a date"
-                />
-              </div>
-            </div>
-
-            {/* Book Now Button */}
-            <div className="text-center">
-              <button
-                disabled={!user}
-                to="/confirmation"
-                className={` text-white px-6 py-2 rounded-md  focus:outline-none focus:ring-2 w-full ${
-                  !user ? "cursor-not-allowed bg-gray-300" : "bg-primary"
-                }`}
-              >
-                Book Now
-              </button>
-              <p className="mt-5 text-red-500">
-                {!user ? "Please Login To Booking Guide" : ""}
-              </p>
-            </div>
-          </form>
-        </div>
+    <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium p-8 md:p-10">
+      <div className="text-center mb-8 space-y-2">
+        <span className="text-xs font-bold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full">
+          Reserve Your Spot
+        </span>
+        <h2 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+          Book {packageName || "Your Tour"}
+        </h2>
+        <p className="text-sm text-slate-400 max-w-md mx-auto">
+          Fill in the details below to reserve your trip. A confirmation email will be sent to you upon successful booking.
+        </p>
       </div>
+
+      <form onSubmit={handelBooking} className="space-y-6">
+        {/* Traveler Info Row (Read-only) */}
+        <div className="flex flex-col sm:flex-row items-center gap-5 bg-slate-50 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+          <img
+            src={user?.photoURL}
+            alt={user?.displayName}
+            className="w-16 h-16 rounded-2xl object-cover border-2 border-primary/20 shadow-sm"
+          />
+          <div className="flex-grow text-center sm:text-left space-y-1">
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-100 font-display">
+              {user?.displayName || "Guest Traveler"}
+            </p>
+            <p className="text-xs text-slate-400">
+              {user?.email || "Not logged in"}
+            </p>
+          </div>
+          <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-wider">
+            Verified
+          </span>
+        </div>
+
+        {/* Booking Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Price */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              <FiDollarSign className="h-3.5 w-3.5" /> Price (USD)
+            </label>
+            <input
+              required
+              type="number"
+              name="price"
+              placeholder="Enter price"
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          {/* Tour Guide */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              <FiUser className="h-3.5 w-3.5" /> Tour Guide
+            </label>
+            <select
+              required
+              name="tourGuide"
+              defaultValue=""
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all appearance-none"
+            >
+              <option value="" disabled>
+                Select a guide
+              </option>
+              {guides.map((guide, index) => (
+                <option key={index} value={guide.name || guide.id}>
+                  {guide.name || "Unnamed Guide"}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Tour Date */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              <FiCalendar className="h-3.5 w-3.5" /> Tour Date
+            </label>
+            <DatePicker
+              required
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+              placeholderText="Select a date"
+              minDate={new Date()}
+            />
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div className="pt-2">
+          {!user && (
+            <p className="text-xs text-amber-500 font-semibold text-center mb-4 bg-amber-500/10 py-2 rounded-xl">
+              ⚠️ Please login to complete your booking
+            </p>
+          )}
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            disabled={!user}
+            className="w-full font-bold text-base"
+          >
+            {user ? "Confirm Booking" : "Login Required"}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
