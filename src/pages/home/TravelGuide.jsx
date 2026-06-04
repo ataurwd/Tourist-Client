@@ -11,7 +11,7 @@ import Button from "../../components/shared/Button";
 import SkeletonCard from "../../components/shared/SkeletonCard";
 
 const TravelGuide = () => {
-  const [packageItem, isPackagesLoading] = usePackage();
+  const [packageItem, , isPackagesLoading] = usePackage();
 
   const { data: guideData = [], isLoading: isGuidesLoading } = useQuery({
     queryKey: ["allGuidesOnly"],

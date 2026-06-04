@@ -13,7 +13,7 @@ const Gallery = () => {
       location: "Sylhet, Bangladesh",
     },
     {
-      img: "https://www.atab.org.bd/public/uploads/backend/posts/Zqide1683452387-sub-img-2.jpg",
+      img: "https://i.ibb.co.com/Pv9ncFB7/download.jpg",
       title: "Bandarban Hills",
       location: "Chittagong, Bangladesh",
     },
@@ -28,7 +28,7 @@ const Gallery = () => {
       location: "Sylhet, Bangladesh",
     },
     {
-      img: "https://www.gokitetours.com/wp-content/uploads/2024/07/Top-10-Tourist-Places-to-Visit-in-Bangladesh.webp",
+      img: "https://i.ibb.co.com/8L4vdL6L/unnamed.jpg",
       title: "Cox's Bazar Beach",
       location: "Cox's Bazar, Bangladesh",
     },

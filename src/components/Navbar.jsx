@@ -70,7 +70,7 @@ const NavBer = () => {
           ? "text-primary active-nav-link"
           : isScrolled
           ? "text-black dark:text-slate-300"
-          : "text-white dark:text-white"
+          : "text-slate-400 dark:text-slate-400"
       }`
     }
   >
