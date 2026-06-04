@@ -5,6 +5,9 @@ import usePackage from "./../../hooks/usePackage";
 import useAllStories from "../../hooks/useAllStories";
 import useAllPayment from "../../hooks/useAllPayment";
 import Swal from "sweetalert2";
+import Button from "../../components/shared/Button";
+import Modal from "../../components/shared/Modal";
+import { FiEdit2, FiMail, FiUsers, FiMap, FiMessageSquare, FiTrendingUp } from "react-icons/fi";
 
 const AdminProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -13,10 +16,12 @@ const AdminProfile = () => {
   const [packageItem] = usePackage();
   const [allStorie] = useAllStories();
   const [payment] = useAllPayment();
+  
   const allPayment = payment.reduce(
-    (total, sum) => total + sum.payment.amount,
+    (total, sum) => total + (sum.payment?.amount || 0),
     0
   );
+  
   const [formData, setFormData] = useState({ ...user });
 
   // Open modal
@@ -24,6 +29,7 @@ const AdminProfile = () => {
     setFormData({ ...user });
     setModalOpen(true);
   };
+  
   // Close modal
   const handleModalClose = () => {
     setModalOpen(false);
@@ -40,153 +46,207 @@ const AdminProfile = () => {
     setUser({ ...formData }); // Update user in context
     setModalOpen(false);
     Swal.fire({
-      title: "Profile Updated",
+      title: "Profile Updated Successfully",
       icon: "success",
-      draggable: false,
     });
   };
 
   return (
-    <div className="p-6">
-      {/* Welcome Message */}
-      <div className="bg-green-200 p-4 rounded-md mb-6">
-        <h2 className="text-2xl font-semibold text-primary">
-          Welcome back, {user?.displayName}!
-        </h2>
-        <p className="text-gray-400">
-          Here’s an overview of your admin dashboard.
-        </p>
-      </div>
-
-      {/* Admin Information */}
-      <div className="bg- shadow-md rounded-lg p-4 mb-6 flex items-center">
-        <img
-          src={user?.photoURL}
-          alt="Admin"
-          className="w-20 h-20 rounded-full mr-4 object-cover"
-        />
-        <div>
-          <h3 className="text-xl font-semibold">{user.displayName}</h3>
-          <p className="text-gray-400">
-            <span className="font-bold">Role:</span> Admin
+    <div className="space-y-8 animate-fade-in-up">
+      {/* Welcome Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/10 p-8 rounded-3xl relative overflow-hidden shadow-premium">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 space-y-2">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+            Admin Console
+          </span>
+          <h2 className="text-3xl font-extrabold font-display text-white tracking-tight">
+            Welcome back, {user?.displayName}!
+          </h2>
+          <p className="text-sm text-slate-305 max-w-xl">
+            Here's an overview of the Treva platform operations, revenue, user bases, and community growth.
           </p>
         </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Total Payment */}
-        <div className=" shadow-md rounded-lg p-4">
-          <h4 className="text-gray-400">Total Payment</h4>
-          <p className="text-2xl font-bold text-green-600">
-            ${allPayment / 100}
-          </p>
-        </div>
-
-        {/* Total Tour Guides */}
-        <div className=" shadow-md rounded-lg p-4">
-          <h4 className="text-gray-400">Total Tour Guides</h4>
-          <p className="text-2xl font-bold text-blue-600">
-            {alluser.filter((guide) => guide.role === "guide").length}
-          </p>
-        </div>
-
-        {/* Total Packages */}
-        <div className=" shadow-md rounded-lg p-4">
-          <h4 className="text-gray-400">Total Packages</h4>
-          <p className="text-2xl font-bold text-purple-600">
-            {packageItem.length}
-          </p>
-        </div>
-
-        {/* Total Clients */}
-        <div className=" shadow-md rounded-lg p-4">
-          <h4 className="text-gray-400">Total Clients</h4>
-          <p className="text-2xl font-bold text-orange-600">
-            {alluser.filter((guide) => guide.role === "tourist").length}
-          </p>
-        </div>
-
-        {/* Total Stories */}
-        <div className=" shadow-md rounded-lg p-4">
-          <h4 className="text-gray-400">Total Stories</h4>
-          <p className="text-2xl font-bold text-pink-600">{allStorie.length}</p>
-        </div>
-      </div>
-      <button
-        onClick={handleEditClick}
-        className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 mr-3"
-      >
-        Edit Profile
-      </button>
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className=" p-6 rounded-lg shadow-lg w-full max-w-lg">
-            <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-            <form>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Name</label>
-                <input
-                  type="text"
-                  name="displayName"
-                  value={formData.displayName}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Photo URL
-                </label>
-                <input
-                  type="text"
-                  name="photoURL"
-                  value={formData.photoURL}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Role</label>
-                <input
-                  type="text"
-                  name="role"
-                  value={user?.role || "Tourist"}
-                  readOnly
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={user?.email}
-                  readOnly
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleModalClose}
-                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2 hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
+      {/* Admin Profile Info Card */}
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
+          <img
+            src={user?.photoURL}
+            alt="Admin"
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-primary/20 shadow-premium"
+          />
+          <div>
+            <h3 className="text-xl font-extrabold font-display text-slate-800 dark:text-slate-100">
+              {user?.displayName}
+            </h3>
+            <p className="text-sm text-slate-400 mt-1 flex items-center gap-1.5 justify-center md:justify-start">
+              <FiMail className="h-3.5 w-3.5" /> {user?.email}
+            </p>
+            <span className="inline-block bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full mt-2 uppercase tracking-wider">
+              System Admin
+            </span>
           </div>
         </div>
-      )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleEditClick}
+          className="font-bold gap-2"
+        >
+          <FiEdit2 className="h-4 w-4" /> Edit Profile
+        </Button>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Revenue */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+            <FiTrendingUp className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Revenue</span>
+            <h4 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 mt-1">
+              ${(allPayment / 100).toLocaleString()}
+            </h4>
+          </div>
+        </div>
+
+        {/* Guides */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-cyan-500/10 text-cyan-500 rounded-xl">
+            <FiUsers className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Guides</span>
+            <h4 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 mt-1">
+              {alluser.filter((guide) => guide.role === "guide").length}
+            </h4>
+          </div>
+        </div>
+
+        {/* Packages */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-violet-500/10 text-violet-500 rounded-xl">
+            <FiMap className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Packages</span>
+            <h4 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 mt-1">
+              {packageItem.length}
+            </h4>
+          </div>
+        </div>
+
+        {/* Clients */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-amber-500/10 text-amber-500 rounded-xl">
+            <FiUsers className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Clients</span>
+            <h4 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 mt-1">
+              {alluser.filter((guide) => guide.role === "tourist").length}
+            </h4>
+          </div>
+        </div>
+
+        {/* Stories */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-6 rounded-2xl shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-pink-500/10 text-pink-500 rounded-xl">
+            <FiMessageSquare className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Stories</span>
+            <h4 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 mt-1">
+              {allStorie.length}
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        title="Edit Profile Details"
+        size="md"
+      >
+        <form className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Display Name
+            </label>
+            <input
+              type="text"
+              name="displayName"
+              value={formData.displayName || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Photo URL
+            </label>
+            <input
+              type="text"
+              name="photoURL"
+              value={formData.photoURL || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              System Role (Read-only)
+            </label>
+            <input
+              type="text"
+              value="Admin"
+              readOnly
+              className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-400 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Email Address (Read-only)
+            </label>
+            <input
+              type="email"
+              value={user?.email || ""}
+              readOnly
+              className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-400 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-750">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleModalClose}
+              className="font-bold"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={handleSave}
+              className="font-bold"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

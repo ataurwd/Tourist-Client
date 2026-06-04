@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Loading from "../../components/Loading";
+import StatusBadge from "../../components/shared/StatusBadge";
+import Pagination from "../../components/shared/Pagination";
+import { HiSearch } from "react-icons/hi";
 
 const AdminManageUser = () => {
   const [product, setProduct] = useState([]);
@@ -9,9 +11,9 @@ const AdminManageUser = () => {
   const [count, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [item, setItem] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
 
   const numberOfPages = Math.ceil(count / item);
-  const pages = [...Array(numberOfPages).keys()];
 
   // Fetch all users for filtering and search
   useEffect(() => {
@@ -20,18 +22,21 @@ const AdminManageUser = () => {
       .then((data) => {
         setProduct(data);
         setFilteredData(data);
-      })
+      });
   }, []);
 
   // Fetch paginated data
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       `${import.meta.env.VITE_URL}/pagination?page=${currentPage}&size=${item}`
     )
       .then((res) => res.json())
       .then((data) => {
-        setFilteredData(data); // Update filteredData with paginated data
+        setFilteredData(data);
+        setIsLoading(false);
       })
+      .catch(() => setIsLoading(false));
   }, [currentPage, item]);
 
   // Fetch total count
@@ -42,16 +47,15 @@ const AdminManageUser = () => {
   }, []);
 
   // Handle items per page
-  const handleItemsPerPage = (e) => {
-    const val = parseInt(e.target.value);
+  const handleItemsPerPage = (val) => {
     setItem(val);
-    setCurrentPage(0); // Reset to the first page
+    setCurrentPage(0);
   };
 
   // Search functionality
   const handleSearch = () => {
-    const filteredUsers = product.filter((product) =>
-      product.name.toLowerCase().includes(search.toLowerCase())
+    const filteredUsers = product.filter((u) =>
+      u.name?.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredData(filteredUsers);
   };
@@ -62,28 +66,40 @@ const AdminManageUser = () => {
 
   // Filter data by role
   const displayedData = filter
-    ? filteredData.filter((user) => user.role === filter)
+    ? filteredData.filter((u) => u.role === filter)
     : filteredData;
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 p-8 bg- shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-400">
-        User Information
-      </h1>
+    <div className="space-y-8 animate-fade-in-up">
+      {/* Title */}
+      <div>
+        <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+          User Directory
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Manage all registered users, filter by role, search details, or edit permissions.
+        </p>
+      </div>
 
-      {/* Search and Filter Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <input
-          type="text"
-          className="border border-gray-300 bg-white rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
-          placeholder="Search by name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      {/* Filters Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 p-5 rounded-2xl shadow-sm">
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <HiSearch className="h-5 w-5" />
+          </span>
+          <input
+            type="text"
+            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            placeholder="Search users by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 rounded-md p-3 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-750 dark:text-slate-250 transition-all"
         >
           <option value="">All Roles</option>
           <option value="admin">Admin</option>
@@ -92,93 +108,76 @@ const AdminManageUser = () => {
         </select>
       </div>
 
-      {/* User Table */}
-      <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300 text-left">
+      {/* Table Card Shell */}
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="bg-primary text-white">
-                <th className="border border-gray-300 px-6 py-3 font-medium">
+              <tr className="border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/70 dark:bg-slate-900/40">
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   No
                 </th>
-                <th className="border border-gray-300 px-6 py-3 font-medium">
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="border border-gray-300 px-6 py-3 font-medium">
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Email
                 </th>
-                <th className="border border-gray-300 px-6 py-3 font-medium">
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Role
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {displayedData.length > 0 ? (
-                displayedData.map((user, index) => (
-                  <tr
-                    key={user._id}
-                    className={`${
-                      index % 2 === 0 ? "bg-" : "bg-"
-                    } transition-colors`}
-                  >
-                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
-                      {index + 1}
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700/40 text-slate-700 dark:text-slate-350">
+              {isLoading ? (
+                [1, 2, 3].map((n) => (
+                  <tr key={n} className="animate-pulse">
+                    <td className="px-6 py-5"><div className="h-4 w-6 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-4 w-32 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-4 w-48 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full" /></td>
+                  </tr>
+                ))
+              ) : displayedData.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-12 text-center text-slate-450 dark:text-slate-550 font-medium">
+                    No users found matching search criteria.
+                  </td>
+                </tr>
+              ) : (
+                displayedData.map((u, index) => (
+                  <tr key={u._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
+                    <td className="px-6 py-5 text-sm font-semibold text-slate-500 dark:text-slate-400">
+                      {index + 1 + currentPage * item}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
-                      {user.name}
+                    <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100 font-display">
+                      {u.name}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3 text-gray-400">
-                      {user.email}
+                    <td className="px-6 py-5 text-sm text-slate-500 dark:text-slate-450">
+                      {u.email}
                     </td>
-                    <td className="border border-gray-300 px-6 py-3">
-                      <span
-                        className={`px-3 py-1 text-sm rounded-full ${
-                          user.role === "admin"
-                            ? "bg-blue-100 text-blue-600"
-                            : user.role === "guide"
-                            ? "bg-green-100 text-green-600"
-                            : "bg-yellow-100 text-yellow-600"
-                        }`}
-                      >
-                        {user.role || "N/A"}
-                      </span>
+                    <td className="px-6 py-5">
+                      <StatusBadge status={u.role || "tourist"} />
                     </td>
                   </tr>
                 ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="text-center py-6 text-gray-600 font-medium"
-                  >
-                    No users found
-                  </td>
-                </tr>
               )}
             </tbody>
           </table>
-      </div>
+        </div>
 
-      {/* Pagination */}
-      <div className="my-10 flex justify-center">
-        {pages.map((page) => (
-          <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`px-4 mx-3 rounded-sm ${
-              currentPage === page
-                ? "bg-primary text-white"
-                : "bg-gray-200 text-black"
-            }`}
-          >
-            {page + 1}
-          </button>
-        ))}
-        <select className="border-2 rounded-sm" value={item} onChange={handleItemsPerPage}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
+        {/* Pagination Card Footer */}
+        {numberOfPages > 1 && (
+          <div className="p-4 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/40 dark:bg-slate-900/20">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={numberOfPages}
+              onPageChange={setCurrentPage}
+              itemsPerPage={item}
+              onItemsPerPageChange={handleItemsPerPage}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

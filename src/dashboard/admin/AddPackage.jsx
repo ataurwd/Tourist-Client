@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Button from "../../components/shared/Button";
+import { FiUpload, FiImage, FiX } from "react-icons/fi";
 
 const AddPackage = () => {
   const [packageData, setPackageData] = useState({
@@ -71,6 +73,14 @@ const AddPackage = () => {
     }
   };
 
+  const handleRemoveUploadedImage = (indexToRemove) => {
+    setUploadedImageUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+    setPackageData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, idx) => idx !== indexToRemove)
+    }));
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,7 +99,6 @@ const AddPackage = () => {
         Swal.fire({
           title: "Package Added Successfully",
           icon: "success",
-          draggable: false,
         });
         form.reset();
         setPackageData({
@@ -111,7 +120,6 @@ const AddPackage = () => {
         Swal.fire({
           title: "Failed to Add Package",
           icon: "error",
-          draggable: false,
         });
       }
     } catch (error) {
@@ -120,102 +128,165 @@ const AddPackage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-3">Add Package</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6  shadow-md rounded-lg p-6"
-      >
-        {/* Form Fields */}
-        <div className="form-control">
-          <label className="label font-bold" htmlFor="packageName">
-            <span className="label-text">Trip Title</span>
-          </label>
-          <input
-            type="text"
-            id="packageName"
-            name="packageName"
-            value={packageData.packageName}
-            onChange={handleChange}
-            placeholder="Enter Package Name"
-            className="input input-bordered w-full"
-          />
+    <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 animate-fade-in-up">
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+            Create Tour Package
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Fill in the details below to add a new package with descriptions, photos, and FAQs.
+          </p>
         </div>
-        <div className="form-control">
-          <label className="label font-bold" htmlFor="aboutTour">
-            <span className="label-text">About Tour</span>
-          </label>
-          <textarea
-            id="aboutTour"
-            name="aboutTour"
-            value={packageData.aboutTour}
-            onChange={handleChange}
-            placeholder="Describe the tour"
-            className="textarea textarea-bordered w-full"
-          ></textarea>
-        </div>
-        <div className="form-control">
-          <label className="label font-bold">
-            <span className="label-text">Gallery (Upload Images)</span>
-          </label>
-          <input
-            type="file"
-            onChange={handleImageUpload}
-            accept="image/*"
-            multiple
-            className="file-input file-input-bordered w-full"
-          />
-        </div>
-        {packageData.faqs.map((faq, index) => (
-          <div key={index} className="form-control space-y-2">
-            <label className="label font-bold">
-              <span className="label-text">FAQ {index + 1}</span>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Trip Title */}
+          <div>
+            <label htmlFor="packageName" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Trip Title
             </label>
             <input
               type="text"
-              value={faq.question}
-              onChange={(e) =>
-                handleFAQChange(index, "question", e.target.value)
-              }
-              placeholder="Enter Question"
-              className="input input-bordered w-full"
+              id="packageName"
+              name="packageName"
+              value={packageData.packageName}
+              onChange={handleChange}
+              placeholder="e.g. Beautiful Sylhet & Tea Gardens Experience"
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
             />
-            <textarea
-              value={faq.answer}
-              onChange={(e) =>
-                handleFAQChange(index, "answer", e.target.value)
-              }
-              placeholder="Enter Answer"
-              className="textarea textarea-bordered w-full"
-            ></textarea>
           </div>
-        ))}
-        <div className="form-control">
-          <label className="label font-bold" htmlFor="price">
-            <span className="label-text">Price</span>
-          </label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={packageData.price}
-            onChange={handleChange}
-            placeholder="Enter Price"
-            className="input input-bordered w-full"
-          />
-        </div>
-        <div className="form-control mt-4">
-          <button
-            type="submit"
-            disabled={isUploading}
-            className={`btn bg-primary w-full ${
-              isUploading ? "cursor-not-allowed" : ""
-            }`}
-          >
-            {isUploading ? "Uploading..." : "Add Package"}
-          </button>
-        </div>
-      </form>
+
+          {/* About Tour */}
+          <div>
+            <label htmlFor="aboutTour" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              About Tour
+            </label>
+            <textarea
+              id="aboutTour"
+              name="aboutTour"
+              value={packageData.aboutTour}
+              onChange={handleChange}
+              placeholder="Describe the tour itinerary, spots to visit, and guide features..."
+              required
+              rows="5"
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
+            />
+          </div>
+
+          {/* Gallery Upload */}
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Gallery Images
+            </label>
+            <div className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:border-primary/50 transition-colors flex flex-col items-center justify-center cursor-pointer bg-slate-50/50 dark:bg-slate-900/20">
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                accept="image/*"
+                multiple
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <FiUpload className="h-8 w-8 text-slate-400 mb-3" />
+              <span className="text-sm font-semibold text-slate-650 dark:text-slate-300">
+                Click to upload gallery photos
+              </span>
+              <span className="text-xs text-slate-450 dark:text-slate-550 mt-1">
+                PNG, JPG or WEBP up to 5MB
+              </span>
+            </div>
+
+            {/* Thumbnail previews */}
+            {uploadedImageUrls.length > 0 && (
+              <div className="grid grid-cols-4 gap-3 mt-4">
+                {uploadedImageUrls.map((url, idx) => (
+                  <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <img src={url} alt="Upload preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveUploadedImage(idx)}
+                      className="absolute top-1.5 right-1.5 bg-slate-900/60 hover:bg-slate-900 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <FiX className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {isUploading && (
+              <div className="flex items-center gap-2 text-sm text-slate-400 mt-3 animate-pulse">
+                <FiImage className="h-4 w-4 animate-spin text-primary" /> Uploading package photos...
+              </div>
+            )}
+          </div>
+
+          {/* FAQs */}
+          <div className="space-y-4">
+            <span className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Package FAQs
+            </span>
+            {packageData.faqs.map((faq, index) => (
+              <div key={index} className="p-4 bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl space-y-3">
+                <span className="text-xs font-extrabold text-slate-450 uppercase tracking-wider">
+                  FAQ Item #{index + 1}
+                </span>
+                <input
+                  type="text"
+                  value={faq.question}
+                  onChange={(e) =>
+                    handleFAQChange(index, "question", e.target.value)
+                  }
+                  placeholder="e.g. What is the cancellation policy?"
+                  required
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+                />
+                <textarea
+                  value={faq.answer}
+                  onChange={(e) =>
+                    handleFAQChange(index, "answer", e.target.value)
+                  }
+                  placeholder="Write the answer here..."
+                  required
+                  rows="3"
+                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Price */}
+          <div>
+            <label htmlFor="price" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Package Price (USD)
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={packageData.price}
+              onChange={handleChange}
+              placeholder="e.g. 299"
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-750">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={isUploading}
+              className="w-full font-bold text-base"
+            >
+              Add Package
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

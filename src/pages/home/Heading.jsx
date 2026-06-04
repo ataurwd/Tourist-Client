@@ -23,7 +23,7 @@ const Heading = () => {
       title: "Your Dream Escape Starts Here",
       tagline: "BESPOKE TRAVEL PACKAGES",
       description: "Looking for a sanctuary to unwind? Browse our premium, custom-tailored travel packages designed to deliver the perfect harmony of relaxation, luxury, and exploration.",
-      bgImage: "https://www.rjtravelagency.com/wp-content/uploads/2023/09/Bangladesh.jpg",
+      bgImage: "https://i.ibb.co.com/8L4vdL6L/unnamed.jpg",
     },
   ];
 

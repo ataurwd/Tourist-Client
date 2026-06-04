@@ -48,9 +48,7 @@ const About = () => {
           <div className="flex-shrink-0">
             <div className="relative">
               <div className="w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-gradient-to-br from-primary to-secondary p-0.5 shadow-premium">
-                <div className="w-full h-full rounded-3xl bg-slate-800 flex items-center justify-center text-5xl font-black text-white font-display">
-                  AR
-                </div>
+               <img className="rounded-3xl w-full h-full" src="https://avatars.githubusercontent.com/u/145910390?v=4" alt="" />
               </div>
               <span className="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-premium">
                 Available
@@ -81,7 +79,7 @@ const About = () => {
                 </Button>
               </a>
               <a href="https://github.com/ataurwd" target="_blank" rel="noreferrer">
-                <Button variant="outline" size="sm" className="font-bold gap-2 border-white/20 text-white hover:bg-white/10">
+                <Button variant="secondary" size="sm" className="font-bold gap-2 border-white/20 text-white hover:bg-white/10">
                   <FaGithub /> GitHub
                 </Button>
               </a>

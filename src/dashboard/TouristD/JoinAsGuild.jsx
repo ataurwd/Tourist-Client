@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FormContext } from "../../context/FormData";
+import Button from "../../components/shared/Button";
 
 const JoinAsGuild = () => {
   const { user } = useContext(FormContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // submit form to the server
+    setIsSubmitting(true);
     const form = e.target;
     const titel = form.applicationTitle.value;
     const reason = form.reasonForTourGuide.value;
@@ -15,88 +18,104 @@ const JoinAsGuild = () => {
     const status = "pending";
     const formData = { titel, reason, cvLink, status, email: user.email };
 
-    await axios
-      .post(`${import.meta.env.VITE_URL}/guide`, formData)
-      .then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            title: "Your Request Sucessfull!",
-            icon: "success",
-            draggable: false,
-          });
-          form.reset();
-        }
-      })
-      .catch(err => {
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_URL}/guide`, formData);
+      if (res.data.insertedId) {
         Swal.fire({
-          title: `${err.code} Already applied`,
-          icon: "error",
-          draggable: true
+          title: "Application Submitted Successfully!",
+          text: "We will review your application soon.",
+          icon: "success",
         });
-    })
+        form.reset();
+      }
+    } catch (err) {
+      Swal.fire({
+        title: "Submission Error",
+        text: err.response?.data?.message || "You might have already applied.",
+        icon: "error",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   return (
-    <div className="max-w-lg mx-auto p-6 bg- shadow-lg rounded-md mt-5">
-      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
-        Tour Guide Application
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-control mb-4">
-          <label
-            htmlFor="applicationTitle"
-            className="label text-sm font-medium text-gray-700"
-          >
-            <span className="label-text">Application Title</span>
-          </label>
-          <input
-            type="text"
-            id="applicationTitle"
-            name="applicationTitle"
-            required
-            className="input input-bordered w-full"
-          />
+    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 animate-fade-in-up">
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium p-8">
+        
+        {/* Header */}
+        <div className="mb-8">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full">
+            Partnership
+          </span>
+          <h2 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight mt-3">
+            Join Our Tour Guides Team
+          </h2>
+          <p className="text-sm text-slate-400 mt-1">
+            Provide details about your experience and qualifications to start guiding travelers on Treva.
+          </p>
         </div>
 
-        <div className="form-control mb-4">
-          <label
-            htmlFor="reasonForTourGuide"
-            className="label text-sm font-medium text-gray-700"
-          >
-            <span className="label-text">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Application Title */}
+          <div>
+            <label htmlFor="applicationTitle" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Application Title
+            </label>
+            <input
+              type="text"
+              id="applicationTitle"
+              name="applicationTitle"
+              placeholder="e.g. Certified Local Trekking Guide in Sylhet"
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          {/* Reason */}
+          <div>
+            <label htmlFor="reasonForTourGuide" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
               Why do you want to be a Tour Guide?
-            </span>
-          </label>
-          <textarea
-            id="reasonForTourGuide"
-            name="reasonForTourGuide"
-            required
-            rows="4"
-            className="textarea textarea-bordered w-full"
-          ></textarea>
-        </div>
+            </label>
+            <textarea
+              id="reasonForTourGuide"
+              name="reasonForTourGuide"
+              placeholder="Tell us about your passion for showing travelers around, your local knowledge, and guide experience..."
+              required
+              rows="5"
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
+            />
+          </div>
 
-        <div className="form-control mb-6">
-          <label
-            htmlFor="cvLink"
-            className="label text-sm font-medium text-gray-700"
-          >
-            <span className="label-text">CV Link</span>
-          </label>
-          <input
-            type="url"
-            id="cvLink"
-            name="cvLink"
-            required
-            className="input input-bordered w-full"
-          />
-        </div>
+          {/* CV Link */}
+          <div>
+            <label htmlFor="cvLink" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              CV / Resume Portfolio Link
+            </label>
+            <input
+              type="url"
+              id="cvLink"
+              name="cvLink"
+              placeholder="https://example.com/your-cv.pdf"
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
 
-        <div className="text-center">
-          <button type="submit" className="btn bg-primary text-white w-full">
-            Submit
-          </button>
-        </div>
-      </form>
+          {/* Form Actions */}
+          <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-750">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={isSubmitting}
+              className="font-bold text-base w-full"
+            >
+              Submit Application
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

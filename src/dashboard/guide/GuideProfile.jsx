@@ -1,13 +1,17 @@
 import React, { useContext, useState } from "react";
 import { FormContext } from "../../context/FormData";
-import { Link } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import Swal from "sweetalert2";
+import Button from "../../components/shared/Button";
+import Modal from "../../components/shared/Modal";
+import { FiEdit2, FiMail, FiCheckCircle } from "react-icons/fi";
+
 const GuideProfile = () => {
   const { user, setUser } = useContext(FormContext);
   const [loginUser] = useUser();
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({ ...user });
+
   // Open modal
   const handleEditClick = () => {
     setFormData({ ...user });
@@ -30,109 +34,156 @@ const GuideProfile = () => {
     setUser({ ...formData }); // Update user in context
     setModalOpen(false);
     Swal.fire({
-      title: "Profile Updated",
+      title: "Profile Updated Successfully",
       icon: "success",
       draggable: false,
     });
   };
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Welcome, {user?.displayName}!</h1>
-      <div className=" p-6 rounded-lg shadow-lg w-full max-w-md text-center">
-        <img
-          src={user?.photoURL}
-          alt="User"
-          className="w-32 h-32 rounded-full mx-auto mb-4"
-        />
-        <h2 className="text-xl font-semibold">{user?.displayName}</h2>
-        <p className="text-gray-400">{user?.email}</p>
-        <p className="text-gray-400">
-          {" "}
-          <span className="font-bold">Role: </span>
-          {loginUser?.role}
-        </p>
-        <button
-          onClick={handleEditClick}
-          className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 mr-3"
-        >
-          Edit Profile
-        </button>
-        <Link to={"/dashboard/tourist-guild"}>
-          <button className="mt-4 bg-secondary text-black py-2 px-4 rounded hover:bg-green-600">
-            Apply For Tour Guide
-          </button>
-        </Link>
-      </div>
+    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 animate-fade-in-up">
+      {/* Profile Card Shell */}
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium overflow-hidden">
+        {/* Cover Accent */}
+        <div className="h-40 bg-gradient-to-br from-cyan-600 via-teal-600 to-emerald-500 relative">
+          <div className="absolute inset-0 bg-slate-950/20" />
+        </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-            <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-            <form>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Name</label>
-                <input
-                  type="text"
-                  name="displayName"
-                  value={formData.displayName}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Photo URL
-                </label>
-                <input
-                  type="text"
-                  name="photoURL"
-                  value={formData.photoURL}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Role</label>
-                <input
-                  type="text"
-                  name="role"
-                  value={user?.role || "Tourist"}
-                  readOnly
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={user?.email}
-                  readOnly
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleModalClose}
-                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2 hover:bg-gray-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
+        {/* User Card */}
+        <div className="relative flex flex-col items-center -mt-16 pb-8 px-6 text-center">
+          <div className="relative">
+            <img
+              src={user?.photoURL}
+              alt={user?.displayName || "Profile Guide"}
+              className="w-32 h-32 rounded-3xl object-cover border-4 border-white dark:border-slate-800 shadow-premium"
+            />
+            <span className="absolute -bottom-2 -right-2 bg-secondary text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-premium uppercase tracking-wider">
+              {loginUser?.role || "Guide"}
+            </span>
+          </div>
+
+          <h1 className="mt-6 text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2 justify-center">
+            {user?.displayName}
+            <FiCheckCircle className="h-5 w-5 text-secondary" title="Verified Tour Guide" />
+          </h1>
+          <p className="text-sm text-slate-400 mt-1 flex items-center gap-1.5 justify-center">
+            <FiMail className="h-3.5 w-3.5" /> {user?.email}
+          </p>
+
+          {/* Details Row */}
+          <div className="grid grid-cols-2 gap-4 mt-8 w-full max-w-sm">
+            <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 flex flex-col items-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                System Role
+              </span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 mt-1 capitalize">
+                {loginUser?.role || "Guide"}
+              </span>
+            </div>
+            <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 flex flex-col items-center">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Status
+              </span>
+              <span className="text-sm font-semibold text-secondary mt-1">
+                Verified Partner
+              </span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-center gap-3 mt-8">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleEditClick}
+              className="font-bold gap-2"
+            >
+              <FiEdit2 className="h-4 w-4" /> Edit Profile
+            </Button>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        title="Edit Profile Details"
+        size="md"
+      >
+        <form className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Display Name
+            </label>
+            <input
+              type="text"
+              name="displayName"
+              value={formData.displayName || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Photo URL
+            </label>
+            <input
+              type="text"
+              name="photoURL"
+              value={formData.photoURL || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              System Role (Read-only)
+            </label>
+            <input
+              type="text"
+              value={loginUser?.role || "Guide"}
+              readOnly
+              className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-400 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Email Address (Read-only)
+            </label>
+            <input
+              type="email"
+              value={user?.email || ""}
+              readOnly
+              className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-400 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-750">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleModalClose}
+              className="font-bold"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={handleSave}
+              className="font-bold"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

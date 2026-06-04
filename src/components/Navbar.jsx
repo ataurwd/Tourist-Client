@@ -104,7 +104,7 @@ const NavBer = () => {
                     alt="User profile"
                     referrerPolicy="no-referrer"
                   />
-                  <span className={`text-xs font-semibold text-black dark:text-slate-300 max-w-[100px] truncate pr-1 ${isScrolled ? "text-black" : "text-white"}`}>
+                  <span className={`text-xs font-semibold text-slate-500 dark:text-slate-300  max-w-[100px] truncate pr-1`}>
                     {user?.displayName?.split(" ")[0]}
                   </span>
                 </button>

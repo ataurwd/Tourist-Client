@@ -4,52 +4,49 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
 import { FormContext } from "../../context/FormData";
+import StatusBadge from "../../components/shared/StatusBadge";
+import Pagination from "../../components/shared/Pagination";
+import Button from "../../components/shared/Button";
 
 const TouristBooking = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(false);
-  const {user} = useContext(FormContext)
+  const { user } = useContext(FormContext);
 
   const [product, setProduct] = useState([]);
-  // for set total data count
   const [count, totalCount] = useState(0);
-  // for update current page data
   const [currentPage, setCurrentPage] = useState(0);
-  // for set how many item we want to show
   const [item, setItem] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // for calculate total number of page
   const numberOfpage = Math.ceil(count / item);
 
-  // for looping all pagination items
-  const pages = [...Array(numberOfpage).keys()];
-
-  // for get data fetching
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_URL}/guide-booking/${user.email}?page=${currentPage}&size=${item}`)
+  const fetchBookings = () => {
+    setIsLoading(true);
+    fetch(
+      `${import.meta.env.VITE_URL}/guide-booking/${user.email}?page=${currentPage}&size=${item}`
+    )
       .then((res) => res.json())
-      .then((data) => setProduct(data));
+      .then((data) => {
+        setProduct(data);
+        setIsLoading(false);
+      })
+      .catch(() => setIsLoading(false));
+  };
+
+  useEffect(() => {
+    fetchBookings();
   }, [currentPage, item]);
 
-  // for get total count of data
   useEffect(() => {
     fetch(`${import.meta.env.VITE_URL}/countGuide/${user.email}`)
       .then((res) => res.json())
       .then((data) => totalCount(data.result));
   }, []);
 
-  // handel drop down item
-  const handleItemsPerPage = (e) => {
-    const val = parseInt(e.target.value);
-    setItem(val);
-    setCurrentPage(0);
-  };
-
-  // This will store the number of bookings the user has made
   const bookingCount = product.length;
 
   useEffect(() => {
-    // Check if the user has more than 3 bookings
     if (bookingCount >= 3) {
       setShowCongrats(true);
       setButtonEnabled(true);
@@ -60,171 +57,184 @@ const TouristBooking = () => {
   }, [product]);
 
   const handleCancel = async (id) => {
-    const res = await axios.delete(
-      `${import.meta.env.VITE_URL}/guide-booking/${id}`
-    );
-    if (res.data.deletedCount) {
-      Swal.fire({
-        title: "Package Deleted Successfully",
-        icon: "success",
-        draggable: false,
-      });
-      const updatedBookings = product.filter(
-        (booking) => booking._id !== id
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to cancel this booking?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
+    });
+
+    if (result.isConfirmed) {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_URL}/guide-booking/${id}`
       );
-      refetch();
-      if (updatedBookings.length <= 3) {
-        setShowCongrats(false);
-        setButtonEnabled(false);
+      if (res.data.deletedCount) {
+        Swal.fire({
+          title: "Booking Cancelled Successfully",
+          icon: "success",
+        });
+        const updatedBookings = product.filter((booking) => booking._id !== id);
+        setProduct(updatedBookings);
+        totalCount((prev) => Math.max(0, prev - 1));
+        if (updatedBookings.length <= 3) {
+          setShowCongrats(false);
+          setButtonEnabled(false);
+        }
       }
     }
   };
 
   return (
-    <div className="overflow-x-auto my-10 md:px-10">
+    <div className="space-y-8 animate-fade-in-up">
+      {/* Title */}
+      <div>
+        <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+          Your Bookings
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Manage and monitor all your reserved tour packages and assigned guides.
+        </p>
+      </div>
+
       {showCongrats && (
-        <div className="relative my-5">
-          <Confetti className="w-full" />
-          <div className="bg-green-100 text-primary py-3 px-5 rounded-md shadow-md">
-            <h2 className="text-xl font-bold">Congratulations!</h2>
-            <p>
-              You have unlocked a special discount for booking more than 3
-              times!
-            </p>
-            <button
+        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/5 border border-emerald-500/20 p-6 rounded-2xl shadow-sm">
+          <Confetti run={showCongrats} numberOfPieces={60} className="w-full h-full absolute inset-0 pointer-events-none" />
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 font-display">
+                🎉 Congratulations!
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                You have unlocked a premium discount for booking more than 3 tours!
+              </p>
+            </div>
+            <Button
               disabled={!buttonEnabled}
-              className={`mt-3 px-4 py-2 rounded-md ${
-                buttonEnabled
-                  ? "bg-primary text-white hover:bg-primary-dark"
-                  : "bg-gray-400 text-gray-700 cursor-not-allowed"
-              }`}
+              variant="primary"
+              size="sm"
+              className="font-bold"
             >
-              Apply Discount
-            </button>
+              Apply 10% Discount
+            </Button>
           </div>
         </div>
       )}
 
-      <table className="min-w-full border border-gray-300">
-        <thead>
-          <tr>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
-              #
-            </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
-              Tour Guide Name
-            </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
-              Tour Date
-            </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
-              Price
-            </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-medium text-gray-400">
-              Status
-            </th>
-            <th className="px-6 py-3 border-b-2 border-gray-300 text-center text-sm font-medium text-gray-400">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {product.map((booking, index) => (
-            <tr key={booking._id}>
-              <td className="px-6 py-3 border-b border-gray-300">
-                {index + 1}
-              </td>
-              <td className="px-6 py-3 border-b border-gray-300">
-                {booking.tourGuide}
-              </td>
-              <td className="px-6 py-3 border-b border-gray-300">
-                {booking.date}
-              </td>
-              <td className="px-6 py-3 border-b border-gray-300">
-                ${booking.price}
-              </td>
-              <td className="px-6 py-3 border-b border-gray-300">
-                <div
-                  className={`badge badge-outline ${
-                    booking.statas === "rejected"
-                      ? "text-red-500"
-                      : booking.statas === "in-review"
-                      ? "text-yellow-500"
-                      : booking.statas === "accepted"
-                      ? "text-green-500"
-                      : ""
-                  }`}
-                >
-                  {booking.statas}{" "}
-                </div>
-              </td>
-              <td className="px-6 py-3 border-b border-gray-300 text-center">
-                <button
-                  disabled={
-                    booking.statas === "in-review" ||
-                    booking.statas === "rejected" ||
-                    booking.statas === "accepted"
-                  }
-                  className={`px-3 py-1 rounded-md mr-2 ${
-                    booking.statas === "in-review" ||
-                    booking.statas === "rejected" ||
-                    booking.statas === "accepted"
-                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                      : "bg-primary text-white hover:bg-primary-dark"
-                  }`}
-                >
-                  <Link
-                    to={`/dashboard/tourist-bookings/${booking._id}`}
-                    className={`${
-                      booking.statas === "in-review" ||
-                      booking.statas === "rejected" ||
-                      booking.statas === "accepted"
-                        ? "cursor-not-allowed pointer-events-none"
-                        : ""
-                    }`}
-                  >
-                    Pay
-                  </Link>
-                </button>
+      {/* Table Card Shell */}
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-left">
+            <thead>
+              <tr className="border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/70 dark:bg-slate-900/40">
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  #
+                </th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  Tour Guide
+                </th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-center">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700/40">
+              {isLoading ? (
+                [1, 2, 3].map((n) => (
+                  <tr key={n} className="animate-pulse">
+                    <td className="px-6 py-5"><div className="h-4 w-4 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-4 w-32 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-6 py-5"><div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full" /></td>
+                    <td className="px-6 py-5"><div className="h-8 w-28 bg-slate-200 dark:bg-slate-700 rounded mx-auto" /></td>
+                  </tr>
+                ))
+              ) : product.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="px-6 py-12 text-center text-slate-400 dark:text-slate-500">
+                    No active bookings found.
+                  </td>
+                </tr>
+              ) : (
+                product.map((booking, index) => (
+                  <tr key={booking._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
+                    <td className="px-6 py-5 text-sm font-semibold text-slate-500 dark:text-slate-400">
+                      {index + 1 + currentPage * item}
+                    </td>
+                    <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100 font-display">
+                      {booking.tourGuide}
+                    </td>
+                    <td className="px-6 py-5 text-sm text-slate-500 dark:text-slate-400">
+                      {booking.date}
+                    </td>
+                    <td className="px-6 py-5 text-sm font-extrabold text-slate-800 dark:text-slate-100">
+                      ${booking.price}
+                    </td>
+                    <td className="px-6 py-5">
+                      <StatusBadge status={booking.statas} />
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <div className="flex justify-center items-center gap-2">
+                        {/* Pay Button */}
+                        <Link
+                          to={`/dashboard/tourist-bookings/${booking._id}`}
+                          className={`${
+                            booking.statas !== "pending"
+                              ? "pointer-events-none opacity-40"
+                              : ""
+                          }`}
+                        >
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            disabled={booking.statas !== "pending"}
+                            className="font-bold"
+                          >
+                            Pay
+                          </Button>
+                        </Link>
+                        {/* Cancel Button */}
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleCancel(booking._id)}
+                          disabled={booking.statas !== "pending"}
+                          className="font-bold"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
-                <button
-                  onClick={() => handleCancel(booking._id)}
-                  disabled={booking.statas !== "pending"}
-                  className={`px-3 py-1 rounded-md ${
-                    booking.statas !== "pending"
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-red-400 cursor-pointer"
-                  }`}
-                >
-                  Cancel
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-            {/* Pagination */}
-            <div className="my-10 flex justify-center">
-        {pages.map((page) => (
-          <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`px-4 mx-3 rounded-sm ${
-              currentPage === page
-                ? "bg-primary text-white"
-                : "bg-gray-200 text-black"
-            }`}
-          >
-            {page + 1}
-          </button>
-        ))}
-        <select className="border-2 rounded-sm" value={item} onChange={handleItemsPerPage}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
+        {/* Pagination Card Footer */}
+        {numberOfpage > 1 && (
+          <div className="p-4 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/40 dark:bg-slate-900/20">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={numberOfpage}
+              onPageChange={setCurrentPage}
+              itemsPerPage={item}
+              onItemsPerPageChange={handleItemsPerPage}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
