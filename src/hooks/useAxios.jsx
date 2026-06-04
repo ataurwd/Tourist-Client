@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FormContext } from "../context/FormData";
 
 export const myAxios = axios.create({
-  baseURL: "https://tourist-booking-iota.vercel.app",
+  baseURL: "http://localhost:7001",
   withCredentials: true,
 });
 
