@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FormContext } from "../context/FormData";
 
 export const myAxios = axios.create({
-  baseURL: "http://localhost:7001",
+  baseURL: import.meta.env.VITE_URL,
   withCredentials: true,
 });
 

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const usePackage = () => {
   const { data: packageItem = [], refetch } = useQuery({
-    querykey: ["packageItem"],
+    queryKey: ["packageItem"],
     queryFn: async () => {
       const response = await axios.get(`${import.meta.env.VITE_URL}/packages`);
       return response.data;
