@@ -4,45 +4,66 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import Button from "./shared/Button";
+import { FiUpload, FiImage, FiX } from "react-icons/fi";
 
 const UpdateStorie = () => {
   const [stories, isLoading, error, refetch] = useStory();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loginUser] = useUser();
-  const [images, setImages] = useState([]); // Store the uploaded images URLs
 
   const story = stories?.find((item) => item?._id === id);
 
+  // Initialize images with the story's existing images
+  const [images, setImages] = useState(() => story?.images || []);
+  const [isUploading, setIsUploading] = useState(false);
+
   if (!story) {
-    return <div>Story not found</div>;
+    return (
+      <div className="p-12 text-center text-red-500 font-semibold">
+        Story not found
+      </div>
+    );
   }
 
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    const formData = new FormData();
+  // Handle image upload to ImgBB
+  const handleImageChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    // Append each selected file to FormData
-    Array.from(files).forEach((file) => {
-      formData.append("image", file);
-    });
+    try {
+      setIsUploading(true);
+      const imageUrls = [];
 
-    // Upload the images to ImgBB and get the URLs
-    Promise.all(
-      Array.from(files).map((file) =>
-        axios.post(
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await axios.post(
           `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGEBB}`,
           formData
-        )
-      )
-    )
-      .then((responses) => {
-        const imageUrls = responses.map((response) => response.data.data.url);
-        setImages(imageUrls); // Set all image URLs
-      })
-      .catch((error) => {
-        console.error("Image upload failed", error);
+        );
+        if (response.data.success) {
+          imageUrls.push(response.data.data.url);
+        }
+      }
+
+      setImages((prev) => [...prev, ...imageUrls]);
+      setIsUploading(false);
+    } catch (error) {
+      setIsUploading(false);
+      console.error("Image upload failed", error);
+      Swal.fire({
+        title: "Upload Failed",
+        text: "Something went wrong while uploading your images.",
+        icon: "error",
       });
+    }
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   // Edit button handler
@@ -51,83 +72,157 @@ const UpdateStorie = () => {
     const form = e.target;
     const title = form.title.value;
     const storyText = form.text.value;
+    
     const updateData = {
       title,
       storyText,
-      images, // Send all uploaded image URLs
+      images, // Send all current image URLs
     };
 
-    await axios
-      .patch(`${import.meta.env.VITE_URL}/update/${id}`, updateData)
-      .then((res) => {
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_URL}/update/${id}`,
+        updateData
+      );
+      if (res.data.modifiedCount || res.data.matchedCount) {
         refetch();
         Swal.fire({
           title: "Update Successful!",
           icon: "success",
-          draggable: false,
         });
         navigate(
           `${
-            loginUser.role === "guide"
-              ? "/dashboard/guide-manage-story" : loginUser.role === 'admin'? '/dashboard/admin-story'
+            loginUser?.role === "guide"
+              ? "/dashboard/guide-manage-story"
+              : loginUser?.role === "admin"
+              ? "/dashboard/admin-story"
               : "/dashboard/tourist-stories"
           }`
         );
+      }
+    } catch (error) {
+      console.error("Update failed", error);
+      Swal.fire({
+        title: "Error",
+        text: "Could not update the story.",
+        icon: "error",
       });
+    }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-5 mt-10 shadow-xl">
-      <form onSubmit={(e) => handleEdit(e, story._id)}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Title</label>
-          <input
-            name="title"
-            defaultValue={story.title} // Accessing the title correctly
-            type="text"
-            className="mt-1 p-2 border border-gray-300 rounded w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Story Text</label>
-          <textarea
-            name="text"
-            defaultValue={story.storyText} // Accessing story text correctly
-            className="mt-1 p-2 border border-gray-300 rounded w-full"
-            rows="4"
-          ></textarea>
+    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 animate-fade-in-up">
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium p-8">
+        
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+            Edit Your Story
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Update your story title, narrative text, or manage published images.
+          </p>
         </div>
 
-        {/* Image Upload Section */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Upload Images</label>
-          <input
-            type="file"
-            onChange={handleImageChange}
-            multiple
-            required
-            className="mt-1 p-2 border border-gray-300 rounded w-full"
-          />
-          {images.length > 0 && (
-            <div>
-              {" "}
-              <h4>Uploaded Images:</h4>
-              <div className="mt-4 grid grid-cols-4 gap-5 rounded-md">
-                {images.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`Uploaded ${index + 1}`}
-                    className="mt-2 max-w-full h-auto"
-                  />
-                ))}
-              </div>
+        <form onSubmit={(e) => handleEdit(e, story._id)} className="space-y-6">
+          {/* Title */}
+          <div>
+            <label htmlFor="title" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Story Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              defaultValue={story.title}
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+            />
+          </div>
+
+          {/* Story Text */}
+          <div>
+            <label htmlFor="text" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Your Story
+            </label>
+            <textarea
+              id="text"
+              name="text"
+              defaultValue={story.storyText}
+              rows="6"
+              required
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
+            />
+          </div>
+
+          {/* Image Upload / Preview Section */}
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+              Story Images
+            </label>
+            
+            {/* Dashed dropzone */}
+            <div className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:border-primary/50 transition-colors flex flex-col items-center justify-center cursor-pointer bg-slate-50/50 dark:bg-slate-900/20">
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                multiple
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <FiUpload className="h-8 w-8 text-slate-400 mb-3" />
+              <span className="text-sm font-semibold text-slate-650 dark:text-slate-300">
+                Click to upload more images
+              </span>
+              <span className="text-xs text-slate-450 dark:text-slate-550 mt-1">
+                PNG, JPG or WEBP up to 5MB
+              </span>
             </div>
-          )}
-        </div>
 
-        <button className="btn bg-secondary font-semibold">Update Now</button>
-      </form>
+            {/* Thumbnail Gallery */}
+            {images.length > 0 && (
+              <div className="mt-4">
+                <span className="block text-xs font-bold text-slate-455 dark:text-slate-545 mb-2 uppercase tracking-wide">
+                  Gallery Previews ({images.length})
+                </span>
+                <div className="grid grid-cols-4 gap-3">
+                  {images.map((url, idx) => (
+                    <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                      <img src={url} alt="Story preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(idx)}
+                        className="absolute top-1.5 right-1.5 bg-slate-900/60 hover:bg-slate-900 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <FiX className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {isUploading && (
+              <div className="flex items-center gap-2 text-sm text-slate-400 mt-3 animate-pulse">
+                <FiImage className="h-4 w-4 animate-spin text-primary" /> Uploading images to gallery...
+              </div>
+            )}
+          </div>
+
+          {/* Form Actions */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-750">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              disabled={isUploading}
+              className="font-bold text-base w-full sm:w-auto"
+            >
+              Update Story
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,44 +1,30 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import 'swiper/swiper-bundle.min.css';
-// import 'swiper/swiper.min.css';
 import "swiper/css";
 import Swal from "sweetalert2";
-import useUser from "../../hooks/useUser";
-import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import useStory from "../../hooks/useStory";
+import Button from "./Button";
+import Card from "./Card";
+import EmptyState from "./EmptyState";
 
 const ManageStories = () => {
   const queryClient = useQueryClient();
   const [stories, isLoading, error, refetch] = useStory();
 
-  // Delete story mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      await axios.delete(`${import.meta.env.VITE_URL}/stories/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["touristStories"]);
-    },
-  });
-
   // Delete button handler
   const handleDelete = async (id) => {
-    // Show confirmation dialog first
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "You won't be able to revert this story!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     });
 
-    // Proceed with deletion only if confirmed
     if (result.isConfirmed) {
       try {
         const res = await axios.delete(
@@ -47,7 +33,7 @@ const ManageStories = () => {
         if (res.data.deletedCount) {
           Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
+            text: "Your story has been deleted.",
             icon: "success",
           });
           refetch();
@@ -65,107 +51,110 @@ const ManageStories = () => {
 
   // Loading state
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="space-y-8 animate-fade-in-up">
+        <div>
+          <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+            Tourist Stories
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Review, edit, or remove travel stories published on the platform.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="bg-slate-100 dark:bg-slate-800 h-80 rounded-2xl" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   // Error state
   if (error) {
-    return <div>Error fetching stories: {error.message}</div>;
+    return (
+      <div className="p-6 text-red-500 font-semibold text-center">
+        Error fetching stories: {error.message}
+      </div>
+    );
   }
 
-  // close the modal
-  const closeModal = () => {
-    document.getElementById("my_modal_1").close();
-  };
-  // Render the stories in card format
   return (
-    <div className="p-6  min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Tourist Stories</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stories.map((story) => (
-          <div
-            key={story._id}
-            className="p-4 rounded-lg shadow-lg flex flex-col"
-          >
-            <h2 className="text-xl font-bold mb-2">{story.title}</h2>
-            <p className="text-gray-400 mb-4">{story.storyText}</p>
-            <Swiper
-              spaceBetween={10}
-              slidesPerView={1}
-              navigation
-              pagination={{ clickable: true }}
-              className="w-full h-48 mb-4"
-            >
-              {story.images.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <img
-                    src={image}
-                    alt={`Story ${index + 1}`}
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="flex space-x-3 mt-auto">
-              <Link
-                to={`/dashboard/update/${story._id}`}
-                onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
-                }
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => handleDelete(story._id)}
-                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-
-              {/* update modal */}
-              <dialog id="my_modal_1" className="modal">
-                <div className="modal-box">
-                  <div
-                    className="flex justify-end font-bold cursor-pointer"
-                    onClick={closeModal}
-                  >
-                    X
-                  </div>
-                  <form onSubmit={(e) => handleEdit(e, story._id)}>
-                    <div className="mb-4">
-                      <label className="block text-gray-700">Title</label>
-                      <input
-                        name="title"
-                        defaultValue={story.title}
-                        type="text"
-                        className="mt-1 p-2 border border-gray-300 rounded w-full"
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-gray-700">Story Text</label>
-                      <textarea
-                        name="text"
-                        defaultValue={story.storyText}
-                        className="mt-1 p-2 border border-gray-300 rounded w-full"
-                        rows="4"
-                      ></textarea>
-                    </div>
-                    <button className="btn bg-secondary font-semibold">
-                      Update Now
-                    </button>
-                  </form>
-                  <div className="modal-action">
-                    <form method="dialog">
-                      {/* if there is a button in form, it will close the modal */}
-                    </form>
-                  </div>
-                </div>
-              </dialog>
-            </div>
-          </div>
-        ))}
+    <div className="space-y-8 animate-fade-in-up">
+      {/* Title */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+            Tourist Stories
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Review, edit, or remove travel stories published on the platform.
+          </p>
+        </div>
+        <Link to="/dashboard/admin-add-story">
+          <Button variant="primary" size="sm" className="font-bold">
+            + Write Story
+          </Button>
+        </Link>
       </div>
+
+      {stories.length === 0 ? (
+        <EmptyState
+          title="No stories found"
+          description="Be the first to share an amazing travel experience with our community!"
+          actionLabel="Write Your First Story"
+          onAction={() => window.location.href = "/dashboard/admin-add-story"}
+        />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {stories.map((story) => (
+            <Card
+              key={story._id}
+              image={story.images?.[0]}
+              title={story.title}
+              subtitle="TOURIST STORY"
+              className="flex flex-col h-full bg-white dark:bg-slate-800"
+            >
+              {/* Slider wrapper if multiple images */}
+              {story.images && story.images.length > 1 && (
+                <div className="h-40 w-full overflow-hidden rounded-xl mb-4">
+                  <Swiper spaceBetween={10} slidesPerView={1} className="w-full h-full">
+                    {story.images.map((image, index) => (
+                      <SwiperSlide key={index}>
+                        <img
+                          src={image}
+                          alt={`Story ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              )}
+              
+              <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-6 leading-relaxed flex-grow">
+                {story.storyText}
+              </p>
+              
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-700/50 mt-auto">
+                <Link to={`/dashboard/update/${story._id}`}>
+                  <Button variant="outline" size="sm" className="font-bold">
+                    Edit
+                  </Button>
+                </Link>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(story._id)}
+                  className="font-bold"
+                >
+                  Delete
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

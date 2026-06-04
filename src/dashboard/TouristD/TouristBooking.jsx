@@ -56,6 +56,11 @@ const TouristBooking = () => {
     }
   }, [product]);
 
+  const handleItemsPerPage = (val) => {
+    setItem(val);
+    setCurrentPage(0);
+  };
+
   const handleCancel = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",

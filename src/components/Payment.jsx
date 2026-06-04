@@ -6,6 +6,8 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useBooking from "../hooks/useBooking";
 import useUser from "../hooks/useUser";
+import Button from "./shared/Button";
+import { FiCreditCard, FiUser, FiCalendar, FiMapPin, FiInfo } from "react-icons/fi";
 
 const Payment = () => {
   const [clientSecrate, setClientSecrate] = useState("");
@@ -39,8 +41,7 @@ const Payment = () => {
       return;
     }
 
-    // Start loading when payment processing begins
-    setLoading(true); 
+    setLoading(true);
 
     try {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -50,6 +51,11 @@ const Payment = () => {
 
       if (error) {
         console.error("Error creating payment method:", error);
+        Swal.fire({
+          title: "Payment Error",
+          text: error.message || "Failed to parse credit card details.",
+          icon: "error",
+        });
         setLoading(false);
         return;
       }
@@ -66,6 +72,11 @@ const Payment = () => {
         });
 
       if (cardErrr) {
+        Swal.fire({
+          title: "Card Declined",
+          text: cardErrr.message || "Payment transaction declined.",
+          icon: "error",
+        });
         setLoading(false);
         return;
       }
@@ -73,13 +84,13 @@ const Payment = () => {
       if (paymentIntent.status === "succeeded") {
         Swal.fire({
           title: "Payment Successful",
+          text: `Charged $${cardData.price} successfully!`,
           icon: "success",
-          draggable: false,
         });
-        refetch()
+        refetch();
         navigate(
           `${
-            loginUser.role === "admin"
+            loginUser?.role === "admin"
               ? "/dashboard/admin-assigned"
               : "/dashboard/tourist-bookings"
           }`
@@ -105,81 +116,148 @@ const Payment = () => {
       }
     } catch (err) {
       console.error("Payment processing error:", err);
+      Swal.fire({
+        title: "Processing Failure",
+        text: "Something went wrong while executing Stripe transaction.",
+        icon: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">
-        Payment Information
-      </h2>
-      <form onSubmit={handleFormSubmit}>
-        {/* Card Details */}
-        <div className="mb-6">
-          <label
-            htmlFor="card"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Credit Card Information
-          </label>
-          <div className="p-3 border rounded-md shadow-sm bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500">
-            <CardElement
-              id="card"
-              iconStyle="solid"
-              style={{
-                base: {
-                  iconColor: "#c4f0ff",
-                  color: "#000",
-                  fontSize: "16px",
-                  fontFamily: "Arial, sans-serif",
-                  fontSmoothing: "antialiased",
-                  "::placeholder": {
-                    color: "#aab7c4",
-                  },
-                },
-                invalid: {
-                  iconColor: "#FFC7EE",
-                  color: "#FFC7EE",
-                },
-              }}
-            />
+    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 animate-fade-in-up">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+        
+        {/* Order Summary Card */}
+        <div className="md:col-span-2 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 text-white rounded-3xl p-6 shadow-premium relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="space-y-6">
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                Order Summary
+              </span>
+              <h3 className="text-xl font-bold font-display mt-4 leading-tight">
+                {cardData?.packageName || "Tour Package"}
+              </h3>
+            </div>
+
+            <div className="space-y-4 pt-4 border-t border-slate-800">
+              <div className="flex items-center gap-3 text-sm text-slate-300">
+                <FiUser className="h-4 w-4 text-primary shrink-0" />
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-bold uppercase">Guide Assigned</span>
+                  <span className="font-semibold">{cardData?.tourGuide || "Pending"}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-sm text-slate-300">
+                <FiCalendar className="h-4 w-4 text-cyan-500 shrink-0" />
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-bold uppercase">Scheduled Date</span>
+                  <span className="font-semibold">{cardData?.date || "Not set"}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-sm text-slate-300">
+                <FiMapPin className="h-4 w-4 text-emerald-500 shrink-0" />
+                <div>
+                  <span className="block text-[10px] text-slate-500 font-bold uppercase">Booking Reference</span>
+                  <span className="font-mono text-xs">{cardData?._id?.substring(0, 12)}...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-slate-800 mt-8 md:mt-0">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Amount Due</span>
+            <div className="text-3xl font-extrabold font-display text-white mt-1">
+              ${cardData?.price}
+            </div>
           </div>
         </div>
 
-        {/* Name Input */}
-        <div className="mb-6">
-          <label
-            htmlFor="name"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Cardholder Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            className="w-full p-3 border rounded-md shadow-sm bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="John Doe"
-            required
-          />
+        {/* Payment Details Card */}
+        <div className="md:col-span-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl p-8 shadow-premium">
+          <div className="mb-6">
+            <h3 className="text-xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
+              Payment Details
+            </h3>
+            <p className="text-xs text-slate-400 mt-1">
+              Payments are secured and processed using Stripe encryption.
+            </p>
+          </div>
+
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            {/* Name Input */}
+            <div>
+              <label htmlFor="name" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+                Cardholder Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="name"
+                  required
+                  placeholder="e.g. John Doe"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all font-semibold"
+                />
+              </div>
+            </div>
+
+            {/* Card Information */}
+            <div>
+              <label htmlFor="card-details" className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">
+                Card Information
+              </label>
+              <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                <CardElement
+                  id="card-details"
+                  options={{
+                    style: {
+                      base: {
+                        color: "#0f172a",
+                        fontSize: "14px",
+                        fontFamily: "Outfit, Inter, sans-serif",
+                        "::placeholder": {
+                          color: "#94a3b8",
+                        },
+                      },
+                      invalid: {
+                        color: "#ef4444",
+                        iconColor: "#ef4444",
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Info Message */}
+            <div className="flex items-start gap-2.5 p-3.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              <FiInfo className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
+              <span>By clicking Pay Now, you authorize the charge of the amount shown in order summary to your card.</span>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-750">
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                disabled={!stripe || !clientSecrate || loading}
+                loading={loading}
+                className="w-full font-bold text-base gap-2"
+              >
+                <FiCreditCard className="h-5 w-5" /> Pay ${cardData?.price} Now
+              </Button>
+            </div>
+          </form>
         </div>
 
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            className={`w-full py-3 font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-              loading
-                ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                : "bg-primary text-white hover:bg-green-400"
-            }`}
-            disabled={!stripe || !clientSecrate || loading}
-          >
-            {loading ? "Processing Payment..." : "Pay Now"}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
