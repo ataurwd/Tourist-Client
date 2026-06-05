@@ -36,7 +36,7 @@ const GuideDetails = () => {
           <p className="text-sm text-slate-400 mt-1">Certified Tour Guide</p>
 
           {/* Info Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 w-full max-w-md">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 w-full max-w-[38rem]">
             <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
               <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-500">
                 <FiMail className="h-5 w-5" />
