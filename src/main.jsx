@@ -11,6 +11,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import Theme from "./context/Theme";
+import { AppLoadingProvider } from "./context/AppLoading";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +20,11 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <Theme>
         <FormData>
-          <Router />
+          <AppLoadingProvider>
+            <Router />
+          </AppLoadingProvider>
         </FormData>
       </Theme>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

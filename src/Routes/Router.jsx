@@ -1,6 +1,8 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./../layout/Layout";
+import Loading from "../components/Loading";
+import { useAppLoading } from "../context/AppLoading";
 import Home from "../pages/home/Home";
 import Login from "../user/Login";
 import Register from "../user/Register";
@@ -31,23 +33,25 @@ import ManageCandidate from "./../dashboard/admin/ManageCandidate";
 import AdminRoute from "./AdminRoute";
 import PackageDetails from "../../src/components/PackageDetails";
 import GuideDetails from "../../src/components/GuideDetails";
-import StripePayment from './../components/StripePayment';
+import StripePayment from "./../components/StripePayment";
 import ErrorPage from "../components/ErrorPage";
 import Contact from "../pages/contact/Contact";
 import AdminOverview from "../dashboard/admin/AdminOverview";
 import TouristOverview from "../dashboard/TouristD/TouristOverview";
 
 const Router = () => {
+  const { isAppLoading } = useAppLoading();
+
   const route = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
-      errorElement: <ErrorPage/>,
+      errorElement: <ErrorPage />,
       children: [
         {
           path: "/",
           element: <Home />,
-          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`,),
+          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`),
         },
         {
           path: "about-us",
@@ -63,13 +67,15 @@ const Router = () => {
         },
         {
           path: "trips",
-          element: <PrivateRoute><Trips /></PrivateRoute>,
+          element: (
+            <PrivateRoute>
+              <Trips />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/pakage/details/:id",
-          element: (
-              <PackageDetails />
-          ),
+          element: <PackageDetails />,
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),
         },
@@ -91,7 +97,7 @@ const Router = () => {
     },
     {
       path: "dashboard",
-      errorElement: <ErrorPage/>,
+      errorElement: <ErrorPage />,
       element: (
         <PrivateRoute>
           <Dashboard />
@@ -183,7 +189,8 @@ const Router = () => {
         {
           path: "update/:id",
           element: <UpateStorie />,
-          loader: ({params}) => (`${import.meta.env.VITE_URL}/stories/${params.id}`)
+          loader: ({ params }) =>
+            `${import.meta.env.VITE_URL}/stories/${params.id}`,
         },
 
         // for admin route
@@ -253,14 +260,21 @@ const Router = () => {
           ),
         },
         {
-          path: '/dashboard/tourist-bookings/:id',
+          path: "/dashboard/tourist-bookings/:id",
           element: <StripePayment />,
-          loader: ({params}) => fetch(`${import.meta.env.VITE_URL}/guide-bookings/${params.id}`)
-        }
+          loader: ({ params }) =>
+            fetch(`${import.meta.env.VITE_URL}/guide-bookings/${params.id}`),
+        },
       ],
     },
   ]);
-  return <RouterProvider router={route} />;
+
+  return (
+    <>
+      {isAppLoading && <Loading fullScreen={true} />}
+      <RouterProvider router={route} />
+    </>
+  );
 };
 
 export default Router;
