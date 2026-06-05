@@ -9,14 +9,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand details */}
           <div className="md:col-span-1 space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-black text-lg shadow-premium">
-                T
-              </span>
-              <span className="font-display font-extrabold text-xl tracking-tight text-white">
-                Treva
-              </span>
-            </Link>
+            <Link to="/" className="flex items-center gap-2 group w-20">
+                          <img src="https://i.ibb.co.com/kVLwMVPv/Screenshot-at-Jun-05-10-22-18-removebg-preview.png" alt="" />
+                        </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               Crafting premium travel experiences around the world. Let us take you to coordinates where memories are born.
             </p>

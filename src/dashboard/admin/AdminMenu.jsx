@@ -7,17 +7,31 @@ import { NavLink } from "react-router-dom";
 import { MdAddTask } from "react-icons/md";
 import { RiProfileLine } from "react-icons/ri";
 import { FiPieChart } from "react-icons/fi";
+import { GiShoppingCart } from "react-icons/gi";
 
 const AdminMenu = ({ isCollapsed }) => {
   const items = [
     { to: "admin-profile", icon: CgProfile, label: "Admin Profile" },
     { to: "overview", icon: FiPieChart, label: "Overview" },
     { to: "admin-assigned", icon: GoTasklist, label: "Assigned Tours" },
-    { to: "admin-add-story", icon: IoIosAddCircleOutline, label: "Add Stories" },
+    {
+      to: "admin-add-story",
+      icon: IoIosAddCircleOutline,
+      label: "Add Stories",
+    },
     { to: "admin-story", icon: MdHistoryToggleOff, label: "Manage Stories" },
     { to: "admin-add-package", icon: MdAddTask, label: "Add Package" },
+    {
+      to: "admin-manage-packages",
+      icon: GiShoppingCart,
+      label: "Manage Packages",
+    },
     { to: "admin-manage-user", icon: RiProfileLine, label: "Manage Users" },
-    { to: "admin-manage-candidate", icon: CgProfile, label: "Manage Candidates" }
+    {
+      to: "admin-manage-candidate",
+      icon: CgProfile,
+      label: "Manage Candidates",
+    },
   ];
 
   return (

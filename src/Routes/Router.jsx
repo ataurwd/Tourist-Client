@@ -30,6 +30,7 @@ import AdminAssigned from "./../dashboard/admin/AdminAssigned";
 import AdminManageUser from "./../dashboard/admin/AdminManageUser";
 import AdminStories from "./../dashboard/admin/AdminStories";
 import ManageCandidate from "./../dashboard/admin/ManageCandidate";
+import AdminManagePackages from "./../dashboard/admin/AdminManagePackages";
 import AdminRoute from "./AdminRoute";
 import PackageDetails from "../../src/components/PackageDetails";
 import GuideDetails from "../../src/components/GuideDetails";
@@ -215,6 +216,14 @@ const Router = () => {
           element: (
             <AdminRoute>
               <AddPackage />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "admin-manage-packages",
+          element: (
+            <AdminRoute>
+              <AdminManagePackages />
             </AdminRoute>
           ),
         },

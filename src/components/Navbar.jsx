@@ -49,7 +49,7 @@ const NavBer = () => {
           {/* Logo Section */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-2 group w-20">
-              <img src="https://i.ibb.co.com/D6LvnBF/Screenshot-at-Jun-04-15-03-33-removebg-preview.png" alt="" />
+              <img src="https://i.ibb.co.com/kVLwMVPv/Screenshot-at-Jun-05-10-22-18-removebg-preview.png" alt="" />
             </Link>
           </div>
 
