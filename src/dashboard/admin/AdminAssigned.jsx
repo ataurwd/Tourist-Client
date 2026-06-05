@@ -1,25 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import useBooking from "../../hooks/useBooking";
 import { toast } from "sonner";
 import StatusBadge from "../../components/shared/StatusBadge";
 import Button from "../../components/shared/Button";
 
 const AdminAssigned = () => {
-  const [guideBooking, refetch, isLoading] = useBooking();
+  const [guideBooking, setGuideBooking] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllBookings = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_URL}/guide-bookings/`,
+        );
+        setGuideBooking(response.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        toast.error("Failed to load bookings");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllBookings();
+  }, []);
 
   const handelCancel = async (id) => {
-    if (!window.confirm("Are you sure? Do you want to cancel this booking?")) return;
+    if (!window.confirm("Are you sure? Do you want to cancel this booking?"))
+      return;
 
-    {
+    try {
       const res = await axios.delete(
-        `${import.meta.env.VITE_URL}/guide-booking/${id}`
+        `${import.meta.env.VITE_URL}/guide-booking/${id}`,
       );
       if (res.data.deletedCount) {
         toast.success("Booking Cancelled Successfully!");
-        refetch();
+        // Refetch the bookings after cancellation
+        setGuideBooking(guideBooking.filter((booking) => booking._id !== id));
       }
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+      toast.error("Failed to cancel booking");
     }
   };
 
@@ -31,7 +55,8 @@ const AdminAssigned = () => {
           All System Bookings
         </h1>
         <p className="text-sm text-slate-400 mt-1">
-          Monitor all tourist package and guide reservations system-wide, and process payments or cancellations.
+          Monitor all tourist package and guide reservations system-wide, and
+          process payments or cancellations.
         </p>
       </div>
 
@@ -65,17 +90,32 @@ const AdminAssigned = () => {
               {isLoading ? (
                 [1, 2, 3].map((n) => (
                   <tr key={n} className="animate-pulse">
-                    <td className="px-6 py-5"><div className="h-4 w-32 bg-slate-200 dark:bg-slate-700 rounded" /></td>
-                    <td className="px-6 py-5"><div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded" /></td>
-                    <td className="px-6 py-5"><div className="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded" /></td>
-                    <td className="px-6 py-5"><div className="h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded" /></td>
-                    <td className="px-6 py-5"><div className="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded-full" /></td>
-                    <td className="px-6 py-5"><div className="h-8 w-28 bg-slate-200 dark:bg-slate-700 rounded mx-auto" /></td>
+                    <td className="px-6 py-5">
+                      <div className="h-4 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded" />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded" />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="h-8 w-28 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+                    </td>
                   </tr>
                 ))
               ) : !guideBooking || guideBooking.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-slate-400 dark:text-slate-500">
+                  <td
+                    colSpan="6"
+                    className="px-6 py-12 text-center text-slate-400 dark:text-slate-500"
+                  >
                     No system bookings found.
                   </td>
                 </tr>
@@ -87,7 +127,10 @@ const AdminAssigned = () => {
                     booking.statas === "accepted";
 
                   return (
-                    <tr key={booking._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
+                    <tr
+                      key={booking._id}
+                      className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors"
+                    >
                       <td className="px-6 py-5 text-sm font-bold text-slate-800 dark:text-slate-100 font-display">
                         {booking.packageName}
                       </td>
