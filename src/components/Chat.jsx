@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import socket from '../socket';
 import { FormContext } from '../context/FormData';
 import axios from 'axios';
@@ -9,6 +9,10 @@ const Chat = ({ receiverId }) => {
   const { user } = useContext(FormContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState("");
+  const typingTimeout = useRef(null);
+
   const roomId = [user?.email, receiverId].sort().join('_');
   const [alluser] = useAllUser();
 
@@ -32,10 +36,36 @@ const Chat = ({ receiverId }) => {
 
     socket.on('receive_message', (data) => {
       setMessages((prev) => [...prev, data]);
+      setIsTyping(false); // Stop typing indicator on message receive
     });
 
-    return () => socket.off('receive_message');
+    socket.on('user_typing', (name) => {
+      setTypingUser(name);
+      setIsTyping(true);
+    });
+
+    socket.on('user_stopped_typing', () => {
+      setIsTyping(false);
+    });
+
+    return () => {
+      socket.off('receive_message');
+      socket.off('user_typing');
+      socket.off('user_stopped_typing');
+    };
   }, [roomId, user?.email, receiverId]);
+
+  const handleTyping = (e) => {
+    setNewMessage(e.target.value);
+    
+    socket.emit('typing', { roomId, senderName: user.displayName });
+
+    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+
+    typingTimeout.current = setTimeout(() => {
+      socket.emit('stop_typing', { roomId });
+    }, 2000);
+  };
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -54,6 +84,7 @@ const Chat = ({ receiverId }) => {
     };
 
     socket.emit('send_message', messageData);
+    socket.emit('stop_typing', { roomId });
     setNewMessage('');
   };
 
@@ -84,13 +115,18 @@ const Chat = ({ receiverId }) => {
             </div>
           );
         })}
+        {isTyping && (
+            <div className="text-xs text-slate-400 italic ml-12">
+                {typingUser} is typing...
+            </div>
+        )}
       </div>
 
       <form onSubmit={sendMessage} className="p-4 border-t border-slate-100 dark:border-slate-700 flex gap-2">
         <input
           type="text"
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={handleTyping}
           className="flex-1 bg-slate-100 dark:bg-slate-900 rounded-full px-4 py-2 text-sm focus:outline-none"
           placeholder="Type a message..."
         />
