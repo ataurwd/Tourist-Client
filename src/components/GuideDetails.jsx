@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import { FiMail, FiShield } from "react-icons/fi";
+import { FiMail, FiShield, FiMessageSquare } from "react-icons/fi";
 import Button from "./shared/Button";
+import Modal from "./shared/Modal";
+import Chat from "./Chat";
 
 const GuideDetails = () => {
   const data = useLoaderData();
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
@@ -73,14 +76,16 @@ const GuideDetails = () => {
                 ← Back to Home
               </Button>
             </Link>
-            <Link to="/trips">
-              <Button variant="primary" size="sm" className="font-bold">
-                Browse Packages
-              </Button>
-            </Link>
+            <Button variant="primary" size="sm" className="font-bold" onClick={() => setIsChatOpen(true)}>
+              <FiMessageSquare className="mr-2 h-4 w-4" /> Message Guide
+            </Button>
           </div>
         </div>
       </div>
+
+      <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} title={`Message ${data?.name}`}>
+        <Chat receiverId={data?.email} />
+      </Modal>
     </div>
   );
 };

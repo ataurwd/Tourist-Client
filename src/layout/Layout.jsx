@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
 import { Toaster } from "sonner";
+import LiveChatWidget from "../components/LiveChatWidget";
 
 const Layout = () => {
   return (
@@ -13,6 +14,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
+      <LiveChatWidget adminEmail="admin@example.com" />
       <Toaster richColors position="top-right" />
     </div>
   );

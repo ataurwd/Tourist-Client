@@ -4,14 +4,17 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdHistoryToggleOff } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { GoTasklist } from "react-icons/go";
+import { FiMessageSquare } from "react-icons/fi";
 
 const GuideMenu = ({ isCollapsed }) => {
   const items = [
     { to: "guide-profile", icon: CgProfile, label: "Manage Profile" },
     { to: "guide-assigned", icon: GoTasklist, label: "Assigned Tours" },
     { to: "guide-add-story", icon: IoIosAddCircleOutline, label: "Add Stories" },
-    { to: "guide-manage-story", icon: MdHistoryToggleOff, label: "Manage Stories" }
+    { to: "guide-manage-story", icon: MdHistoryToggleOff, label: "Manage Stories" },
+    { to: "messages", icon: FiMessageSquare, label: "Messages" }
   ];
+// ...
 
   return (
     <div className="space-y-1">

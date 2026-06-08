@@ -6,7 +6,7 @@ import { MdHistoryToggleOff } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { MdAddTask } from "react-icons/md";
 import { RiProfileLine } from "react-icons/ri";
-import { FiPieChart } from "react-icons/fi";
+import { FiPieChart, FiMessageSquare } from "react-icons/fi";
 import { GiShoppingCart } from "react-icons/gi";
 
 const AdminMenu = ({ isCollapsed }) => {
@@ -32,7 +32,9 @@ const AdminMenu = ({ isCollapsed }) => {
       icon: CgProfile,
       label: "Manage Candidates",
     },
+    { to: "messages", icon: FiMessageSquare, label: "Messages" },
   ];
+// ...
 
   return (
     <div className="space-y-1">

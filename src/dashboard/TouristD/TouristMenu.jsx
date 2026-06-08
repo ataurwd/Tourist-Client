@@ -1,4 +1,4 @@
-import { FiPieChart, FiUser } from 'react-icons/fi';
+import { FiPieChart, FiUser, FiMessageSquare } from 'react-icons/fi';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { MdHistoryToggleOff } from "react-icons/md";
@@ -12,7 +12,8 @@ const TouristMenu = ({ isCollapsed }) => {
     { to: "tourist-bookings", icon: TbCalendar, label: "My Bookings" },
     { to: "tourist-add-story", icon: IoIosAddCircleOutline, label: "Add Stories" },
     { to: "tourist-stories", icon: MdHistoryToggleOff, label: "Manage Stories" },
-    { to: "tourist-guild", icon: IoPersonAddOutline, label: "Join as Guide" }
+    { to: "tourist-guild", icon: IoPersonAddOutline, label: "Join as Guide" },
+    { to: "messages", icon: FiMessageSquare, label: "Messages" }
   ];
 
   return (

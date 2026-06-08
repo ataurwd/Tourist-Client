@@ -37,6 +37,7 @@ import GuideDetails from "../../src/components/GuideDetails";
 import StripePayment from "./../components/StripePayment";
 import ErrorPage from "../components/ErrorPage";
 import Contact from "../pages/contact/Contact";
+import MessageDashboard from "../dashboard/MessageDashboard";
 import AdminOverview from "../dashboard/admin/AdminOverview";
 import TouristOverview from "../dashboard/TouristD/TouristOverview";
 
@@ -151,6 +152,15 @@ const Router = () => {
             <UserRoute>
               <JoinAsGuild />
             </UserRoute>
+          ),
+        },
+
+        {
+          path: "messages",
+          element: (
+            <PrivateRoute>
+              <MessageDashboard />
+            </PrivateRoute>
           ),
         },
 
