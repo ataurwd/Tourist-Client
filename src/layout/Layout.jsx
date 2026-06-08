@@ -14,7 +14,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
-      <LiveChatWidget adminEmail="admin@example.com" />
+      <LiveChatWidget adminEmail="ataurrahman24707@gmail.com" />
       <Toaster richColors position="top-right" />
     </div>
   );
