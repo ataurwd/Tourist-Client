@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -49,6 +49,23 @@ const Login = () => {
       });
   };
 
+  const quickLogin = (role) => {
+    let email = "";
+    let password = "passAo@#rd123"; 
+    
+    if (role === "tourist") email = "tourist@example.com";
+    else if (role === "guide") email = "guide@example.com";
+    else if (role === "admin") email = "admin@example.com";
+    
+    // Autofill form
+    const emailInput = document.querySelector('input[name="email"]');
+    const passwordInput = document.querySelector('input[name="password"]');
+    if (emailInput && passwordInput) {
+      emailInput.value = email;
+      passwordInput.value = password;
+    }
+  };
+
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 animate-fade-in-up">
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white dark:bg-slate-800 rounded-3xl shadow-premium overflow-hidden border border-slate-100 dark:border-slate-700/50">
@@ -92,7 +109,21 @@ const Login = () => {
             <h2 className="text-2xl font-extrabold font-display text-slate-800 dark:text-slate-100 tracking-tight">
               Sign In
             </h2>
-            <p className="text-sm text-slate-400">
+            <div className="flex gap-2 mt-4">
+               <div className="relative group">
+                 <button className="flex items-center gap-2 px-3 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <FaUserShield /> Quick Login
+                 </button>
+                 <div className="absolute top-full left-0 w-32 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 hidden group-hover:block z-20">
+                    {["tourist", "guide", "admin"].map(role => (
+                        <button key={role} onClick={() => quickLogin(role)} className="block w-full text-left px-4 py-2 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 capitalize">
+                            {role}
+                        </button>
+                    ))}
+                 </div>
+               </div>
+            </div>
+            <p className="text-sm text-slate-400 mt-2">
               Enter your credentials to access your account.
             </p>
           </div>

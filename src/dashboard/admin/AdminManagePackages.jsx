@@ -3,6 +3,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FiEdit2, FiTrash2, FiX } from "react-icons/fi";
 import Button from "../../components/shared/Button";
+import { useContext } from "react";
+import { FormContext } from "../../context/FormData";
 
 const AdminManagePackages = () => {
   const [packages, setPackages] = useState([]);
@@ -10,6 +12,8 @@ const AdminManagePackages = () => {
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
+  const {user}  = useContext(FormContext);
+
 
   // Fetch all packages
   useEffect(() => {
@@ -204,13 +208,15 @@ const AdminManagePackages = () => {
                         </button>
 
                         {/* Delete Button */}
-                        <button
-                          onClick={() => handleDelete(pkg._id)}
-                          className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
-                          title="Delete Package"
-                        >
-                          <FiTrash2 className="h-4 w-4" />
-                        </button>
+                        {user.email === "admin@example.com" ? "" : (
+                          <button
+                            onClick={() => handleDelete(pkg._id)}
+                            className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
+                            title="Delete Package"
+                          >
+                            <FiTrash2 className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
