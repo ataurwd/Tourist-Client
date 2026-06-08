@@ -3,13 +3,17 @@ import socket from '../socket';
 import { FormContext } from '../context/FormData';
 import axios from 'axios';
 import { FiSend } from 'react-icons/fi';
+import useAllUser from '../hooks/useAllUser';
 
 const Chat = ({ receiverId }) => {
   const { user } = useContext(FormContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-
   const roomId = [user?.email, receiverId].sort().join('_');
+  const [alluser] = useAllUser();
+
+  // Find the receiver's details to get their name/photo
+  const receiverData = alluser.find(u => u.email === receiverId);
 
   useEffect(() => {
     if (!user?.email || !receiverId) return;
@@ -42,8 +46,10 @@ const Chat = ({ receiverId }) => {
       sender: user.email,
       senderName: user.displayName || "User",
       senderPhoto: user.photoURL || "/default-profile.png",
-      message: newMessage,
       receiver: receiverId,
+      receiverName: receiverData?.name || "Receiver",
+      receiverPhoto: receiverData?.photo || "/default-profile.png",
+      message: newMessage,
       timestamp: new Date()
     };
 
@@ -56,19 +62,23 @@ const Chat = ({ receiverId }) => {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => {
           const isMe = msg.sender === user.email;
+          const senderImage = isMe ? (user.photoURL || "/default-profile.png") : (msg.senderPhoto || "/default-profile.png");
+
           return (
             <div key={index} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-end gap-2 max-w-[80%] ${isMe ? 'flex-row-reverse' : ''}`}>
+              <div className={`flex items-end gap-2 max-w-[85%] ${isMe ? 'flex-row-reverse' : ''}`}>
                 <img 
-                  src={msg.senderPhoto || "/default-profile.png"} 
-                  alt={msg.senderName} 
-                  className="w-8 h-8 rounded-full object-cover" 
+                  src={senderImage}
+                  alt={msg.senderName || "User"} 
+                  className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700 shadow-sm" 
                 />
-                <div className={`p-3 rounded-2xl ${isMe ? 'bg-primary text-white rounded-br-none' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-none'}`}>
-                  <p className="text-sm">{msg.message}</p>
-                  <span className={`text-[10px] opacity-70 ${isMe ? 'text-white' : 'text-slate-500'}`}>
-                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
+                <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                    <div className={`p-3 rounded-2xl shadow-sm ${isMe ? 'bg-primary text-white rounded-br-none' : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-none border border-slate-200 dark:border-slate-600'}`}>
+                      <p className="text-sm">{msg.message}</p>
+                    </div>
+                    <span className="text-[10px] text-slate-400 mt-1 px-1">
+                        {msg.senderName || "User"} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                 </div>
               </div>
             </div>
@@ -93,4 +103,3 @@ const Chat = ({ receiverId }) => {
 };
 
 export default Chat;
-

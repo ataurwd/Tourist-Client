@@ -7,7 +7,6 @@ const MessageDashboard = () => {
   const { user } = useContext(FormContext);
   const [conversations, setConversations] = useState([]);
   const [selectedReceiver, setSelectedReceiver] = useState(null);
-  console.log(selectedReceiver);
   useEffect(() => {
     if (!user?.email) return;
 
@@ -36,9 +35,13 @@ const MessageDashboard = () => {
           <button
             key={conv}
             onClick={() => setSelectedReceiver(conv)}
-            className={`w-full p-4 rounded-xl text-left mb-2 transition-colors ${selectedReceiver === conv ? 'bg-primary/10 text-primary' : 'hover:bg-slate-100 dark:hover:bg-slate-700/50'}`}
+            className={`w-full p-4 rounded-xl text-left mb-2 transition-colors flex items-center gap-4 ${selectedReceiver === conv ? 'bg-primary/10 text-primary' : 'hover:bg-slate-100 dark:hover:bg-slate-700/50 '}`}
           >
-            <p className="font-semibold">{conv}</p>
+            <img src={`${conv.photoURL || "https://ui-avatars.com/api/?name=" + conv}&background=random&size=64`} alt={conv.displayName || "User"} className="w-10 h-10 rounded-full mt-2" />
+            <div>
+              <p className="font-semibold">{conv}</p>
+            </div>
+            
           </button>
         ))}
       </div>

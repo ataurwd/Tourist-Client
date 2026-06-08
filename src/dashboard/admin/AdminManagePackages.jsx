@@ -54,7 +54,7 @@ const AdminManagePackages = () => {
         { withCredentials: true },
       );
 
-      console.log("Update response:", response.data);
+
       
       // MongoDB updateOne returns acknowledged:true if successful
       if (response.data.acknowledged) {
