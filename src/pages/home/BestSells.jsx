@@ -48,7 +48,7 @@ const BestSells = () => {
               
               <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-700/50">
                 <span className="text-xs font-semibold text-slate-400">Available Slots</span>
-                <Link to={`/pakage/details/${tour._id}`}>
+                <Link to={`/package/details/${tour._id}`}>
                   <Button variant="primary" size="sm" className="font-bold">
                     View Details
                   </Button>

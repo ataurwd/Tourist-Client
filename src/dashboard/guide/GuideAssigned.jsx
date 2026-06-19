@@ -5,29 +5,32 @@ import { FormContext } from "./../../context/FormData";
 import { toast } from "sonner";
 import StatusBadge from "../../components/shared/StatusBadge";
 import Button from "../../components/shared/Button";
+import useAxios from "../../hooks/useAxios";
 
 const GuideAssigned = () => {
   const { user } = useContext(FormContext);
+  const axiosInstance = useAxios();
 
-  // Fetch guide bookings
+  // Fetch guide bookings secure route (Guide specific)
   const { data: guideAssigner = [], refetch, isLoading } = useQuery({
-    queryKey: ["guide-assigned"],
+    queryKey: ["guide-assigned", user?.email],
     queryFn: async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_URL}/guide-bookings`
-      );
+      const response = await axiosInstance.get(`/guide-bookings/guide`);
       return response.data;
     },
+    enabled: !!user?.email,
   });
 
   // Update booking status function (Reject)
   const handleReject = async (id) => {
     if (!window.confirm("Are you sure? Do you want to reject this booking assignation?")) return;
 
-    {
-      await axios.patch(`${import.meta.env.VITE_URL}/update-status/${id}`);
+    try {
+      await axiosInstance.patch(`/update-status/${id}`);
       toast.success("Rejected Successfully!");
       refetch();
+    } catch (err) {
+      toast.error("Failed to reject assignment");
     }
   };
 
@@ -35,19 +38,17 @@ const GuideAssigned = () => {
   const handelAccept = async (id) => {
     if (!window.confirm("Do you want to accept this booking assignation?")) return;
 
-    {
-      await axios.patch(
-        `${import.meta.env.VITE_URL}/update-accepted/${id}`
-      );
+    try {
+      await axiosInstance.patch(`/update-accepted/${id}`);
       toast.success("Accepted Successfully!");
       refetch();
+    } catch (err) {
+      toast.error("Failed to accept assignment");
     }
   };
 
-  // Filter for tours assigned specifically to this guide
-  const assignedTours = guideAssigner?.filter(
-    (booking) => booking.tourGuide === user?.displayName
-  );
+  // Direct reference without insecure client-side filtering
+  const assignedTours = guideAssigner;
 
   return (
     <div className="space-y-8 animate-fade-in-up">
@@ -121,14 +122,14 @@ const GuideAssigned = () => {
                       ${booking.price}
                     </td>
                     <td className="px-6 py-5">
-                      <StatusBadge status={booking.statas} />
+                      <StatusBadge status={booking.status || booking.statas} />
                     </td>
                     <td className="px-6 py-5 text-center">
                       <div className="flex justify-center items-center gap-2">
                         {/* Accept Button */}
                         <Button
-                          disabled={booking.statas !== "in-review"}
-                          variant={booking.statas === "in-review" ? "primary" : "outline"}
+                          disabled={(booking.status || booking.statas) !== "in-review"}
+                          variant={(booking.status || booking.statas) === "in-review" ? "primary" : "outline"}
                           size="sm"
                           className="font-bold"
                           onClick={() => handelAccept(booking._id)}
@@ -136,7 +137,7 @@ const GuideAssigned = () => {
                           Accept
                         </Button>
                         {/* Reject Button */}
-                        {booking.statas === "in-review" && (
+                        {((booking.status || booking.statas) === "in-review") && (
                           <Button
                             variant="danger"
                             size="sm"

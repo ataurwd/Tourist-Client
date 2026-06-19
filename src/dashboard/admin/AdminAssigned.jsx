@@ -121,10 +121,11 @@ const AdminAssigned = () => {
                 </tr>
               ) : (
                 guideBooking.map((booking) => {
+                  const currentStatus = booking.status || booking.statas;
                   const isActionDisabled =
-                    booking.statas === "in-review" ||
-                    booking.statas === "rejected" ||
-                    booking.statas === "accepted";
+                    currentStatus === "in-review" ||
+                    currentStatus === "rejected" ||
+                    currentStatus === "accepted";
 
                   return (
                     <tr
@@ -144,7 +145,7 @@ const AdminAssigned = () => {
                         ${booking.price}
                       </td>
                       <td className="px-6 py-5">
-                        <StatusBadge status={booking.statas} />
+                        <StatusBadge status={currentStatus} />
                       </td>
                       <td className="px-6 py-5 text-center">
                         <div className="flex justify-center items-center gap-2">
@@ -166,7 +167,7 @@ const AdminAssigned = () => {
                           {/* Cancel Button */}
                           <Button
                             onClick={() => handelCancel(booking._id)}
-                            disabled={booking.statas !== "pending"}
+                            disabled={currentStatus !== "pending"}
                             variant="danger"
                             size="sm"
                             className="font-bold"

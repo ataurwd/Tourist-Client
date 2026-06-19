@@ -8,9 +8,9 @@ import { FormContext } from "../../context/FormData";
 import { Link } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import Button from "../../components/shared/Button";
-import Card from "../../components/shared/Card";
+import SkeletonCard from "../../components/shared/SkeletonCard";
 
-const HomeStory = ({ storyData = [] }) => {
+const HomeStory = ({ storyData = [], isLoading }) => {
   const { user } = useContext(FormContext);
   const [loginUser] = useUser();
 
@@ -27,65 +27,75 @@ const HomeStory = ({ storyData = [] }) => {
 
       {/* Story Section Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-        {storyData.slice(0, 4).map((story) => (
-          <div key={story._id} className="flex flex-col h-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition-all duration-300 hover:-translate-y-1">
-            {/* Swiper slider wrapper */}
-            <div className="relative h-48 w-full group overflow-hidden">
-              <Swiper
-                spaceBetween={0}
-                slidesPerView={1}
-                navigation={true}
-                pagination={{ clickable: true }}
-                className="w-full h-full"
-              >
-                {story.images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                    <img
-                      src={image}
-                      alt={`Story ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-
-            {/* Content area */}
-            <div className="p-5 flex flex-col flex-grow">
-              <span className="text-[10px] font-bold text-primary tracking-widest uppercase mb-1.5 block">
-                Traveler Journal
-              </span>
-              <h3 className="text-md font-bold text-slate-800 dark:text-slate-100 font-display line-clamp-1 mb-2">
-                {story.title}
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 mb-6">
-                {story.storyText}
-              </p>
-
-              {/* Share Trigger */}
-              <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                <FacebookShareButton
-                  url={window.location.href}
-                  quote={story.title}
-                  hashtag="#TrevaTravels"
-                  onShareWindowClose={handleShareSuccess}
-                  className="w-full"
+        {isLoading ? (
+          [1, 2, 3].map((n) => (
+            <SkeletonCard key={n} />
+          ))
+        ) : storyData.length === 0 ? (
+          <div className="col-span-full text-center text-slate-400 py-10 bg-slate-50/50 dark:bg-slate-800/10 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+            No stories shared by travelers yet.
+          </div>
+        ) : (
+          storyData.slice(0, 3).map((story) => (
+            <div key={story._id} className="flex flex-col h-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition-all duration-300 hover:-translate-y-1">
+              {/* Swiper slider wrapper */}
+              <div className="relative h-48 w-full group overflow-hidden">
+                <Swiper
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  navigation={true}
+                  pagination={{ clickable: true }}
+                  className="w-full h-full"
                 >
-                  {user ? (
-                    <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-[#1877F2] hover:bg-[#166FE5] text-white text-xs font-bold rounded-xl transition duration-200 shadow-sm active:scale-95">
-                      <FaFacebook size={16} />
-                      <span>Share Story</span>
-                    </button>
-                  ) : (
-                    <div className="text-[10px] text-center text-slate-400 py-2">
-                      Login to share story
-                    </div>
-                  )}
-                </FacebookShareButton>
+                  {story.images.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <img
+                        src={image}
+                        alt={`Story ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+
+              {/* Content area */}
+              <div className="p-5 flex flex-col flex-grow">
+                <span className="text-[10px] font-bold text-primary tracking-widest uppercase mb-1.5 block">
+                  Traveler Journal
+                </span>
+                <h3 className="text-md font-bold text-slate-800 dark:text-slate-100 font-display line-clamp-1 mb-2">
+                  {story.title}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3 mb-6">
+                  {story.storyText}
+                </p>
+
+                {/* Share Trigger */}
+                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                  <FacebookShareButton
+                    url={window.location.href}
+                    quote={story.title}
+                    hashtag="#TrevaTravels"
+                    onShareWindowClose={handleShareSuccess}
+                    className="w-full"
+                  >
+                    {user ? (
+                      <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-[#1877F2] hover:bg-[#166FE5] text-white text-xs font-bold rounded-xl transition duration-200 shadow-sm active:scale-95">
+                        <FaFacebook size={16} />
+                        <span>Share Story</span>
+                      </button>
+                    ) : (
+                      <div className="text-[10px] text-center text-slate-400 py-2">
+                        Login to share story
+                      </div>
+                    )}
+                  </FacebookShareButton>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Admin / Guide / Tourist control triggers */}

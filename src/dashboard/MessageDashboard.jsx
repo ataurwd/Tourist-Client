@@ -7,15 +7,13 @@ const MessageDashboard = () => {
   const { user } = useContext(FormContext);
   const [conversations, setConversations] = useState([]);
   const [selectedReceiver, setSelectedReceiver] = useState(null);
+
   useEffect(() => {
     if (!user?.email) return;
 
     // Fetch conversation list from backend
     const fetchConversations = async () => {
       try {
-        // Note: This endpoint needs to be implemented in backend if it doesn't exist.
-        // For now, assuming you can fetch a list of users the logged-in user has interacted with.
-        // If no such endpoint exists, you might need to query the messages table by sender/receiver.
         const res = await axios.get(
           `${import.meta.env.VITE_URL}/conversations/${user.email}/`,
           { withCredentials: true },
@@ -27,13 +25,7 @@ const MessageDashboard = () => {
     };
     fetchConversations();
   }, [user?.email]);
-  // find the conversation with admin or not
-  const adminConversation = conversations.filter(
-    (conv) => conv === "ataurrahman24707@gmail.com",
-  );
-  console.log(adminConversation);
 
-  console.log("Conversations:", conversations);
   return (
     <div className="flex h-[calc(100vh-100px)] gap-6 p-6">
       {/* Conversations List */}
@@ -42,22 +34,33 @@ const MessageDashboard = () => {
         {conversations.length === 0 && (
           <p className="text-slate-400">No conversations yet.</p>
         )}
-        {conversations.map((conv) => (
-          <button
-            key={conv}
-            onClick={() => setSelectedReceiver(conv)}
-            className={`w-full p-4 rounded-xl text-left mb-2 transition-colors flex items-center gap-4 ${selectedReceiver === conv ? "bg-primary/10 text-primary" : "hover:bg-slate-100 dark:hover:bg-slate-700/50 "}`}
-          >
-            <img
-              src={`${conv === "ataurrahman24707@gmail.com" ? "https://avatars.githubusercontent.com/u/145910390?v=4" : conv.photoURL || "https://ui-avatars.com/api/?name=" + conv}&background=random&size=64`}
-              alt={conv.displayName || "User"}
-              className="w-10 h-10 rounded-full mt-2"
-            />
-            <div>
-              <p>{conv === "ataurrahman24707@gmail.com" ? "Admin" : conv}</p>
-            </div>
-          </button>
-        ))}
+        {conversations.map((conv) => {
+          const isParticipantAdmin = conv.role === "admin";
+          const displayName = isParticipantAdmin ? "Admin" : (conv.name || conv.email);
+          const photoURL = conv.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&size=64`;
+
+          return (
+            <button
+              key={conv.email}
+              onClick={() => setSelectedReceiver(conv)}
+              className={`w-full p-4 rounded-xl text-left mb-2 transition-colors flex items-center gap-4 ${selectedReceiver?.email === conv.email ? "bg-primary/10 text-primary" : "hover:bg-slate-100 dark:hover:bg-slate-700/50 "}`}
+            >
+              <img
+                src={photoURL}
+                alt={displayName}
+                className="w-10 h-10 rounded-full mt-2 object-cover"
+              />
+              <div>
+                <p className="font-semibold text-sm">{displayName}</p>
+                {isParticipantAdmin && (
+                  <span className="text-[10px] text-primary font-bold uppercase tracking-wider">
+                    Support Staff
+                  </span>
+                )}
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {/* Chat Area */}
@@ -65,10 +68,10 @@ const MessageDashboard = () => {
         {selectedReceiver ? (
           <div className="flex flex-col h-full">
             <h3 className="text-lg font-bold mb-4 font-display pb-4 border-b">
-              Chat with {selectedReceiver}
+              Chat with {selectedReceiver.role === "admin" ? "Admin" : (selectedReceiver.name || selectedReceiver.email)}
             </h3>
             <div className="flex-1 overflow-y-auto">
-              <Chat receiverId={selectedReceiver} />
+              <Chat receiver={selectedReceiver} />
             </div>
           </div>
         ) : (

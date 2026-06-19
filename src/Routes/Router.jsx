@@ -53,7 +53,6 @@ const Router = () => {
         {
           path: "/",
           element: <Home />,
-          loader: () => fetch(`${import.meta.env.VITE_URL}/stories`),
         },
         {
           path: "about-us",
@@ -76,7 +75,7 @@ const Router = () => {
           ),
         },
         {
-          path: "/pakage/details/:id",
+          path: "/package/details/:id",
           element: <PackageDetails />,
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),

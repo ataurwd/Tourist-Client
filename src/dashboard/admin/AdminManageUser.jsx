@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import StatusBadge from "../../components/shared/StatusBadge";
 import Pagination from "../../components/shared/Pagination";
 import { HiSearch } from "react-icons/hi";
+import useAxios from "../../hooks/useAxios";
 
 const AdminManageUser = () => {
   const [product, setProduct] = useState([]);
@@ -12,39 +13,35 @@ const AdminManageUser = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [item, setItem] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
+  const axiosInstance = useAxios();
 
   const numberOfPages = Math.ceil(count / item);
 
   // Fetch all users for filtering and search
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_URL}/users`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProduct(data);
-        setFilteredData(data);
+    axiosInstance.get(`/users`)
+      .then((res) => {
+        setProduct(res.data);
+        setFilteredData(res.data);
       });
-  }, []);
+  }, [axiosInstance]);
 
   // Fetch paginated data
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `${import.meta.env.VITE_URL}/pagination?page=${currentPage}&size=${item}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setFilteredData(data);
+    axiosInstance.get(`/pagination?page=${currentPage}&size=${item}`)
+      .then((res) => {
+        setFilteredData(res.data);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
-  }, [currentPage, item]);
+  }, [currentPage, item, axiosInstance]);
 
   // Fetch total count
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_URL}/totalCount`)
-      .then((res) => res.json())
-      .then((data) => setTotalCount(data.result));
-  }, []);
+    axiosInstance.get(`/totalCount`)
+      .then((res) => setTotalCount(res.data.result));
+  }, [axiosInstance]);
 
   // Handle items per page
   const handleItemsPerPage = (val) => {

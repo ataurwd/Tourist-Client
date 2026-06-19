@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormContext } from "./../context/FormData";
-import useAllUser from "../hooks/useAllUser";
+import useGuides from "../hooks/useGuides";
 import axios from "axios";
 import { toast } from "sonner";
 import useUser from "./../hooks/useUser";
@@ -11,14 +11,12 @@ import Button from "./shared/Button";
 import Title from "./Title";
 import { FiCalendar, FiDollarSign, FiUser } from "react-icons/fi";
 
-const BookingForm = ({ packageName }) => {
+const BookingForm = ({ packageName, packagePrice }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const { user } = useContext(FormContext);
-  const [alluser] = useAllUser();
+  const [guides] = useGuides();
   const navigate = useNavigate();
   const [loginUser] = useUser();
-
-  const guides = alluser.filter((u) => u.role === "guide");
 
   const handelBooking = async (e) => {
     e.preventDefault();
@@ -26,7 +24,7 @@ const BookingForm = ({ packageName }) => {
     const name = user?.displayName;
     const email = user?.email;
     const photo = user?.photoURL;
-    const price = form.price.value;
+    const price = packagePrice; // Use verified price from props
     const date = selectedDate.toLocaleDateString();
     const tourGuide = form.tourGuide.value;
     const formData = {
@@ -36,6 +34,7 @@ const BookingForm = ({ packageName }) => {
       price,
       date,
       tourGuide,
+      status: "pending",
       statas: "pending",
       packageName: packageName,
     };
@@ -104,10 +103,11 @@ const BookingForm = ({ packageName }) => {
             </label>
             <input
               required
+              readOnly
               type="number"
               name="price"
-              placeholder="Enter price"
-              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all"
+              value={packagePrice || ""}
+              className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none text-sm text-slate-500 dark:text-slate-400 cursor-not-allowed font-semibold"
             />
           </div>
 

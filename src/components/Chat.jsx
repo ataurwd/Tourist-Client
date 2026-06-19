@@ -3,9 +3,8 @@ import socket from '../socket';
 import { FormContext } from '../context/FormData';
 import axios from 'axios';
 import { FiSend } from 'react-icons/fi';
-import useAllUser from '../hooks/useAllUser';
 
-const Chat = ({ receiverId }) => {
+const Chat = ({ receiver }) => {
   const { user } = useContext(FormContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -13,11 +12,8 @@ const Chat = ({ receiverId }) => {
   const [typingUser, setTypingUser] = useState("");
   const typingTimeout = useRef(null);
 
+  const receiverId = receiver?.email;
   const roomId = [user?.email, receiverId].sort().join('_');
-  const [alluser] = useAllUser();
-
-  // Find the receiver's details to get their name/photo
-  const receiverData = alluser.find(u => u.email === receiverId);
 
   useEffect(() => {
     if (!user?.email || !receiverId) return;
@@ -77,8 +73,8 @@ const Chat = ({ receiverId }) => {
       senderName: user.displayName || "User",
       senderPhoto: user.photoURL || "/default-profile.png",
       receiver: receiverId,
-      receiverName: receiverData?.name || "Receiver",
-      receiverPhoto: receiverData?.photo || "/default-profile.png",
+      receiverName: receiver?.name || "Receiver",
+      receiverPhoto: receiver?.photo || "/default-profile.png",
       message: newMessage,
       timestamp: new Date()
     };

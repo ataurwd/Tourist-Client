@@ -74,7 +74,7 @@ console.log(packageItem)
                     {tour.aboutTour}
                   </p>
                   <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-auto">
-                    <Link to={`/pakage/details/${tour._id}`} className="w-full">
+                    <Link to={`/package/details/${tour._id}`} className="w-full">
                       <Button variant="outline" size="sm" className="w-full font-bold">
                         View Details
                       </Button>

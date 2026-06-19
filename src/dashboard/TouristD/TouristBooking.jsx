@@ -177,7 +177,7 @@ const TouristBooking = () => {
                       ${booking.price}
                     </td>
                     <td className="px-6 py-5">
-                      <StatusBadge status={booking.statas} />
+                      <StatusBadge status={booking.status || booking.statas} />
                     </td>
                     <td className="px-6 py-5 text-center">
                       <div className="flex justify-center items-center gap-2">
@@ -185,7 +185,7 @@ const TouristBooking = () => {
                         <Link
                           to={`/dashboard/tourist-bookings/${booking._id}`}
                           className={`${
-                            booking.statas !== "pending"
+                            (booking.status || booking.statas) !== "pending"
                               ? "pointer-events-none opacity-40"
                               : ""
                           }`}
@@ -193,7 +193,7 @@ const TouristBooking = () => {
                           <Button
                             variant="primary"
                             size="sm"
-                            disabled={booking.statas !== "pending"}
+                            disabled={(booking.status || booking.statas) !== "pending"}
                             className="font-bold"
                           >
                             Pay
@@ -204,7 +204,7 @@ const TouristBooking = () => {
                           variant="danger"
                           size="sm"
                           onClick={() => handleCancel(booking._id)}
-                          disabled={booking.statas !== "pending"}
+                          disabled={(booking.status || booking.statas) !== "pending"}
                           className="font-bold"
                         >
                           Cancel

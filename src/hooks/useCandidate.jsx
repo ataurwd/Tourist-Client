@@ -1,16 +1,17 @@
-import { useQueries, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import useAxios from "./useAxios";
 
 const useCandidate = () => {
-  const { data: candidate = [], refetch } = useQuery({
-    querykey: ["candidate"],
+  const axiosInstance = useAxios();
+  const { data: candidate = [], refetch, isLoading } = useQuery({
+    queryKey: ["candidate"],
     queryFn: async () => {
-      const response = await axios.get(`${import.meta.env.VITE_URL}/guides`);
+      const response = await axiosInstance.get(`/guides`);
       return response.data;
     },
   });
-  return [candidate, refetch];
+  return [candidate, refetch, isLoading];
 };
 
 export default useCandidate;

@@ -3,8 +3,10 @@ import axios from "axios";
 import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import { FiUpload, FiImage, FiX } from "react-icons/fi";
+import useAxios from "../../hooks/useAxios";
 
 const AddPackage = () => {
+  const axiosInstance = useAxios();
   const [packageData, setPackageData] = useState({
     packageName: "",
     aboutTour: "",
@@ -91,8 +93,8 @@ const AddPackage = () => {
     };
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_URL}/add-package`,
+      const response = await axiosInstance.post(
+        `/add-package`,
         packageToSubmit
       );
       if (response.data.insertedId) {

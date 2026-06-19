@@ -3,10 +3,12 @@ import axios from "axios";
 import { toast } from "sonner";
 import { FormContext } from "../../context/FormData";
 import Button from "../../components/shared/Button";
+import useAxios from "../../hooks/useAxios";
 
 const JoinAsGuild = () => {
   const { user } = useContext(FormContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const axiosInstance = useAxios();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ const JoinAsGuild = () => {
     const formData = { titel, reason, cvLink, status, email: user.email };
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_URL}/guide`, formData);
+      const res = await axiosInstance.post(`/guide`, formData);
       if (res.data.insertedId) {
         toast.success("Application Submitted! We will review it soon.");
         form.reset();

@@ -1,15 +1,13 @@
 import React from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import Title from "./Title";
-import useAllUser from "../hooks/useAllUser";
+import useGuides from "../hooks/useGuides";
 import BookingForm from "./BookingForm";
 import Button from "./shared/Button";
 
 const PackageDetails = () => {
   const data = useLoaderData();
-  const [alluser] = useAllUser();
-
-  const guides = alluser.filter((u) => u.role === "guide");
+  const [guides] = useGuides();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
@@ -122,7 +120,7 @@ const PackageDetails = () => {
 
       {/* Form Slot */}
       <div className="my-16 max-w-4xl mx-auto">
-        <BookingForm packageName={data.packageName} />
+        <BookingForm packageName={data.packageName} packagePrice={data.price} />
       </div>
     </div>
   );

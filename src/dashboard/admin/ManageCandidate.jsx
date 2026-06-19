@@ -5,18 +5,22 @@ import { toast } from "sonner";
 import Button from "../../components/shared/Button";
 import StatusBadge from "../../components/shared/StatusBadge";
 import { FiEye } from "react-icons/fi";
+import useAxios from "../../hooks/useAxios";
 
 const ManageCandidate = () => {
   const [candidate, refetch, isLoading] = useCandidate();
+  const axiosInstance = useAxios();
 
   // to update user role
   const handleAccept = async (email) => {
     if (!window.confirm(`Approve this application and update ${email} to Tour Guide?`)) return;
 
-    {
-      await axios.patch(`${import.meta.env.VITE_URL}/update-guide/${email}`);
+    try {
+      await axiosInstance.patch(`/update-guide/${email}`);
       toast.success("User role has been updated to guide.");
       refetch();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update role");
     }
   };
 
@@ -24,12 +28,14 @@ const ManageCandidate = () => {
   const handleReject = async (id) => {
     if (!window.confirm("Do you want to decline this Tour Guide application?")) return;
 
-    {
-      const res = await axios.delete(`${import.meta.env.VITE_URL}/guide/${id}`);
+    try {
+      const res = await axiosInstance.delete(`/guide/${id}`);
       if (res.data.deletedCount) {
         toast.success("Application Rejected Successfully!");
         refetch();
       }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to reject application");
     }
   };
 
