@@ -15,12 +15,16 @@ const LiveChatWidget = ({ adminEmail }) => {
           <FiMessageCircle size={28} />
         </button>
       ) : (
-        <div className="w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-fade-in-up">
-          <div className="flex justify-between items-center p-4 bg-primary text-white">
+        <div className="w-80 h-[450px] flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-fade-in-up">
+          <div className="flex justify-between items-center p-4 bg-primary text-white shrink-0">
             <h4 className="font-bold">Live Chat (Admin)</h4>
-            <button onClick={() => setIsOpen(false)}><FiX /></button>
+            <button onClick={() => setIsOpen(false)} className="hover:opacity-80 transition-opacity">
+              <FiX size={18} />
+            </button>
           </div>
-          <Chat receiverId={adminEmail} />
+          <div className="flex-1 min-h-0">
+            <Chat receiver={{ email: adminEmail, name: "Admin" }} />
+          </div>
         </div>
       )}
     </div>

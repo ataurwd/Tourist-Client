@@ -12,7 +12,6 @@ import SkeletonCard from "../../components/shared/SkeletonCard";
 
 const TravelGuide = () => {
   const [packageItem, , isPackagesLoading] = usePackage();
-console.log(packageItem)
   const { data: guideData = [], isLoading: isGuidesLoading } = useQuery({
     queryKey: ["allGuidesOnly"],
     queryFn: async () => {
