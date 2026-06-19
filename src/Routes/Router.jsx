@@ -1,50 +1,72 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./../layout/Layout";
-import Loading from "../components/Loading";
 import { useAppLoading } from "../context/AppLoading";
-import Home from "../pages/home/Home";
-import Login from "../user/Login";
-import Register from "../user/Register";
+import Loading from "../components/Loading";
+
+// ── Eagerly load only structural layout components ──────────────────────────
+import Layout from "./../layout/Layout";
 import Dashboard from "./../layout/Dashboard";
-import About from "../pages/about/About";
-import Community from "./../pages/community/Community";
-import Trips from "./../pages/trips/Trips";
-import TouristAddStory from "../dashboard/TouristD/TouristAddStory";
-import TouristProfile from "./../dashboard/TouristD/TouristProfile";
-import TouristBooking from "./../dashboard/TouristD/TouristBooking";
-import TouristStories from "./../dashboard/TouristD/TouristStories";
-import JoinAsGuild from "../dashboard/TouristD/JoinAsGuild";
-import UserRoute from "./UserRoute";
-import GuideProfile from "../dashboard/guide/GuideProfile";
-import PrivateRoute from "./PrivateRoute";
-import GuideAssigned from "./../dashboard/guide/GuideAssigned";
-import GuideAddStorie from "./../dashboard/guide/GuideAddStorie";
-import GuideMangeStory from "./../dashboard/guide/GuideMangeStory";
-import GuideRoute from "./GuideRoute";
-import UpateStorie from "../components/UpateStorie";
-import AdminProfile from "./../dashboard/admin/AdminProfile";
-import AddPackage from "./../dashboard/admin/AddPackage";
-import AdminAddStories from "./../dashboard/admin/AdminAddStories";
-import AdminAssigned from "./../dashboard/admin/AdminAssigned";
-import AdminManageUser from "./../dashboard/admin/AdminManageUser";
-import AdminStories from "./../dashboard/admin/AdminStories";
-import AdminAllStories from "./../dashboard/admin/AdminAllStories";
-import ManageCandidate from "./../dashboard/admin/ManageCandidate";
-import AdminManagePackages from "./../dashboard/admin/AdminManagePackages";
-import AdminRoute from "./AdminRoute";
-import PackageDetails from "../../src/components/PackageDetails";
-import GuideDetails from "../../src/components/GuideDetails";
-import StripePayment from "./../components/StripePayment";
 import ErrorPage from "../components/ErrorPage";
-import Contact from "../pages/contact/Contact";
-import MessageDashboard from "../dashboard/MessageDashboard";
-import AdminOverview from "../dashboard/admin/AdminOverview";
-import TouristOverview from "../dashboard/TouristD/TouristOverview";
-import GuideAddPackage from "../dashboard/guide/GuideAddPackage";
-import GuideManagePackages from "../dashboard/guide/GuideManagePackages";
-import GuidePackageBookings from "../dashboard/guide/GuidePackageBookings";
-import AdminManageGuidePackages from "../dashboard/admin/AdminManageGuidePackages";
+import PrivateRoute from "./PrivateRoute";
+import UserRoute from "./UserRoute";
+import GuideRoute from "./GuideRoute";
+import AdminRoute from "./AdminRoute";
+
+// ── Lazy load every page / dashboard component ───────────────────────────────
+const Home                    = lazy(() => import("../pages/home/Home"));
+const Login                   = lazy(() => import("../user/Login"));
+const Register                = lazy(() => import("../user/Register"));
+const About                   = lazy(() => import("../pages/about/About"));
+const Community               = lazy(() => import("./../pages/community/Community"));
+const Trips                   = lazy(() => import("./../pages/trips/Trips"));
+const Contact                 = lazy(() => import("../pages/contact/Contact"));
+const PackageDetails          = lazy(() => import("../../src/components/PackageDetails"));
+const GuideDetails            = lazy(() => import("../../src/components/GuideDetails"));
+const StripePayment           = lazy(() => import("./../components/StripePayment"));
+
+// Tourist dashboard
+const TouristOverview         = lazy(() => import("../dashboard/TouristD/TouristOverview"));
+const TouristAddStory         = lazy(() => import("../dashboard/TouristD/TouristAddStory"));
+const TouristProfile          = lazy(() => import("./../dashboard/TouristD/TouristProfile"));
+const TouristBooking          = lazy(() => import("./../dashboard/TouristD/TouristBooking"));
+const TouristStories          = lazy(() => import("./../dashboard/TouristD/TouristStories"));
+const JoinAsGuild             = lazy(() => import("../dashboard/TouristD/JoinAsGuild"));
+
+// Guide dashboard
+const GuideProfile            = lazy(() => import("../dashboard/guide/GuideProfile"));
+const GuideAssigned           = lazy(() => import("./../dashboard/guide/GuideAssigned"));
+const GuideAddStorie          = lazy(() => import("./../dashboard/guide/GuideAddStorie"));
+const GuideMangeStory         = lazy(() => import("./../dashboard/guide/GuideMangeStory"));
+const GuideAddPackage         = lazy(() => import("../dashboard/guide/GuideAddPackage"));
+const GuideManagePackages     = lazy(() => import("../dashboard/guide/GuideManagePackages"));
+const GuidePackageBookings    = lazy(() => import("../dashboard/guide/GuidePackageBookings"));
+const UpateStorie             = lazy(() => import("../components/UpateStorie"));
+
+// Admin dashboard
+const AdminOverview           = lazy(() => import("../dashboard/admin/AdminOverview"));
+const AdminProfile            = lazy(() => import("./../dashboard/admin/AdminProfile"));
+const AddPackage              = lazy(() => import("./../dashboard/admin/AddPackage"));
+const AdminAddStories         = lazy(() => import("./../dashboard/admin/AdminAddStories"));
+const AdminAssigned           = lazy(() => import("./../dashboard/admin/AdminAssigned"));
+const AdminManageUser         = lazy(() => import("./../dashboard/admin/AdminManageUser"));
+const AdminStories            = lazy(() => import("./../dashboard/admin/AdminStories"));
+const AdminAllStories         = lazy(() => import("./../dashboard/admin/AdminAllStories"));
+const ManageCandidate         = lazy(() => import("./../dashboard/admin/ManageCandidate"));
+const AdminManagePackages     = lazy(() => import("./../dashboard/admin/AdminManagePackages"));
+const AdminManageGuidePackages = lazy(() => import("../dashboard/admin/AdminManageGuidePackages"));
+const MessageDashboard        = lazy(() => import("../dashboard/MessageDashboard"));
+
+// ── Fallback spinner shown while a lazy chunk loads ──────────────────────────
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <span className="loading loading-spinner loading-lg text-primary" />
+  </div>
+);
+
+// Convenience wrapper so each route doesn't repeat Suspense boilerplate
+const Lazy = ({ children }) => (
+  <Suspense fallback={<PageLoader />}>{children}</Suspense>
+);
 
 const Router = () => {
   const { isAppLoading } = useAppLoading();
@@ -57,47 +79,47 @@ const Router = () => {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Lazy><Home /></Lazy>,
         },
         {
           path: "about-us",
-          element: <About />,
+          element: <Lazy><About /></Lazy>,
         },
         {
           path: "community",
-          element: <Community />,
+          element: <Lazy><Community /></Lazy>,
         },
         {
           path: "contact",
-          element: <Contact />,
+          element: <Lazy><Contact /></Lazy>,
         },
         {
           path: "trips",
           element: (
             <PrivateRoute>
-              <Trips />
+              <Lazy><Trips /></Lazy>
             </PrivateRoute>
           ),
         },
         {
           path: "/package/details/:id",
-          element: <PackageDetails />,
+          element: <Lazy><PackageDetails /></Lazy>,
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/package/${params.id}`),
         },
         {
           path: "/guide/:id",
-          element: <GuideDetails />,
+          element: <Lazy><GuideDetails /></Lazy>,
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/users/${params.id}`),
         },
         {
           path: "login",
-          element: <Login />,
+          element: <Lazy><Login /></Lazy>,
         },
         {
           path: "register",
-          element: <Register />,
+          element: <Lazy><Register /></Lazy>,
         },
       ],
     },
@@ -110,221 +132,121 @@ const Router = () => {
         </PrivateRoute>
       ),
       children: [
+        // ── Tourist ────────────────────────────────────────────────────────
         {
           path: "tourist-stories",
-          element: (
-            <UserRoute>
-              <TouristStories />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><TouristStories /></Lazy></UserRoute>,
         },
         {
           path: "tourist-overview",
-          element: (
-            <UserRoute>
-              <TouristOverview />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><TouristOverview /></Lazy></UserRoute>,
         },
         {
           path: "tourist-profile",
-          element: (
-            <UserRoute>
-              <TouristProfile />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><TouristProfile /></Lazy></UserRoute>,
         },
         {
           path: "tourist-bookings",
-          element: (
-            <UserRoute>
-              <TouristBooking />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><TouristBooking /></Lazy></UserRoute>,
         },
         {
           path: "tourist-add-story",
-          element: (
-            <UserRoute>
-              <TouristAddStory />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><TouristAddStory /></Lazy></UserRoute>,
         },
         {
           path: "tourist-guild",
-          element: (
-            <UserRoute>
-              <JoinAsGuild />
-            </UserRoute>
-          ),
+          element: <UserRoute><Lazy><JoinAsGuild /></Lazy></UserRoute>,
         },
-
         {
           path: "messages",
-          element: (
-            <PrivateRoute>
-              <MessageDashboard />
-            </PrivateRoute>
-          ),
+          element: <PrivateRoute><Lazy><MessageDashboard /></Lazy></PrivateRoute>,
         },
 
-        // for guide dashboard menu
+        // ── Guide ──────────────────────────────────────────────────────────
         {
           path: "guide-profile",
-          element: (
-            <GuideRoute>
-              <GuideProfile />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideProfile /></Lazy></GuideRoute>,
         },
         {
           path: "guide-assigned",
-          element: (
-            <GuideRoute>
-              <GuideAssigned />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideAssigned /></Lazy></GuideRoute>,
         },
         {
           path: "guide-add-story",
-          element: (
-            <GuideRoute>
-              <GuideAddStorie />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideAddStorie /></Lazy></GuideRoute>,
         },
         {
           path: "guide-manage-story",
-          element: (
-            <GuideRoute>
-              <GuideMangeStory />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideMangeStory /></Lazy></GuideRoute>,
         },
         {
           path: "guide-add-package",
-          element: (
-            <GuideRoute>
-              <GuideAddPackage />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideAddPackage /></Lazy></GuideRoute>,
         },
         {
           path: "guide-manage-packages",
-          element: (
-            <GuideRoute>
-              <GuideManagePackages />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuideManagePackages /></Lazy></GuideRoute>,
         },
         {
           path: "guide-package-bookings",
-          element: (
-            <GuideRoute>
-              <GuidePackageBookings />
-            </GuideRoute>
-          ),
+          element: <GuideRoute><Lazy><GuidePackageBookings /></Lazy></GuideRoute>,
         },
         {
           path: "update/:id",
-          element: <UpateStorie />,
+          element: <Lazy><UpateStorie /></Lazy>,
           loader: ({ params }) =>
             `${import.meta.env.VITE_URL}/stories/${params.id}`,
         },
 
-        // for admin route
+        // ── Admin ──────────────────────────────────────────────────────────
         {
           path: "admin-profile",
-          element: (
-            <AdminRoute>
-              <AdminProfile />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminProfile /></Lazy></AdminRoute>,
         },
         {
           path: "overview",
-          element: (
-            <AdminRoute>
-              <AdminOverview />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminOverview /></Lazy></AdminRoute>,
         },
         {
           path: "admin-add-package",
-          element: (
-            <AdminRoute>
-              <AddPackage />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AddPackage /></Lazy></AdminRoute>,
         },
         {
           path: "admin-manage-packages",
-          element: (
-            <AdminRoute>
-              <AdminManagePackages />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminManagePackages /></Lazy></AdminRoute>,
         },
         {
           path: "admin-manage-guide-packages",
-          element: (
-            <AdminRoute>
-              <AdminManageGuidePackages />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminManageGuidePackages /></Lazy></AdminRoute>,
         },
         {
           path: "admin-add-story",
-          element: (
-            <AdminRoute>
-              <AdminAddStories />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminAddStories /></Lazy></AdminRoute>,
         },
         {
           path: "admin-assigned",
-          element: (
-            <AdminRoute>
-              <AdminAssigned />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminAssigned /></Lazy></AdminRoute>,
         },
         {
           path: "admin-manage-user",
-          element: (
-            <AdminRoute>
-              <AdminManageUser />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminManageUser /></Lazy></AdminRoute>,
           loader: () => fetch(`${import.meta.env.VITE_URL}/users`),
         },
         {
           path: "admin-story",
-          element: (
-            <AdminRoute>
-              <AdminStories />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminStories /></Lazy></AdminRoute>,
         },
         {
           path: "admin-all-stories",
-          element: (
-            <AdminRoute>
-              <AdminAllStories />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><AdminAllStories /></Lazy></AdminRoute>,
         },
         {
           path: "admin-manage-candidate",
-          element: (
-            <AdminRoute>
-              <ManageCandidate />
-            </AdminRoute>
-          ),
+          element: <AdminRoute><Lazy><ManageCandidate /></Lazy></AdminRoute>,
         },
         {
           path: "/dashboard/tourist-bookings/:id",
-          element: <StripePayment />,
+          element: <Lazy><StripePayment /></Lazy>,
           loader: ({ params }) =>
             fetch(`${import.meta.env.VITE_URL}/guide-bookings/${params.id}`),
         },
