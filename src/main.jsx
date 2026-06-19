@@ -6,6 +6,7 @@ import FormData from "./context/FormData";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Theme from "./context/Theme";
 import { AppLoadingProvider } from "./context/AppLoading";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,14 +25,16 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Theme>
-        <FormData>
-          <AppLoadingProvider>
-            <Router />
-          </AppLoadingProvider>
-        </FormData>
-      </Theme>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <Theme>
+          <FormData>
+            <AppLoadingProvider>
+              <Router />
+            </AppLoadingProvider>
+          </FormData>
+        </Theme>
+      </QueryClientProvider>
+    </HelmetProvider>
   </StrictMode>,
 );

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { FormContext } from "./../context/FormData";
 import axios from "axios";
 import Button from "../components/shared/Button";
+import SEO from "../components/SEO";
 
 const Login = () => {
   const { googleLogin, loginUser, user, setUser } = useContext(FormContext);
@@ -68,6 +69,7 @@ const Login = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 animate-fade-in-up">
+      <SEO title="Sign In" noindex={true} urlPath="/login" />
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white dark:bg-slate-800 rounded-3xl shadow-premium overflow-hidden border border-slate-100 dark:border-slate-700/50">
         
         {/* Left Decorative Panel */}

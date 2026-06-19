@@ -4,13 +4,38 @@ import { FiMail, FiShield, FiMessageSquare } from "react-icons/fi";
 import Button from "./shared/Button";
 import Modal from "./shared/Modal";
 import Chat from "./Chat";
+import SEO from "./SEO";
 
 const GuideDetails = () => {
   const data = useLoaderData();
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  // Person schema for guide details indexing
+  const guideSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `https://treva-travel.web.app/guide/${data?._id}#person`,
+    "name": data?.name,
+    "email": data?.email,
+    "image": data?.photo,
+    "jobTitle": "Certified Tour Guide",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Treva Travel",
+      "url": "https://treva-travel.web.app"
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
+      <SEO 
+        title={`Tour Guide: ${data?.name || "Profile"}`}
+        description={`Meet certified tour guide ${data?.name || "our expert guide"}. Read bio, get in touch, and book tour package guides with Treva.`}
+        image={data?.photo}
+        urlPath={`/guide/${data?._id}`}
+        keywords={`${data?.name || "tour guide"}, travel guide, local guide, booking`}
+        schema={guideSchema}
+      />
       {/* Profile Hero Card */}
       <div className="relative bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-3xl shadow-premium overflow-hidden">
         {/* Cover Gradient */}

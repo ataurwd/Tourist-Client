@@ -1,0 +1,24 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+
+# Allow crawling of public content
+Allow: /
+Allow: /about-us
+Allow: /community
+Allow: /contact
+Allow: /package/details/*
+Allow: /guide/*
+
+# Disallow access to dashboard elements (save crawl budget and protect privacy)
+Disallow: /dashboard/
+Disallow: /dashboard/*
+
+# Disallow login and registration forms
+Disallow: /login
+Disallow: /register
+
+# Host
+Host: https://treva-travel.web.app
+
+# Sitemap
+Sitemap: https://treva-travel.web.app/sitemap.xml

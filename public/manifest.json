@@ -1,0 +1,23 @@
+{
+  "short_name": "Treva",
+  "name": "Treva — Premium Travel Experience",
+  "icons": [
+    {
+      "src": "https://i.ibb.co.com/FqKW885X/Screenshot-at-Jun-05-10-29-11-removebg-preview.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co.com/FqKW885X/Screenshot-at-Jun-05-10-29-11-removebg-preview.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "display": "standalone",
+  "orientation": "portrait"
+}

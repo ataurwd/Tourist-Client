@@ -4,13 +4,56 @@ import Title from "./Title";
 import useGuides from "../hooks/useGuides";
 import BookingForm from "./BookingForm";
 import Button from "./shared/Button";
+import SEO from "./SEO";
 
 const PackageDetails = () => {
   const data = useLoaderData();
   const [guides] = useGuides();
 
+  // Dynamic Product schema combined with FAQ itinerary schema for rich results
+  const packageSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": `https://treva-travel.web.app/package/details/${data?._id}#product`,
+        "name": data?.packageName,
+        "description": data?.aboutTour,
+        "image": data?.images,
+        "sku": data?._id,
+        "offers": {
+          "@type": "Offer",
+          "price": data?.price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": `https://treva-travel.web.app/package/details/${data?._id}`
+        }
+      },
+      data?.faqs && data.faqs.length > 0 ? {
+        "@type": "FAQPage",
+        "@id": `https://treva-travel.web.app/package/details/${data?._id}#faq`,
+        "mainEntity": data.faqs.map((faq, idx) => ({
+          "@type": "Question",
+          "name": `Day ${idx + 1}: ${faq.question}`,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer
+          }
+        }))
+      } : null
+    ].filter(Boolean)
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
+      <SEO 
+        title={`${data?.packageName || "Tour Package Details"}`}
+        description={data?.aboutTour?.slice(0, 160) || "Check out details for this tour package. Book your local guide today."}
+        image={data?.images?.[0]}
+        urlPath={`/package/details/${data?._id}`}
+        keywords={`${data?.packageName}, tour itinerary, travel guide, book tour, premium trip`}
+        schema={packageSchema}
+      />
       {/* Immersive Photo Grid Gallery */}
       <div className="grid md:grid-cols-3 gap-6 rounded-3xl overflow-hidden shadow-premium">
         {/* Large Feature Column */}

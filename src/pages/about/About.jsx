@@ -3,6 +3,7 @@ import Title from "../../components/Title";
 import Button from "../../components/shared/Button";
 import { FaGithub, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { SiReact, SiTailwindcss, SiNodedotjs, SiMongodb, SiExpress, SiJavascript, SiFirebase, SiGit } from "react-icons/si";
+import SEO from "../../components/SEO";
 
 const skills = [
   { icon: SiReact, label: "React.js", color: "text-cyan-400" },
@@ -36,6 +37,12 @@ const projects = [
 const About = () => {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 animate-fade-in-up">
+      <SEO 
+        title="About Us & Platform Developers"
+        description="Learn more about Treva, our vision to elevate travel experiences, and meet the development team behind our premium booking engine."
+        urlPath="/about-us"
+        keywords="about treva, travel agency team, developers, ataur rahman, travel web app"
+      />
 
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 p-8 md:p-14">

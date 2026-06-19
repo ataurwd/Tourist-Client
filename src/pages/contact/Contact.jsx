@@ -3,9 +3,49 @@ import Title from "../../components/Title";
 import Button from "../../components/shared/Button";
 import { FiMapPin, FiPhone, FiMail, FiSend } from "react-icons/fi";
 import { toast } from "sonner";
+import SEO from "../../components/SEO";
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // LocalBusiness schema for rich contact card results
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Treva Travel Ltd.",
+    "image": "https://i.ibb.co.com/FqKW885X/Screenshot-at-Jun-05-10-29-11-removebg-preview.png",
+    "@id": "https://treva-travel.web.app/#localbusiness",
+    "url": "https://treva-travel.web.app/contact",
+    "telephone": "+880 1234 567 890",
+    "email": "hello@treva.travel",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "123 Travel Avenue",
+      "addressLocality": "Dhaka",
+      "addressRegion": "Dhaka Division",
+      "postalCode": "1212",
+      "addressCountry": "BD"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 23.794,
+      "longitude": 90.404
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,6 +81,13 @@ const Contact = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
+      <SEO 
+        title="Contact Us — Customer Service & Support"
+        description="Have questions or need assistance with your booking? Contact the Treva Travel concierge team. We are available 24/7."
+        urlPath="/contact"
+        keywords="contact treva, customer service, support email, phone number, address, travel agency"
+        schema={contactSchema}
+      />
       <Title
         heading="Get in Touch"
         text="Have a question, partnership inquiry, or feedback? Reach out to us — our travel concierge team responds within 24 hours."

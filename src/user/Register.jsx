@@ -7,6 +7,7 @@ import { updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 import axios from "axios";
 import Button from "../components/shared/Button";
+import SEO from "../components/SEO";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -77,6 +78,7 @@ const Register = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 animate-fade-in-up">
+      <SEO title="Sign Up" noindex={true} urlPath="/register" />
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white dark:bg-slate-800 rounded-3xl shadow-premium overflow-hidden border border-slate-100 dark:border-slate-700/50">
         
         {/* Left Decorative Panel */}

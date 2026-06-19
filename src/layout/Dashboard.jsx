@@ -10,6 +10,7 @@ import GuideMenu from "../dashboard/guide/GuideMenu";
 import useUser from "../hooks/useUser";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { Toaster } from "sonner";
+import SEO from "../components/SEO";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -22,6 +23,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+      <SEO title="Dashboard" noindex={true} urlPath="/dashboard" />
       
       {/* Mobile Header Toggle */}
       <div className="fixed top-0 left-0 w-full bg-slate-900 border-b border-slate-800 h-16 flex items-center justify-between px-4 z-40 md:hidden">

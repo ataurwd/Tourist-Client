@@ -12,6 +12,7 @@ import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
 import Loading from "./../../components/Loading";
 import SkeletonCard from "../../components/shared/SkeletonCard";
+import SEO from "../../components/SEO";
 
 const Community = () => {
   const [allStorie, refetch, isLoading] = useAllStories();
@@ -24,6 +25,12 @@ const Community = () => {
   if (isLoading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <SEO 
+          title="Travel Community Stories"
+          description="Read and share inspiring travel stories, journals, and adventures shared by members of the Treva travel community."
+          urlPath="/community"
+          keywords="travel stories, travel blogs, community journals, travelers, travel diaries"
+        />
         <Title heading="Community Stories" text="Loading traveler experiences..." />
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 mt-10">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
@@ -36,6 +43,12 @@ const Community = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
+      <SEO 
+        title="Travel Community Stories"
+        description="Read and share inspiring travel stories, journals, and adventures shared by members of the Treva travel community."
+        urlPath="/community"
+        keywords="travel stories, travel blogs, community journals, travelers, travel diaries"
+      />
       <Title
         heading="Community Stories"
         text="Discover stories shared by travelers and guides from around the world. Get inspired by their experiences and share your own adventure."

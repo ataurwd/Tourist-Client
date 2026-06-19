@@ -7,6 +7,7 @@ import Card from "../../components/shared/Card";
 import Button from "../../components/shared/Button";
 import SkeletonCard from "../../components/shared/SkeletonCard";
 import { HiSearch } from "react-icons/hi";
+import SEO from "../../components/SEO";
 
 const Trips = () => {
   const secureAxios = useAxios();
@@ -38,6 +39,7 @@ const Trips = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <SEO title="Explore Trips" noindex={true} urlPath="/trips" />
       <Title
         heading="Explore All Trip Packages"
         text="Discover the perfect trip tailored to your interests! Filter and sort our curated itineraries designed to suit every traveler."
