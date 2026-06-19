@@ -29,6 +29,7 @@ import AdminAddStories from "./../dashboard/admin/AdminAddStories";
 import AdminAssigned from "./../dashboard/admin/AdminAssigned";
 import AdminManageUser from "./../dashboard/admin/AdminManageUser";
 import AdminStories from "./../dashboard/admin/AdminStories";
+import AdminAllStories from "./../dashboard/admin/AdminAllStories";
 import ManageCandidate from "./../dashboard/admin/ManageCandidate";
 import AdminManagePackages from "./../dashboard/admin/AdminManagePackages";
 import AdminRoute from "./AdminRoute";
@@ -266,6 +267,14 @@ const Router = () => {
           element: (
             <AdminRoute>
               <AdminStories />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "admin-all-stories",
+          element: (
+            <AdminRoute>
+              <AdminAllStories />
             </AdminRoute>
           ),
         },
