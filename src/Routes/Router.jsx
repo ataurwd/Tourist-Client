@@ -41,6 +41,10 @@ import Contact from "../pages/contact/Contact";
 import MessageDashboard from "../dashboard/MessageDashboard";
 import AdminOverview from "../dashboard/admin/AdminOverview";
 import TouristOverview from "../dashboard/TouristD/TouristOverview";
+import GuideAddPackage from "../dashboard/guide/GuideAddPackage";
+import GuideManagePackages from "../dashboard/guide/GuideManagePackages";
+import GuidePackageBookings from "../dashboard/guide/GuidePackageBookings";
+import AdminManageGuidePackages from "../dashboard/admin/AdminManageGuidePackages";
 
 const Router = () => {
   const { isAppLoading } = useAppLoading();
@@ -198,6 +202,30 @@ const Router = () => {
           ),
         },
         {
+          path: "guide-add-package",
+          element: (
+            <GuideRoute>
+              <GuideAddPackage />
+            </GuideRoute>
+          ),
+        },
+        {
+          path: "guide-manage-packages",
+          element: (
+            <GuideRoute>
+              <GuideManagePackages />
+            </GuideRoute>
+          ),
+        },
+        {
+          path: "guide-package-bookings",
+          element: (
+            <GuideRoute>
+              <GuidePackageBookings />
+            </GuideRoute>
+          ),
+        },
+        {
           path: "update/:id",
           element: <UpateStorie />,
           loader: ({ params }) =>
@@ -234,6 +262,14 @@ const Router = () => {
           element: (
             <AdminRoute>
               <AdminManagePackages />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: "admin-manage-guide-packages",
+          element: (
+            <AdminRoute>
+              <AdminManageGuidePackages />
             </AdminRoute>
           ),
         },

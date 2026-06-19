@@ -11,7 +11,7 @@ import Button from "./shared/Button";
 import Title from "./Title";
 import { FiCalendar, FiDollarSign, FiUser } from "react-icons/fi";
 
-const BookingForm = ({ packageName, packagePrice }) => {
+const BookingForm = ({ packageName, packagePrice, creatorRole, tourGuide: lockedGuide }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const { user } = useContext(FormContext);
   const [guides] = useGuides();
@@ -26,7 +26,10 @@ const BookingForm = ({ packageName, packagePrice }) => {
     const photo = user?.photoURL;
     const price = packagePrice; // Use verified price from props
     const date = selectedDate.toLocaleDateString();
-    const tourGuide = form.tourGuide.value;
+    
+    // Auto-assign the guide creator if the package was guide-created
+    const tourGuide = creatorRole === "guide" ? lockedGuide : form.tourGuide.value;
+    
     const formData = {
       name,
       email,
@@ -119,17 +122,24 @@ const BookingForm = ({ packageName, packagePrice }) => {
             <select
               required
               name="tourGuide"
-              defaultValue=""
-              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all appearance-none"
+              disabled={creatorRole === "guide"}
+              defaultValue={creatorRole === "guide" ? lockedGuide : ""}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-700 dark:text-slate-200 transition-all appearance-none disabled:opacity-75 disabled:cursor-not-allowed"
             >
-              <option value="" disabled>
-                Select a guide
-              </option>
-              {guides.map((guide, index) => (
-                <option key={index} value={guide.name || guide.id}>
-                  {guide.name || "Unnamed Guide"}
-                </option>
-              ))}
+              {creatorRole === "guide" ? (
+                <option value={lockedGuide}>{lockedGuide} (Creator)</option>
+              ) : (
+                <>
+                  <option value="" disabled>
+                    Select a guide
+                  </option>
+                  {guides.map((guide, index) => (
+                    <option key={index} value={guide.name || guide.id}>
+                      {guide.name || "Unnamed Guide"}
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
           </div>
 

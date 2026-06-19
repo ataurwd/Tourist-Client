@@ -126,26 +126,25 @@ const GuideAssigned = () => {
                     </td>
                     <td className="px-6 py-5 text-center">
                       <div className="flex justify-center items-center gap-2">
-                        {/* Accept Button */}
-                        <Button
-                          disabled={(booking.status || booking.statas) !== "in-review"}
-                          variant={(booking.status || booking.statas) === "in-review" ? "primary" : "outline"}
-                          size="sm"
-                          className="font-bold"
-                          onClick={() => handelAccept(booking._id)}
-                        >
-                          Accept
-                        </Button>
-                        {/* Reject Button */}
                         {((booking.status || booking.statas) === "in-review") && (
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            className="font-bold"
-                            onClick={() => handleReject(booking._id)}
-                          >
-                            Reject
-                          </Button>
+                          <>
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="font-bold"
+                              onClick={() => handelAccept(booking._id)}
+                            >
+                              Confirm Tour
+                            </Button>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              className="font-bold"
+                              onClick={() => handleReject(booking._id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
                         )}
                       </div>
                     </td>

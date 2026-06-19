@@ -120,7 +120,12 @@ const PackageDetails = () => {
 
       {/* Form Slot */}
       <div className="my-16 max-w-4xl mx-auto">
-        <BookingForm packageName={data.packageName} packagePrice={data.price} />
+        <BookingForm 
+          packageName={data.packageName} 
+          packagePrice={data.price} 
+          creatorRole={data.creatorRole}
+          tourGuide={data.tourGuide}
+        />
       </div>
     </div>
   );

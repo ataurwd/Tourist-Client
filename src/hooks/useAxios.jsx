@@ -23,6 +23,7 @@ const useAxios = () => {
           logoutUser();
           navigate("/login");
         }
+        return Promise.reject(err);
       }
     );
   }, [logoutUser, navigate]);

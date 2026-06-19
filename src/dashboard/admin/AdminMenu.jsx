@@ -14,7 +14,7 @@ const AdminMenu = ({ isCollapsed }) => {
 
   // Active status triggers based on paths
   const isStoriesActive = location.pathname.includes("admin-story") || location.pathname.includes("admin-add-story") || location.pathname.includes("admin-all-stories");
-  const isPackagesActive = location.pathname.includes("admin-manage-packages") || location.pathname.includes("admin-add-package");
+  const isPackagesActive = location.pathname.includes("admin-manage-packages") || location.pathname.includes("admin-add-package") || location.pathname.includes("admin-manage-guide-packages");
   const isUsersActive = location.pathname.includes("admin-manage-user") || location.pathname.includes("admin-manage-candidate");
 
   const [storiesOpen, setStoriesOpen] = useState(isStoriesActive);
@@ -53,6 +53,7 @@ const AdminMenu = ({ isCollapsed }) => {
   const packageChildren = [
     { to: "admin-manage-packages", icon: GiShoppingCart, label: "Manage Packages" },
     { to: "admin-add-package", icon: MdAddTask, label: "Add Package" },
+    { to: "admin-manage-guide-packages", icon: FiPackage, label: "Guide Packages" },
   ];
 
   const userChildren = [
